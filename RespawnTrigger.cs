@@ -3,7 +3,6 @@ using UnityEngine;
 public class RespawnTrigger : MonoBehaviour
 {
     private SceneManager sceneManager;
-    private int respawnCount = 0;
 
     void Start()
     {
@@ -23,7 +22,26 @@ public class RespawnTrigger : MonoBehaviour
 
         SlotController slotController = spawnedObject.GetComponent<SlotController>();
         if (slotController != null) {
+            sceneManager.AddValueToMatrix(spawnedObject, GetColumnForMatrix((float)xPosition));
             slotController.SetConstructorValues(false, 23.0f);
+        }
+    }
+
+// prendere le 3 posizioni dall'array di sceneManager
+    int GetColumnForMatrix(float xPosition)
+    {
+        switch(xPosition)
+        {
+            case 0f:
+                return 0;
+            case 3.5f:
+                return 1;
+            case 6.5f:
+                return 2;
+            default: {
+                Debug.LogError("Posizione non valida. Controllare l'assegnazione della colonna. Possibile che siano state modificate le x");
+                return 0;
+            }
         }
     }
 }

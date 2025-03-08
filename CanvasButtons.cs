@@ -8,5 +8,10 @@ public class CanvasButtons : MonoBehaviour
         foreach (SlotController slotController in slotControllers) {
             slotController.SetMoving(false);
         }
+
+// TODO -> eliminare il log della matrice
+        SceneManager sceneManager = FindFirstObjectByType<SceneManager>();
+        sceneManager.LogMatrix();
+        sceneManager.RoundPositionByMatrix();
     }
 }

@@ -22,7 +22,6 @@ public class SlotController : MonoBehaviour
             MoveCell();
         } else {
             rb.linearVelocity = new Vector2(0, 0);
-            RoundPosition();
         }
     }
 
@@ -42,28 +41,6 @@ public class SlotController : MonoBehaviour
         if (transform.position.y <= 2.5f) {
             transform.Rotate(20 * Time.deltaTime, 0, 0);
         }
-    }
-
-    void RoundPosition()
-    {
-        Vector3[] startingPositions = sceneManager.GetAllStartingPosition();
-            // Implementa la logica per arrotondare la posizione utilizzando startingPositions
-            // Ad esempio, puoi trovare la posizione più vicina e impostarla come nuova posizione
-        Vector3 closestPosition = startingPositions[0];
-        float closestDistance = Vector3.Distance(transform.position, closestPosition);
-
-        foreach (Vector3 position in startingPositions)
-        {
-            float distance = Vector3.Distance(transform.position, position);
-            if (distance < closestDistance)
-            {
-                closestPosition = position;
-                closestDistance = distance;
-            }
-        }
-        Debug.Log("Posizione y prima dell'arrotondamento: " + transform.position.y);
-        transform.position = closestPosition;
-        Debug.Log("Posizione y dopo l'arrotondamento: " + transform.position.y);
     }
 
     public void SetConstructorValues(bool movingUp, float speed, bool moving = true)
