@@ -5,6 +5,8 @@ public class SceneManager : MonoBehaviour
     public GameObject[] prefabs; // Il prefab da istanziare
     public Vector3[] startingPositions; // Array di posizioni
     private GameObject[][] slotCells;
+    private bool isRolling = false;
+    private bool[] isRollingByColumn = new bool[3] {true, true, true};
 
     void Start()
     {
@@ -18,11 +20,29 @@ public class SceneManager : MonoBehaviour
         slotCells = new GameObject[3][];
         for (int i = 0; i < slotCells.Length; i++) {
             slotCells[i] = new GameObject[3];
+        }        
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if (!isRolling) {
+                EmptySlotMatrix();
+                StartSlot();
+                isRolling = true;
+                isRollingByColumn = new bool[3] {true, true, true};
+            } else {
+                StopSlot();
+                isRolling = false;
+                isRollingByColumn = new bool[3] {false, false, false};
+            }
         }
 
-        // Istanzia 9 prefab nelle posizioni specificate
-        for (int i = 0; i < startingPositions.Length; i++) {
-            Instantiate(GetRandomPrefab(), startingPositions[i], Quaternion.identity);
+        if (isRollingByColumn[0] || isRollingByColumn[1] || isRollingByColumn[2]) {
+            StopSlotByColumn();
+        }
+        if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2]) {
+            isRolling = false;
         }
     }
 
@@ -34,6 +54,59 @@ public class SceneManager : MonoBehaviour
     public Vector3[] GetAllStartingPosition()
     {
         return startingPositions;
+    }
+
+    public void StartSlot()
+    {
+        // Istanzia 9 prefab nelle posizioni specificate
+        for (int i = 0; i < startingPositions.Length; i++) {
+            Instantiate(GetRandomPrefab(), startingPositions[i], Quaternion.identity);
+        }
+    }
+
+    public void StopSlot()
+    {
+        SlotController[] slotControllers = FindObjectsByType<SlotController>(FindObjectsSortMode.None);
+        foreach (SlotController slotController in slotControllers) {
+            slotController.SetMoving(false);
+        }
+
+        RoundPositionByMatrix();
+    }
+
+    private void EmptySlotMatrix()
+    {
+        for (int i = 0; i < slotCells.Length; i++) {
+            for (int j = 0; j < slotCells[i].Length; j++) {
+                if (slotCells[i][j] != null) {
+                    Destroy(slotCells[i][j]);
+                    slotCells[i][j] = null;
+                }
+            }
+        }
+    }
+
+    public void StopSlotByColumn()
+    {
+        int column = -1;
+
+        if (Input.GetKeyDown(KeyCode.S)) {
+            column = 0;
+        } else if (Input.GetKeyDown(KeyCode.D)) {
+            column = 1;
+        } else if (Input.GetKeyDown(KeyCode.F)) {
+            column = 2;
+        }
+
+        if (column != -1) {
+            for (int row = 0; row < slotCells.Length; row++) {
+                if (slotCells[row][column] != null) {
+                    slotCells[row][column].GetComponent<SlotController>().SetMoving(false);
+                    RoundPositionByColumn(column);
+                    isRollingByColumn[column] = false;
+                }
+            }
+        }
     }
 
     public void LogMatrix()
@@ -81,6 +154,30 @@ public class SceneManager : MonoBehaviour
                 slotCells[row][column].transform.position = startingPositions[positionIndex];
                 positionIndex++;
             }
+        }
+    }
+
+    public void RoundPositionByColumn(int column)
+    {
+        int[] positions = new int[] { 0, 1, 2 };
+
+        switch (column) {
+            case 0: {
+                positions = new int[] { 0, 3, 6 };
+                break;
+            }
+            case 1: {
+                positions = new int[] { 1, 4, 7 };
+                break;
+            }
+            case 2: {
+                positions = new int[] { 2, 5, 8 };
+                break;
+            }
+        }
+
+        for (int row = 0; row < slotCells.Length; row++) {
+            slotCells[row][column].transform.position = startingPositions[positions[row]];
         }
     }
 }

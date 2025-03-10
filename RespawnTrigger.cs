@@ -27,21 +27,16 @@ public class RespawnTrigger : MonoBehaviour
         }
     }
 
-// prendere le 3 posizioni dall'array di sceneManager
     int GetColumnForMatrix(float xPosition)
     {
-        switch(xPosition)
-        {
-            case 0f:
-                return 0;
-            case 3.5f:
-                return 1;
-            case 6.5f:
-                return 2;
-            default: {
-                Debug.LogError("Posizione non valida. Controllare l'assegnazione della colonna. Possibile che siano state modificate le x");
-                return 0;
+        Vector3[] startingPositions = sceneManager.GetAllStartingPosition();
+        for (int i = 0; i < 3; i++) {
+            if (Mathf.Approximately(startingPositions[i].x, xPosition)) {
+                return i;
             }
         }
+
+        Debug.LogError("Posizione non valida. Controllare l'assegnazione della colonna. Possibile che siano state modificate le x");
+        return 0;
     }
 }
