@@ -8,7 +8,7 @@ public class DespawnTrigger : MonoBehaviour
     {
         float xPosition = slotCell.transform.position.x;
         Destroy(slotCell.gameObject);
-        if (respawnTrigger != null && slotCell.CompareTag("SlotCell")) {
+        if (respawnTrigger != null && slotCell.tag.Contains("_SlotCell")) {
             respawnTrigger.RespawnAtX(xPosition);
         }
     }

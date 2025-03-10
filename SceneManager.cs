@@ -7,6 +7,7 @@ public class SceneManager : MonoBehaviour
     private GameObject[][] slotCells;
     private bool isRolling = false;
     private bool[] isRollingByColumn = new bool[3] {true, true, true};
+    private PointSystemController pointSystemController;
 
     void Start()
     {
@@ -20,7 +21,9 @@ public class SceneManager : MonoBehaviour
         slotCells = new GameObject[3][];
         for (int i = 0; i < slotCells.Length; i++) {
             slotCells[i] = new GameObject[3];
-        }        
+        }
+
+        pointSystemController = FindFirstObjectByType<PointSystemController>();
     }
 
     void Update()
@@ -29,6 +32,7 @@ public class SceneManager : MonoBehaviour
             if (!isRolling) {
                 EmptySlotMatrix();
                 StartSlot();
+                pointSystemController.setUpdated(false);
                 isRolling = true;
                 isRollingByColumn = new bool[3] {true, true, true};
             } else {
@@ -40,9 +44,14 @@ public class SceneManager : MonoBehaviour
 
         if (isRollingByColumn[0] || isRollingByColumn[1] || isRollingByColumn[2]) {
             StopSlotByColumn();
+            pointSystemController.setUpdated(false);
         }
         if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2]) {
             isRolling = false;
+        }
+
+        if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2] && !isRolling) {
+            pointSystemController.FetchPoints();
         }
     }
 
@@ -54,6 +63,11 @@ public class SceneManager : MonoBehaviour
     public Vector3[] GetAllStartingPosition()
     {
         return startingPositions;
+    }
+
+    public GameObject[][] GetMatrix()
+    {
+        return slotCells;
     }
 
     public void StartSlot()
