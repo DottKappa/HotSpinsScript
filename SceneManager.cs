@@ -28,30 +28,32 @@ public class SceneManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if (!isRolling) {
-                EmptySlotMatrix();
-                StartSlot();
-                pointSystemController.setUpdated(false);
-                isRolling = true;
-                isRollingByColumn = new bool[3] {true, true, true};
-            } else {
-                StopSlot();
-                isRolling = false;
-                isRollingByColumn = new bool[3] {false, false, false};
+        if (!MatrixHasEmptySlot() || !isRolling) {
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                if (!isRolling) {
+                    EmptySlotMatrix();
+                    StartSlot();
+                    pointSystemController.setUpdated(false);
+                    isRolling = true;
+                    isRollingByColumn = new bool[3] {true, true, true};
+                } else {
+                    StopSlot();
+                    isRolling = false;
+                    isRollingByColumn = new bool[3] {false, false, false};
+                }
             }
-        }
 
-        if (isRollingByColumn[0] || isRollingByColumn[1] || isRollingByColumn[2]) {
-            StopSlotByColumn();
-            pointSystemController.setUpdated(false);
-        }
-        if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2]) {
-            isRolling = false;
-        }
+            if (isRollingByColumn[0] || isRollingByColumn[1] || isRollingByColumn[2]) {
+                StopSlotByColumn();
+                pointSystemController.setUpdated(false);
+            }
+            if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2]) {
+                isRolling = false;
+            }
 
-        if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2] && !isRolling) {
-            pointSystemController.FetchPoints();
+            if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2] && !isRolling) {
+                pointSystemController.FetchPoints();
+            }
         }
     }
 
@@ -133,6 +135,19 @@ public class SceneManager : MonoBehaviour
             }
             Debug.Log(row);
         }
+    }
+
+    private bool MatrixHasEmptySlot()
+    {
+        for (int i = 0; i < slotCells.Length; i++) {
+            for (int j = 0; j < slotCells[i].Length; j++) {
+                if (slotCells[i][j] == null) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public void AddValueToMatrix(GameObject value, int column)
