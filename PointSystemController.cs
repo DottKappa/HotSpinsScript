@@ -6,12 +6,14 @@ public class PointSystemController : MonoBehaviour
     public TextMeshProUGUI pointText;
     private int points = 0;
     private SceneManager sceneManager;
+    private RespawnTrigger respawnTrigger;
     private GameObject[][] slotCells;
     private bool updated = false;
 
     void Start()
     {
         sceneManager = FindFirstObjectByType<SceneManager>();
+        respawnTrigger = FindFirstObjectByType<RespawnTrigger>();
     }
 
     public void FetchPoints()
@@ -61,6 +63,8 @@ public class PointSystemController : MonoBehaviour
         } else {
             points += 1 * multiplier;
         }
+
+        respawnTrigger.ResetWeights();
     }
 
     private void UpdatePointsText()

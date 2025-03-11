@@ -6,8 +6,10 @@ public class SceneManager : MonoBehaviour
     public Vector3[] startingPositions; // Array di posizioni
     private GameObject[][] slotCells;
     private bool isRolling = false;
+    private int numberOfSpins = 0;
     private bool[] isRollingByColumn = new bool[3] {true, true, true};
     private PointSystemController pointSystemController;
+    private RespawnTrigger respawnTrigger;
 
     void Start()
     {
@@ -24,6 +26,7 @@ public class SceneManager : MonoBehaviour
         }
 
         pointSystemController = FindFirstObjectByType<PointSystemController>();
+        respawnTrigger = FindFirstObjectByType<RespawnTrigger>();
     }
 
     void Update()
@@ -36,6 +39,7 @@ public class SceneManager : MonoBehaviour
                     pointSystemController.setUpdated(false);
                     isRolling = true;
                     isRollingByColumn = new bool[3] {true, true, true};
+                    numberOfSpins++;
                 } else {
                     StopSlot();
                     isRolling = false;
@@ -57,9 +61,39 @@ public class SceneManager : MonoBehaviour
         }
     }
 
+    public GameObject[] GetAllPrefabs()
+    {
+        return prefabs;
+    }
+
     public GameObject GetRandomPrefab()
     {
         return prefabs[Random.Range(0, prefabs.Length)];
+    }
+
+    public GameObject GetCellPrefab()
+    {
+        return prefabs[0];
+    }
+    
+    public GameObject GetCherryPrefab()
+    {
+        return prefabs[1];
+    }
+    
+    public GameObject GetMelonPrefab()
+    {
+        return prefabs[2];
+    }
+    
+    public GameObject GetSevenPrefab()
+    {
+        return prefabs[3];
+    }
+    
+    public GameObject GetSpecialPrefab()
+    {
+        return prefabs[4];
     }
 
     public Vector3[] GetAllStartingPosition()
@@ -72,11 +106,36 @@ public class SceneManager : MonoBehaviour
         return slotCells;
     }
 
+    public int GetNumberOfSpins()
+    {
+        return numberOfSpins;
+    }
+
     public void StartSlot()
     {
         // Istanzia 9 prefab nelle posizioni specificate
         for (int i = 0; i < startingPositions.Length; i++) {
             Instantiate(GetRandomPrefab(), startingPositions[i], Quaternion.identity);
+        }
+
+        switch (numberOfSpins) {
+            case int n when n % 3 == 0:
+            respawnTrigger.ManipulateWeights(0, 4f);
+            break;
+            case int n when n % 5 == 0:
+            respawnTrigger.ManipulateWeights(0, -10f);
+            respawnTrigger.ManipulateWeights(1, -2f);
+            break;
+            case int n when n % 7 == 0:
+            respawnTrigger.ManipulateWeights(2, 10f);
+            break;
+            case int n when n % 11 == 0:
+            respawnTrigger.ManipulateWeights(1, 3f);
+            respawnTrigger.ManipulateWeights(2, -3f);
+            break;
+            case int n when n % 13 == 0:
+            respawnTrigger.ManipulateWeights(4, 20f);
+            break;
         }
     }
 
