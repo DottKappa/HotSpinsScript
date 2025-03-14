@@ -34,16 +34,9 @@ public class SceneManager : MonoBehaviour
         if (!MatrixHasEmptySlot() || !isRolling) {
             if (Input.GetKeyDown(KeyCode.Space)) {
                 if (!isRolling) {
-                    EmptySlotMatrix();
-                    StartSlot();
-                    pointSystemController.setUpdated(false);
-                    isRolling = true;
-                    isRollingByColumn = new bool[3] {true, true, true};
-                    numberOfSpins++;
+                    StartSlot();                    
                 } else {
                     StopSlot();
-                    isRolling = false;
-                    isRollingByColumn = new bool[3] {false, false, false};
                 }
             }
 
@@ -54,7 +47,6 @@ public class SceneManager : MonoBehaviour
             if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2]) {
                 isRolling = false;
             }
-
             if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2] && !isRolling) {
                 pointSystemController.FetchPoints();
             }
@@ -111,32 +103,26 @@ public class SceneManager : MonoBehaviour
         return numberOfSpins;
     }
 
+    public bool GetIsRolling()
+    {
+        return isRolling;
+    }
+
     public void StartSlot()
     {
+        EmptySlotMatrix();
+
         // Istanzia 9 prefab nelle posizioni specificate
         for (int i = 0; i < startingPositions.Length; i++) {
             Instantiate(GetRandomPrefab(), startingPositions[i], Quaternion.identity);
         }
 
-        switch (numberOfSpins) {
-            case int n when n % 3 == 0:
-            respawnTrigger.ManipulateWeights(0, 4f);
-            break;
-            case int n when n % 5 == 0:
-            respawnTrigger.ManipulateWeights(0, -10f);
-            respawnTrigger.ManipulateWeights(1, -2f);
-            break;
-            case int n when n % 7 == 0:
-            respawnTrigger.ManipulateWeights(2, 10f);
-            break;
-            case int n when n % 11 == 0:
-            respawnTrigger.ManipulateWeights(1, 3f);
-            respawnTrigger.ManipulateWeights(2, -3f);
-            break;
-            case int n when n % 13 == 0:
-            respawnTrigger.ManipulateWeights(4, 20f);
-            break;
-        }
+        ManipulateSlot();
+
+        pointSystemController.setUpdated(false);
+        isRolling = true;
+        isRollingByColumn = new bool[3] {true, true, true};
+        numberOfSpins++;
     }
 
     public void StopSlot()
@@ -146,6 +132,9 @@ public class SceneManager : MonoBehaviour
             slotController.SetMoving(false);
         }
 
+        
+        isRolling = false;
+        isRollingByColumn = new bool[3] {false, false, false};
         RoundPositionByMatrix();
     }
 
@@ -161,24 +150,25 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    public void StopSlotByColumn()
+    public void StopSlotByColumn(SlotColumns? column = null)
     {
-        int column = -1;
-
-        if (Input.GetKeyDown(KeyCode.S)) {
-            column = 0;
-        } else if (Input.GetKeyDown(KeyCode.D)) {
-            column = 1;
-        } else if (Input.GetKeyDown(KeyCode.F)) {
-            column = 2;
+        if (column == null) {
+            if (Input.GetKeyDown(KeyCode.S)) {
+                column = SlotColumns.First;
+            } else if (Input.GetKeyDown(KeyCode.D)) {
+                column = SlotColumns.Second;
+            } else if (Input.GetKeyDown(KeyCode.F)) {
+                column = SlotColumns.Third;
+            }
         }
 
-        if (column != -1) {
+        if (column != null) {
+            int colIndex = (int)column;
             for (int row = 0; row < slotCells.Length; row++) {
-                if (slotCells[row][column] != null) {
-                    slotCells[row][column].GetComponent<SlotController>().SetMoving(false);
-                    RoundPositionByColumn(column);
-                    isRollingByColumn[column] = false;
+                if (slotCells[row][colIndex] != null) {
+                    slotCells[row][colIndex].GetComponent<SlotController>().SetMoving(false);
+                    RoundPositionByColumn(colIndex);
+                    isRollingByColumn[colIndex] = false;
                 }
             }
         }
@@ -196,7 +186,7 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    private bool MatrixHasEmptySlot()
+    public bool MatrixHasEmptySlot()
     {
         for (int i = 0; i < slotCells.Length; i++) {
             for (int j = 0; j < slotCells[i].Length; j++) {
@@ -266,6 +256,29 @@ public class SceneManager : MonoBehaviour
 
         for (int row = 0; row < slotCells.Length; row++) {
             slotCells[row][column].transform.position = startingPositions[positions[row]];
+        }
+    }
+
+    private void ManipulateSlot()
+    {
+        switch (numberOfSpins) {
+            case int n when n % 3 == 0:
+            respawnTrigger.ManipulateWeights(0, 4f);
+            break;
+            case int n when n % 5 == 0:
+            respawnTrigger.ManipulateWeights(0, -10f);
+            respawnTrigger.ManipulateWeights(1, -2f);
+            break;
+            case int n when n % 7 == 0:
+            respawnTrigger.ManipulateWeights(2, 10f);
+            break;
+            case int n when n % 11 == 0:
+            respawnTrigger.ManipulateWeights(1, 3f);
+            respawnTrigger.ManipulateWeights(2, -3f);
+            break;
+            case int n when n % 13 == 0:
+            respawnTrigger.ManipulateWeights(4, 20f);
+            break;
         }
     }
 }
