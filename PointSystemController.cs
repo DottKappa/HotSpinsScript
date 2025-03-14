@@ -19,7 +19,6 @@ public class PointSystemController : MonoBehaviour
     public void FetchPoints()
     {
         if (!updated) {
-            Debug.Log("Punti: " + points);
             slotCells = sceneManager.GetMatrix();
             checkHorizontal();
             checkDiagonalUpDown();
@@ -44,14 +43,14 @@ public class PointSystemController : MonoBehaviour
     private void checkDiagonalUpDown()
     {
         if (slotCells[0][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[2][2].tag) {
-            updatePoints(slotCells[1][0].tag.Split('_')[0], 2);
+            updatePoints(slotCells[0][0].tag.Split('_')[0], 2);
         }
     }
 
     private void checkDiagonalDownUp()
     {
         if (slotCells[2][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[0][2].tag) {
-            updatePoints(slotCells[1][0].tag.Split('_')[0], 2);
+            updatePoints(slotCells[2][0].tag.Split('_')[0], 2);
         }
     }
 
