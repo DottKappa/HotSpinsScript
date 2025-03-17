@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CanvasButtons : MonoBehaviour
 {
-    private SceneManager sceneManager;
+    private SceneManager sceneManager;    
 
     void Start()
     {
@@ -33,5 +33,10 @@ public class CanvasButtons : MonoBehaviour
     public void StopRightColumn()
     {
         sceneManager.StopSlotByColumn(SlotColumns.Third);
+    }
+
+    public void PickUpSpark()
+    {
+        sceneManager.PickUpSpark();
     }
 }

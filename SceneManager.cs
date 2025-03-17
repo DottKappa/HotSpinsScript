@@ -10,6 +10,7 @@ public class SceneManager : MonoBehaviour
     private bool[] isRollingByColumn = new bool[3] {true, true, true};
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
+    private PowerUpManager powerUpManager;
 
     void Start()
     {
@@ -27,6 +28,7 @@ public class SceneManager : MonoBehaviour
 
         pointSystemController = FindFirstObjectByType<PointSystemController>();
         respawnTrigger = FindFirstObjectByType<RespawnTrigger>();
+        powerUpManager = FindFirstObjectByType<PowerUpManager>();
     }
 
     void Update()
@@ -49,6 +51,12 @@ public class SceneManager : MonoBehaviour
             }
             if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2] && !isRolling) {
                 pointSystemController.FetchPoints();
+            }
+        }
+
+        if (!MatrixHasEmptySlot() && !isRolling) {
+            if (Input.GetKeyDown(KeyCode.A)) {
+                PickUpSpark();
             }
         }
     }
@@ -108,6 +116,23 @@ public class SceneManager : MonoBehaviour
         return isRolling;
     }
 
+    public int GetNumberOfSparksInSlot()
+    {
+        int numberOfSparks = 0;
+        
+        if (!MatrixHasEmptySlot() && !isRolling) {
+            for (int i = 0; i < slotCells.Length; i++) {
+                for (int j = 0; j < slotCells[i].Length; j++) {
+                    if (slotCells[i][j] != null && slotCells[i][j].tag.Contains("Powerup_")) {
+                        numberOfSparks++;
+                    }
+                }
+            }
+        }
+
+        return numberOfSparks;
+    }
+
     public void StartSlot()
     {
         EmptySlotMatrix();
@@ -138,7 +163,7 @@ public class SceneManager : MonoBehaviour
         RoundPositionByMatrix();
     }
 
-    private void EmptySlotMatrix()
+    public void EmptySlotMatrix()
     {
         for (int i = 0; i < slotCells.Length; i++) {
             for (int j = 0; j < slotCells[i].Length; j++) {
@@ -279,6 +304,15 @@ public class SceneManager : MonoBehaviour
             case int n when n % 13 == 0:
             respawnTrigger.ManipulateWeights(4, 20f);
             break;
+        }
+    }
+
+    public void PickUpSpark()
+    {
+        int numberOfSparksInSlot = GetNumberOfSparksInSlot();
+        if (numberOfSparksInSlot > 0) {
+            EmptySlotMatrix();
+            powerUpManager.addSpark(numberOfSparksInSlot);
         }
     }
 }

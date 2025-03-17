@@ -8,7 +8,7 @@ public class RespawnTrigger : MonoBehaviour
     public int counterSeven = 0;
     public int counterSpecial = 0;
     private SceneManager sceneManager;
-    private float[] weights = new float[5] {20f, 20f, 20f, 20f, 20f};
+    private float[] weights = new float[6] {20f, 20f, 20f, 20f, 20f, 1000.1f};
     private GameObject[] prefabs;
 
     void Start()
@@ -28,12 +28,14 @@ public class RespawnTrigger : MonoBehaviour
         GameObject prefabToSpawn = null;
 
         //CountNewObject(prefabToSpawn); // TODO -> lo potrei usare per qualche trick sulla ruota, o forse no
-        
+        /*
         if (sceneManager.GetNumberOfSpins() < 9) {
             prefabToSpawn = sceneManager.GetRandomPrefab();
         } else {
             prefabToSpawn = GetRandomGameObjectByWeight();
         }
+        */
+        prefabToSpawn = GetRandomGameObjectByWeight();
 
         GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
 
@@ -123,5 +125,6 @@ public class RespawnTrigger : MonoBehaviour
         for (int i = 0; i < weights.Length; i++) {
             weights[i] = 20f;
         }
+        weights[weights.Length-1] = 0.1f;
     }
 }
