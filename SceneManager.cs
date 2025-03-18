@@ -8,6 +8,7 @@ public class SceneManager : MonoBehaviour
     private bool isRolling = false;
     private int numberOfSpins = 0;
     private bool[] isRollingByColumn = new bool[3] {true, true, true};
+    private int spinWithMultiplier = 0;
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
     private PowerUpManager powerUpManager;
@@ -50,6 +51,11 @@ public class SceneManager : MonoBehaviour
                 isRolling = false;
             }
             if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2] && !isRolling) {
+                if (spinWithMultiplier > 0) {
+                    spinWithMultiplier--;
+                } else {
+                    pointSystemController.setCustomMultiplier(1);
+                }
                 pointSystemController.FetchPoints();
             }
         }
@@ -314,5 +320,11 @@ public class SceneManager : MonoBehaviour
             EmptySlotMatrix();
             powerUpManager.addSpark(numberOfSparksInSlot);
         }
+    }
+
+    public void ManipulateMultiplierBySpins(float multiplier, int spins)
+    {
+        spinWithMultiplier = spins;
+        pointSystemController.setCustomMultiplier(multiplier);
     }
 }

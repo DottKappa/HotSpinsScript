@@ -10,11 +10,21 @@ public class RespawnTrigger : MonoBehaviour
     private SceneManager sceneManager;
     private float[] weights = new float[6] {20f, 20f, 20f, 20f, 20f, 1000.1f};
     private GameObject[] prefabs;
+    private float speed = 23.0f;
+    private int numberOfSpecialSpins = 0;
 
     void Start()
     {
         sceneManager = FindFirstObjectByType<SceneManager>();
         prefabs = sceneManager.GetAllPrefabs();
+    }
+
+    void Update()
+    {
+        if (sceneManager.GetNumberOfSpins() > numberOfSpecialSpins) {
+            // Resetto la velocità iniziale
+            speed = 23.0f;
+        }
     }
 
     public void RespawnAtX(float xPosition)
@@ -26,15 +36,6 @@ public class RespawnTrigger : MonoBehaviour
 
         Vector3 spawnPosition = new Vector3(xPosition, transform.position.y, transform.position.z);
         GameObject prefabToSpawn = null;
-
-        //CountNewObject(prefabToSpawn); // TODO -> lo potrei usare per qualche trick sulla ruota, o forse no
-        /*
-        if (sceneManager.GetNumberOfSpins() < 9) {
-            prefabToSpawn = sceneManager.GetRandomPrefab();
-        } else {
-            prefabToSpawn = GetRandomGameObjectByWeight();
-        }
-        */
         prefabToSpawn = GetRandomGameObjectByWeight();
 
         GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
@@ -42,7 +43,7 @@ public class RespawnTrigger : MonoBehaviour
         SlotController slotController = spawnedObject.GetComponent<SlotController>();
         if (slotController != null) {
             sceneManager.AddValueToMatrix(spawnedObject, GetColumnForMatrix((float)xPosition));
-            slotController.SetConstructorValues(false, 23.0f);
+            slotController.SetConstructorValues(false, speed);
         }
     }
 
@@ -126,5 +127,11 @@ public class RespawnTrigger : MonoBehaviour
             weights[i] = 20f;
         }
         weights[weights.Length-1] = 0.1f;
+    }
+
+    public void ManipulateSpeed(float speed, int numberOfSpins)
+    {
+        this.speed = speed;
+        numberOfSpecialSpins = sceneManager.GetNumberOfSpins() + numberOfSpins;
     }
 }

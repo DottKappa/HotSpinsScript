@@ -9,6 +9,7 @@ public class PointSystemController : MonoBehaviour
     private RespawnTrigger respawnTrigger;
     private GameObject[][] slotCells;
     private bool updated = false;
+    private float customMultiplier = 1f;
 
     void Start()
     {
@@ -31,6 +32,23 @@ public class PointSystemController : MonoBehaviour
     public void setUpdated(bool value)
     {
         updated = value;
+    }
+
+    public void MultipliePoints(int multiplier)
+    {
+        points *= multiplier;
+        UpdatePointsText();
+    }
+
+    public void DividePoints(int multiplier)
+    {
+        points /= multiplier;
+        UpdatePointsText();
+    }
+
+    public void setCustomMultiplier(float multiplier)
+    {
+        customMultiplier = multiplier;
     }
 
     private void checkHorizontal()
@@ -56,12 +74,14 @@ public class PointSystemController : MonoBehaviour
 
     private void updatePoints(string tag, int multiplier)
     {
+        float calculatePoints = points;
         if (System.Enum.TryParse(tag, out SlotSymbols symbol)) {
             int value = (int)symbol;
-            points += value * multiplier;
+            calculatePoints += value * multiplier * customMultiplier;
         } else {
-            points += 1 * multiplier;
+            calculatePoints += 1 * multiplier * customMultiplier;
         }
+        points = (int)calculatePoints;
 
         respawnTrigger.ResetWeights();
     }
