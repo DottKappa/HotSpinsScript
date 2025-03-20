@@ -7,16 +7,25 @@ public class PointSystemController : MonoBehaviour
     private int points = 0;
     private SceneManager sceneManager;
     private RespawnTrigger respawnTrigger;
+    private FileManager fileManager;
+    private CanvasController canvasController;
     private GameObject[][] slotCells;
     private bool updated = false;
     private float customMultiplier = 1f;
     private int numberOfSpinToBuff = 0;
     private int numberOfSpinToDebuff = 0;
+    private int[][] waifuStepsArray;
 
     void Start()
     {
         sceneManager = FindFirstObjectByType<SceneManager>();
         respawnTrigger = FindFirstObjectByType<RespawnTrigger>();
+        fileManager = FindFirstObjectByType<FileManager>();
+        canvasController = FindFirstObjectByType<CanvasController>();
+
+        waifuStepsArray = GetWaifuStepsAsIntegers();
+        // Quando avrò già dei dati devo controllare tutto quello che dovrebbe partire allo start (anche le scritte etc)
+        UpdateWaifuImage();
     }
 
     public void FetchPoints()
@@ -27,6 +36,7 @@ public class PointSystemController : MonoBehaviour
             checkDiagonalUpDown();
             checkDiagonalDownUp();
             UpdatePointsText();
+            UpdateWaifuImage();
             updated = true;
         }
     }
@@ -138,5 +148,33 @@ public class PointSystemController : MonoBehaviour
     public void SetNumberOfSpinToDebuff(int number)
     {
         numberOfSpinToDebuff = number;
+    }
+
+    private void UpdateWaifuImage()
+    {
+        string waifuName = fileManager.GetWaifuName().ToString();
+        
+        for (int i = 0; i < waifuStepsArray.Length; i++) {
+            if (points >= waifuStepsArray[i][0] && waifuStepsArray[i][1] == 0) {
+                canvasController.SetWaifuImage(waifuName, waifuName + "_" + (i + 1));
+                waifuStepsArray[i][1] = 1;
+            } else if (i + 1 < waifuStepsArray.Length && points < waifuStepsArray[i + 1][0]) {
+                break;
+            }
+        }
+    }
+
+    private int[][] GetWaifuStepsAsIntegers()
+    {
+        WaifuSteps[] steps = (WaifuSteps[])System.Enum.GetValues(typeof(WaifuSteps));
+        int[][] stepValues = new int[steps.Length][];
+
+        for (int i = 0; i < steps.Length; i++) {
+            stepValues[i] = new int[2];
+            stepValues[i][0] = (int)steps[i];
+            stepValues[i][1] = 0;
+        }
+
+        return stepValues;
     }
 }

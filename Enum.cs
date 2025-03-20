@@ -39,3 +39,15 @@ public enum DebuffType
     ResetDebuffSpawn,
     Nothing,
 }
+
+public enum Waifu
+{
+    Chiho,
+}
+
+public enum WaifuSteps
+{
+    Chiho_1 = 0,
+    Chiho_2 = 100,
+    Chiho_3 = 1000,
+}
