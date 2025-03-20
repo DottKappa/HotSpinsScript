@@ -10,6 +10,8 @@ public class PointSystemController : MonoBehaviour
     private GameObject[][] slotCells;
     private bool updated = false;
     private float customMultiplier = 1f;
+    private int numberOfSpinToBuff = 0;
+    private int numberOfSpinToDebuff = 0;
 
     void Start()
     {
@@ -81,7 +83,7 @@ public class PointSystemController : MonoBehaviour
         } else {
             calculatePoints += 1 * multiplier * customMultiplier;
         }
-        points = (int)calculatePoints;
+        points = ManipulateWinWithPowerUp(calculatePoints);
 
         respawnTrigger.ResetWeights();
     }
@@ -115,5 +117,26 @@ public class PointSystemController : MonoBehaviour
         }
 
         return sb.ToString();
+    }
+
+    private int ManipulateWinWithPowerUp(float points)
+    {
+        if (numberOfSpinToBuff != 0 && sceneManager.GetNumberOfSpins() % numberOfSpinToBuff == 0) {
+            return (int)(points * 2);
+        } else if (numberOfSpinToDebuff != 0 && sceneManager.GetNumberOfSpins() % numberOfSpinToDebuff == 0) {
+            return (int)(points / 2);
+        }
+
+        return (int)points;
+    }
+
+    public void SetNumberOfSpinToBuff(int number)
+    {
+        numberOfSpinToBuff = number;
+    }
+
+    public void SetNumberOfSpinToDebuff(int number)
+    {
+        numberOfSpinToDebuff = number;
     }
 }

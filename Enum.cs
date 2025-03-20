@@ -33,7 +33,7 @@ public enum DebuffType
     SpeedUp,
     HalfScore,
     Next5HalfScore,
-    Every10HalfScore,
+    Every11HalfScore,
     RemoveSparks,
     RemoveMultiplierCells,
     ResetDebuffSpawn,

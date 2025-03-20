@@ -68,30 +68,42 @@ public class PowerUpManager : MonoBehaviour
             switch (powerUpBuff) {
                 case BuffType.SlowDown:
                     respawnTrigger.ManipulateSpeed(13.0f, 3);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.DoubleScore:
                     pointSystemController.MultipliePoints(2);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.Next3TripleScore:
                     sceneManager.ManipulateMultiplierBySpins(3f, 3);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.Every5DoubleScore:
-                    // Aggiungi la logica per Every3DoubleScore
+                    pointSystemController.SetNumberOfSpinToBuff(5);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.AddMoreSparks:
-                    // Aggiungi la logica per AddMoreSparks
+                // TODO -> da aggiornare quando avrò tutte le celle (non solo questo metodo/anche i debuff)
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 10f);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.AddMoreBasicCells:
-                    // Aggiungi la logica per AddMoreBasicCells
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("cell"), 10f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("cherry"), 10f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("melon"), 10f);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.AddMoreMultiplierCells:
-                    // Aggiungi la logica per AddMoreMultiplierCells
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 10f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 10f);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.ResetBuffSpawn:
-                    // Aggiungi la logica per ResetBuffSpawn
+                    buffDebuffManager.ResetBuffDictionary();
+                    buffDebuffManager.SetPowerUpUsed(BuffType.Every5DoubleScore.ToString(), true);
                     break;
                 case BuffType.Nothing:
-                    // Aggiungi la logica per Nothing
+                    buffDebuffManager.SetPowerUpUsed(BuffType.Nothing.ToString(), true);
                     break;
                 default:
                     Debug.LogWarning("Unhandled power-up buff type: " + powerUpBuff);
@@ -102,27 +114,35 @@ public class PowerUpManager : MonoBehaviour
             switch (powerUpDebuff) {
                 case DebuffType.SpeedUp:
                     respawnTrigger.ManipulateSpeed(33.0f, 3);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
                     break;
                 case DebuffType.HalfScore:
                     pointSystemController.DividePoints(2);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
                     break;
                 case DebuffType.Next5HalfScore:
                     sceneManager.ManipulateMultiplierBySpins(0.5f, 5);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
                     break;
-                case DebuffType.Every10HalfScore:
-                    // Aggiungi la logica per Every10HalfScore
+                case DebuffType.Every11HalfScore:
+                    pointSystemController.SetNumberOfSpinToDebuff(11);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
                     break;
                 case DebuffType.RemoveSparks:
-                    // Aggiungi la logica per RemoveSparks
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 10f, false);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
                     break;
                 case DebuffType.RemoveMultiplierCells:
-                    // Aggiungi la logica per RemoveMultiplierCells
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 10f, false);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 10f, false);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
                     break;
                 case DebuffType.ResetDebuffSpawn:
-                    // Aggiungi la logica per ResetDebuffSpawn
+                    buffDebuffManager.ResetDebuffDictionary();
+                    buffDebuffManager.SetPowerUpUsed(DebuffType.Every11HalfScore.ToString(), true);
                     break;
                 case DebuffType.Nothing:
-                    // Aggiungi la logica per Nothing
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
                     break;
                 default:
                     Debug.LogWarning("Unhandled power-up debuff type: " + powerUpDebuff);

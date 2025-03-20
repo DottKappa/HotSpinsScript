@@ -116,9 +116,34 @@ public class RespawnTrigger : MonoBehaviour
         return null;
     }
 
-    public void ManipulateWeights(int weightIndex, float value)
+    public void ManipulateWeights(int weightIndex, float value, bool positive = true)
     {
-        weights[weightIndex] = (weights[weightIndex] + value);
+        if (positive) {
+            weights[weightIndex] = (weights[weightIndex] + value);
+        } else {
+            weights[weightIndex] = (weights[weightIndex] - value);
+        }
+    }
+
+    public int GetIndexOfWeightsByTag(string tag)
+    {
+        switch (tag.ToLower())
+        {
+            case "cell":
+                return 0;
+            case "cherry":
+                return 1;
+            case "melon":
+                return 2;
+            case "seven":
+                return 3;
+            case "special":
+                return 4;
+            case "powerup":
+                return 5;
+            default:
+                return 0;
+        }
     }
 
     public void ResetWeights()

@@ -33,7 +33,7 @@ public class BuffDebuffManager : MonoBehaviour
         { DebuffType.SpeedUp, new PowerUpTupla("Next 3 spins will be speed up (istant)") },
         { DebuffType.HalfScore, new PowerUpTupla("Half the score (instant)") },
         { DebuffType.Next5HalfScore, new PowerUpTupla("Half the score for next 5 spins (instant)") },
-        { DebuffType.Every10HalfScore, new PowerUpTupla("Half the score every spin multiple of 10") },
+        { DebuffType.Every11HalfScore, new PowerUpTupla("Half the score every spin multiple of 11") },
         { DebuffType.RemoveSparks, new PowerUpTupla("Remove probability to spawn sparks (until next win)") },
         { DebuffType.RemoveMultiplierCells, new PowerUpTupla("Remove probability to spawn multiplier (until next win)") },
         { DebuffType.ResetDebuffSpawn, new PowerUpTupla("Reset the probability of 'instant' or 'until next win' debuff to spawn") },
@@ -67,7 +67,7 @@ public class BuffDebuffManager : MonoBehaviour
         if (isBuff) {
             if (availableBuffs.Count > 0) {
                 BuffType randomBuff = availableBuffs[random.Next(availableBuffs.Count)];
-                buffDescriptions[randomBuff].IsUsed = true;
+                //buffDescriptions[randomBuff].IsUsed = true;
                 return new string[] { randomBuff.ToString(), buffDescriptions[randomBuff].Description };
             } else {
                 return new string[] { BuffType.Nothing.ToString(), buffDescriptions[BuffType.Nothing].Description };
@@ -75,11 +75,44 @@ public class BuffDebuffManager : MonoBehaviour
         } else {
             if (availableDebuffs.Count > 0) {
                 DebuffType randomDebuff = availableDebuffs[random.Next(availableDebuffs.Count)];
-                debuffDescriptions[randomDebuff].IsUsed = true;
+                //debuffDescriptions[randomDebuff].IsUsed = true;
                 return new string[] { randomDebuff.ToString(), debuffDescriptions[randomDebuff].Description };
             } else {
                 return new string[] { DebuffType.Nothing.ToString(), debuffDescriptions[DebuffType.Nothing].Description };
             }
+        }
+    }
+
+    public void SetPowerUpUsed(string key, bool isBuff)
+    {
+        if (isBuff) {
+            foreach (var buff in buffDescriptions) {
+                if (buff.Key.ToString().Equals(key, System.StringComparison.OrdinalIgnoreCase)) {
+                    buff.Value.IsUsed = true;
+                    return;
+                }
+            }
+        } else {
+            foreach (var debuff in debuffDescriptions) {
+                if (debuff.Key.ToString().Equals(key, System.StringComparison.OrdinalIgnoreCase)) {
+                    debuff.Value.IsUsed = true;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void ResetBuffDictionary()
+    {
+        foreach (var buff in buffDescriptions) {
+            buff.Value.IsUsed = false;
+        }
+    }
+
+    public void ResetDebuffDictionary()
+    {
+        foreach (var debuff in debuffDescriptions) {
+            debuff.Value.IsUsed = false;
         }
     }
 }
