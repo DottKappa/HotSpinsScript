@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class PowerUpTupla
 {
@@ -42,10 +43,15 @@ public class BuffDebuffManager : MonoBehaviour
 
     private List<BuffType> availableBuffs = new List<BuffType>();
     private List<DebuffType> availableDebuffs = new List<DebuffType>();
+    private FileManager fileManager;
 
     void Start()
     {
         // Controllerà il file di salvataggio per aggiornare il dizionario
+        fileManager = FindFirstObjectByType<FileManager>();
+        LoadPowerUp(fileManager.GetBuffUsedByWaifu());
+        LoadPowerUp(fileManager.GetDebuffUsedByWaifu());
+
 
         // Crea la lista di power-up disponibili
         foreach (var buff in buffDescriptions) {
@@ -56,6 +62,26 @@ public class BuffDebuffManager : MonoBehaviour
         foreach (var debuff in debuffDescriptions) {
             if (!debuff.Value.IsUsed) {
                 availableDebuffs.Add(debuff.Key);
+            }
+        }
+    }
+
+    private void LoadPowerUp(PowerUpUsed<BuffType> buffs)
+    {
+        for (int i = 0; i < buffs.GetEnumNames().Length; i++) {
+            BuffType buff;
+            if (Enum.TryParse(buffs.GetEnumNames()[i], out buff) && buffDescriptions.ContainsKey(buff)) {
+                buffDescriptions[buff].IsUsed = buffs.GetIsUsed()[i];
+            }
+        }
+    }
+
+    private void LoadPowerUp(PowerUpUsed<DebuffType> debuffs)
+    {
+        for (int i = 0; i < debuffs.GetEnumNames().Length; i++) {
+            DebuffType debuff;
+            if (Enum.TryParse(debuffs.GetEnumNames()[i], out debuff) && debuffDescriptions.ContainsKey(debuff)) {
+                debuffDescriptions[debuff].IsUsed = debuffs.GetIsUsed()[i];
             }
         }
     }

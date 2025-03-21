@@ -12,6 +12,7 @@ public class SceneManager : MonoBehaviour
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
     private PowerUpManager powerUpManager;
+    private FileManager fileManager;
 
     void Start()
     {
@@ -30,6 +31,9 @@ public class SceneManager : MonoBehaviour
         pointSystemController = FindFirstObjectByType<PointSystemController>();
         respawnTrigger = FindFirstObjectByType<RespawnTrigger>();
         powerUpManager = FindFirstObjectByType<PowerUpManager>();
+        fileManager = FindFirstObjectByType<FileManager>();
+        
+        numberOfSpins = fileManager.GetSpinsByWaifu(fileManager.GetWaifuName());
     }
 
     void Update()
