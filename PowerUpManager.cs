@@ -114,35 +114,35 @@ public class PowerUpManager : MonoBehaviour
             switch (powerUpDebuff) {
                 case DebuffType.SpeedUp:
                     respawnTrigger.ManipulateSpeed(33.0f, 3);
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.HalfScore:
                     pointSystemController.DividePoints(2);
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.Next5HalfScore:
                     sceneManager.ManipulateMultiplierBySpins(0.5f, 5);
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.Every11HalfScore:
                     pointSystemController.SetNumberOfSpinToDebuff(11);
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.RemoveSparks:
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 10f, false);
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.RemoveMultiplierCells:
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 10f, false);
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 10f, false);
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.ResetDebuffSpawn:
                     buffDebuffManager.ResetDebuffDictionary();
-                    buffDebuffManager.SetPowerUpUsed(DebuffType.Every11HalfScore.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(DebuffType.Every11HalfScore.ToString(), false);
                     break;
                 case DebuffType.Nothing:
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 default:
                     Debug.LogWarning("Unhandled power-up debuff type: " + powerUpDebuff);

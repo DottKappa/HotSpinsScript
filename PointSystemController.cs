@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using System;
 
 public class PointSystemController : MonoBehaviour
 {
@@ -25,8 +26,9 @@ public class PointSystemController : MonoBehaviour
         canvasController = FindFirstObjectByType<CanvasController>();
 
         waifuStepsArray = GetWaifuStepsAsIntegers();
-        // Quando avrò già dei dati devo controllare tutto quello che dovrebbe partire allo start (anche le scritte etc)
+
         points = fileManager.GetPointsByWaifu(fileManager.GetWaifuName());
+        UpdatePointsText();
         UpdateWaifuImage();
     }
 
@@ -41,6 +43,11 @@ public class PointSystemController : MonoBehaviour
             UpdateWaifuImage();
             updated = true;
         }
+    }
+
+    public int GetPoints()
+    {
+        return points;
     }
 
     public void setUpdated(bool value)
@@ -174,13 +181,32 @@ public class PointSystemController : MonoBehaviour
         var filteredSteps = steps.Where(step => step.ToString().Contains(waifuName)).ToArray();
         
         int[][] stepValues = new int[filteredSteps.Length][];
-
+        int actualStep = fileManager.GetImageStepByWaifu(fileManager.GetWaifuName());
         for (int i = 0; i < filteredSteps.Length; i++) {
             stepValues[i] = new int[2];
             stepValues[i][0] = (int)filteredSteps[i];
-            stepValues[i][1] = 0;
+
+            // Estrai il numero del passo dalla stringa
+            var stepName = filteredSteps[i].ToString();
+            var stepNumberStr = new string(stepName.Where(c => Char.IsDigit(c)).ToArray()); // Estrae solo i numeri dalla stringa
+            int stepNumber = int.Parse(stepNumberStr);  // Converte la parte numerica in int
+            
+            // Se il passo è precedente ad actualStep, imposta stepValues[i][1] a 1
+            stepValues[i][1] = (stepNumber < actualStep) ? 1 : 0;
         }
 
         return stepValues;
+    }
+
+    public int GetActualImageStep()
+    {
+        for (int i = 0; i < waifuStepsArray.Length; i++) {
+            // Per ottenere quello attivo mi basta prendere la posizione del primo non attivo (i è indietro di 1)
+            if (waifuStepsArray[i][1] != 1) {
+                return i;
+            }
+        }
+        
+        return waifuStepsArray.Length;
     }
 }

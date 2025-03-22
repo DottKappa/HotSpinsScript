@@ -9,10 +9,12 @@ public class SceneManager : MonoBehaviour
     private int numberOfSpins = 0;
     private bool[] isRollingByColumn = new bool[3] {true, true, true};
     private int spinWithMultiplier = 0;
+    private bool needSave = true;
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
     private PowerUpManager powerUpManager;
     private FileManager fileManager;
+    private BuffDebuffManager buffDebuffManager;
 
     void Start()
     {
@@ -32,6 +34,7 @@ public class SceneManager : MonoBehaviour
         respawnTrigger = FindFirstObjectByType<RespawnTrigger>();
         powerUpManager = FindFirstObjectByType<PowerUpManager>();
         fileManager = FindFirstObjectByType<FileManager>();
+        buffDebuffManager = FindFirstObjectByType<BuffDebuffManager>();
         
         numberOfSpins = fileManager.GetSpinsByWaifu(fileManager.GetWaifuName());
     }
@@ -61,6 +64,12 @@ public class SceneManager : MonoBehaviour
                     pointSystemController.setCustomMultiplier(1);
                 }
                 pointSystemController.FetchPoints();
+                
+                if (needSave) {
+                    saveWaifuData();
+                    fileManager.SaveWaifuFile();
+                    needSave = false;
+                }
             }
         }
 
@@ -146,6 +155,7 @@ public class SceneManager : MonoBehaviour
     public void StartSlot()
     {
         EmptySlotMatrix();
+        needSave = true;
 
         // Istanzia 9 prefab nelle posizioni specificate
         for (int i = 0; i < startingPositions.Length; i++) {
@@ -330,5 +340,16 @@ public class SceneManager : MonoBehaviour
     {
         spinWithMultiplier = spins;
         pointSystemController.setCustomMultiplier(multiplier);
+    }
+
+    private void saveWaifuData()
+    {
+        Waifu waifuName = (Waifu)System.Enum.Parse(typeof(Waifu), PlayerPrefs.GetString("waifuName"));
+
+        fileManager.SetPointsByWaifu(pointSystemController.GetPoints(), waifuName);
+        fileManager.SetSpinsByWaifu(numberOfSpins, waifuName);
+        fileManager.SetImageStepByWaifu(pointSystemController.GetActualImageStep(), waifuName);
+        fileManager.SetBuffUsedByWaifu(System.Enum.GetNames(typeof(BuffType)), buffDebuffManager.GetIsUsedByDictionary(true), waifuName);
+        fileManager.SetDebuffUsedByWaifu(System.Enum.GetNames(typeof(DebuffType)), buffDebuffManager.GetIsUsedByDictionary(false), waifuName);
     }
 }

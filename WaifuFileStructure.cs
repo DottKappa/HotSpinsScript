@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using UnityEngine;
 
 [System.Serializable]
 public class WaifuFileStructure
 {
-    private WaifuSave chiho;
-    private WaifuSave erikaTMP;
+    [SerializeField] private WaifuSave chiho;
+    [SerializeField] private WaifuSave erikaTMP;
 
     public WaifuFileStructure(WaifuSave chiho, WaifuSave erikaTMP)
     {
@@ -30,13 +31,13 @@ public class WaifuFileStructure
 [System.Serializable]
 public class WaifuSave 
 {
-    private string waifuName;
-    private bool isUnlocked;
-    private int points;
-    private int spins;
-    private int imageStep;
-    private PowerUpUsed<BuffType> buffUsed;
-    private PowerUpUsed<DebuffType> debuffUsed;
+    [SerializeField] private string waifuName;
+    [SerializeField] private bool isUnlocked;
+    [SerializeField] private int points;
+    [SerializeField] private int spins;
+    [SerializeField] private int imageStep;
+    [SerializeField] private PowerUpUsed<BuffType> buffUsed;
+    [SerializeField] private PowerUpUsed<DebuffType> debuffUsed;
 
     public WaifuSave(string waifuName = "Chiho", bool isUnlocked = false, int points = 0, int spins = 0, int imageStep = 1, PowerUpUsed<BuffType> buffUsed = null, PowerUpUsed<DebuffType> debuffUsed = null)
     {
@@ -73,13 +74,41 @@ public class WaifuSave
     {
         return debuffUsed;
     }
+
+    public void SetPoints(int points)
+    {
+        this.points = points;
+    }
+
+    public void SetSpins(int spins)
+    {
+        this.spins = spins;
+    }
+
+    public void SetImageStep(int imageStep)
+    {
+        this.imageStep = imageStep;
+    }
+
+    public void SetBuffUsed(string[] names, bool[] isUsed)
+    {
+        this.buffUsed.SetEnumNames(names);
+        this.buffUsed.SetIsUsed(isUsed);
+    }
+    
+    public void SetDebuffUsed(string[] names, bool[] isUsed)
+    {
+        this.debuffUsed.SetEnumNames(names);
+        this.debuffUsed.SetIsUsed(isUsed);
+    }
 }
 
+[System.Serializable]
 public class PowerUpUsed<T> where T : Enum
 {
     // Popolo per ogni posizione con la stessa cosa
-    private string[] enumName;
-    private bool[] isUsed;
+    [SerializeField] private string[] enumName;
+    [SerializeField] private bool[] isUsed;
 
     public PowerUpUsed(bool isUsed = false)
     {
@@ -99,5 +128,15 @@ public class PowerUpUsed<T> where T : Enum
     public bool[] GetIsUsed()
     {
         return isUsed;
+    }
+
+    public void SetEnumNames(string[] names)
+    {
+        enumName = names;
+    }
+
+    public void SetIsUsed(bool[] isUsed)
+    {
+        this.isUsed = isUsed;
     }
 }

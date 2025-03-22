@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class PowerUpTupla
 {
@@ -41,8 +42,6 @@ public class BuffDebuffManager : MonoBehaviour
         { DebuffType.Nothing, new PowerUpTupla("Literally nothing") }
     };
 
-    private List<BuffType> availableBuffs = new List<BuffType>();
-    private List<DebuffType> availableDebuffs = new List<DebuffType>();
     private FileManager fileManager;
 
     void Start()
@@ -51,19 +50,6 @@ public class BuffDebuffManager : MonoBehaviour
         fileManager = FindFirstObjectByType<FileManager>();
         LoadPowerUp(fileManager.GetBuffUsedByWaifu());
         LoadPowerUp(fileManager.GetDebuffUsedByWaifu());
-
-
-        // Crea la lista di power-up disponibili
-        foreach (var buff in buffDescriptions) {
-            if (!buff.Value.IsUsed) {
-                availableBuffs.Add(buff.Key);
-            }
-        }
-        foreach (var debuff in debuffDescriptions) {
-            if (!debuff.Value.IsUsed) {
-                availableDebuffs.Add(debuff.Key);
-            }
-        }
     }
 
     private void LoadPowerUp(PowerUpUsed<BuffType> buffs)
@@ -90,19 +76,32 @@ public class BuffDebuffManager : MonoBehaviour
     {
         System.Random random = new System.Random();
 
+        // Filtra buff/debuff dei relativi dizionari grazie ad un dizionario di supporto
         if (isBuff) {
-            if (availableBuffs.Count > 0) {
-                BuffType randomBuff = availableBuffs[random.Next(availableBuffs.Count)];
-                //buffDescriptions[randomBuff].IsUsed = true;
-                return new string[] { randomBuff.ToString(), buffDescriptions[randomBuff].Description };
+            var unusedBuffs = new Dictionary<BuffType, PowerUpTupla>();
+            foreach (var buff in buffDescriptions) {
+                if (!buff.Value.IsUsed) {
+                    unusedBuffs.Add(buff.Key, buff.Value);
+                }
+            }
+
+            if (unusedBuffs.Count > 0) {
+                var randomBuffKey = unusedBuffs.Keys.ElementAt(random.Next(unusedBuffs.Count));
+                return new string[] { randomBuffKey.ToString(), unusedBuffs[randomBuffKey].Description };
             } else {
                 return new string[] { BuffType.Nothing.ToString(), buffDescriptions[BuffType.Nothing].Description };
             }
         } else {
-            if (availableDebuffs.Count > 0) {
-                DebuffType randomDebuff = availableDebuffs[random.Next(availableDebuffs.Count)];
-                //debuffDescriptions[randomDebuff].IsUsed = true;
-                return new string[] { randomDebuff.ToString(), debuffDescriptions[randomDebuff].Description };
+            var unusedDebuffs = new Dictionary<DebuffType, PowerUpTupla>();
+            foreach (var debuff in debuffDescriptions) {
+                if (!debuff.Value.IsUsed) {
+                    unusedDebuffs.Add(debuff.Key, debuff.Value);
+                }
+            }
+
+            if (unusedDebuffs.Count > 0) {
+                var randomDebuffKey = unusedDebuffs.Keys.ElementAt(random.Next(unusedDebuffs.Count));
+                return new string[] { randomDebuffKey.ToString(), unusedDebuffs[randomDebuffKey].Description };
             } else {
                 return new string[] { DebuffType.Nothing.ToString(), debuffDescriptions[DebuffType.Nothing].Description };
             }
@@ -140,5 +139,27 @@ public class BuffDebuffManager : MonoBehaviour
         foreach (var debuff in debuffDescriptions) {
             debuff.Value.IsUsed = false;
         }
+    }
+
+    public bool[] GetIsUsedByDictionary(bool isBuff) 
+    {
+        bool[] isUsed;
+        int i = 0;
+
+        if (isBuff) {
+            isUsed = new bool[buffDescriptions.Count];
+            foreach (var buff in buffDescriptions) {
+                isUsed[i] = buff.Value.IsUsed;
+                i++;
+            }
+        } else {
+            isUsed = new bool[debuffDescriptions.Count];
+            foreach (var debuff in debuffDescriptions) {
+                isUsed[i] = debuff.Value.IsUsed;
+                i++;
+            }
+        }
+
+        return isUsed;
     }
 }

@@ -7,8 +7,8 @@ public class FileManager : MonoBehaviour
     private string folder = "dataFiles";
     private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave());
 
-    void Start() {
-
+    void Awake() 
+    {
         string folderPath = Path.Combine(Application.persistentDataPath, folder);
 
         if (!Directory.Exists(folderPath)) {
@@ -27,6 +27,7 @@ public class FileManager : MonoBehaviour
             Debug.LogError("[FileManager.cs] Il nome della waifu non fa parte dell'enum");
         }
         
+        // TODO !!
         // Lo prenderà da file 
         // o da una decisione presa prima e salvata in una var globale di unity 
         // o di base avrà Chiho
@@ -42,7 +43,7 @@ public class FileManager : MonoBehaviour
     public int GetSpinsByWaifu(Waifu waifuName = Waifu.Chiho)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
-        return waifuSave.GetPoints();
+        return waifuSave.GetSpins();
     }
 
     public int GetImageStepByWaifu(Waifu waifuName = Waifu.Chiho)
@@ -63,10 +64,49 @@ public class FileManager : MonoBehaviour
         return waifuSave.GetDebuffUsed();
     }
 
+    public void SetPointsByWaifu(int points, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetPoints(points);
+    }
+
+    public void SetSpinsByWaifu(int spins, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetSpins(spins);
+    }
+
+    public void SetImageStepByWaifu(int imageStep, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetImageStep(imageStep);
+    }
+
+    public void SetBuffUsedByWaifu(string[] names, bool[] isUsed, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetBuffUsed(names, isUsed);
+    }
+
+    public void SetDebuffUsedByWaifu(string[] names, bool[] isUsed, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetDebuffUsed(names, isUsed);
+    }
+
     public void SaveWaifuFile()
     {
         string nameFile = "waifuData.json";
-
+        string filePath = Path.Combine(Path.Combine(Application.persistentDataPath, folder), nameFile);
+        
+        try {
+            string json = JsonUtility.ToJson(waifuFile);
+            //Debug.Log("JSON da salvare: " + json);
+            File.WriteAllText(filePath, json);
+            Debug.Log("[" + nameFile + "] Salvato correttamente");
+        } catch (System.Exception e) {
+            Debug.LogError("[FileManager] Failed to save waifu file: " + e.Message);
+        }        
     }
 
     public void LoadWaifuFile()
@@ -76,7 +116,11 @@ public class FileManager : MonoBehaviour
 
         if (File.Exists(filePath)) {
             string json = File.ReadAllText(filePath);
-            waifuFile = JsonUtility.FromJson<WaifuFileStructure>(json);
-        }
+            if (json == "{}" || string.IsNullOrEmpty(json)) {
+                Debug.LogWarning("[FileManager] Il file json è vuoto");
+                return;
+            }
+
+            waifuFile = JsonUtility.FromJson<WaifuFileStructure>(json);}
     }
 }
