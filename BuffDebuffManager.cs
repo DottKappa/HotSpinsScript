@@ -43,9 +43,11 @@ public class BuffDebuffManager : MonoBehaviour
     };
 
     private FileManager fileManager;
+    private PowerUpManager powerUpManager;
 
     void Start()
     {
+        powerUpManager = FindFirstObjectByType<PowerUpManager>();
         // Controllerà il file di salvataggio per aggiornare il dizionario
         fileManager = FindFirstObjectByType<FileManager>();
         LoadPowerUp(fileManager.GetBuffUsedByWaifu());
@@ -58,6 +60,10 @@ public class BuffDebuffManager : MonoBehaviour
             BuffType buff;
             if (Enum.TryParse(buffs.GetEnumNames()[i], out buff) && buffDescriptions.ContainsKey(buff)) {
                 buffDescriptions[buff].IsUsed = buffs.GetIsUsed()[i];
+                // Mi serve per tenere attivi i buff permanenti
+                if (buff == BuffType.Every5DoubleScore && buffDescriptions[buff].IsUsed == true) {
+                    powerUpManager.ManagePowerUp(buffDescriptions[buff].Description);
+                }
             }
         }
     }
@@ -68,6 +74,10 @@ public class BuffDebuffManager : MonoBehaviour
             DebuffType debuff;
             if (Enum.TryParse(debuffs.GetEnumNames()[i], out debuff) && debuffDescriptions.ContainsKey(debuff)) {
                 debuffDescriptions[debuff].IsUsed = debuffs.GetIsUsed()[i];
+                // Mi serve per tenere attivi i debuff permanenti
+                if (debuff == DebuffType.Every11HalfScore && debuffDescriptions[debuff].IsUsed == true) {
+                    powerUpManager.ManagePowerUp(debuffDescriptions[debuff].Description);
+                }
             }
         }
     }

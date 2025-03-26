@@ -43,6 +43,8 @@ public enum DebuffType
 public enum Waifu
 {
     Chiho,
+    Hina,
+    Shiori
 }
 
 public enum WaifuSteps
