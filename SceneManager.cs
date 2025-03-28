@@ -36,7 +36,7 @@ public class SceneManager : MonoBehaviour
         fileManager = FindFirstObjectByType<FileManager>();
         buffDebuffManager = FindFirstObjectByType<BuffDebuffManager>();
         
-        numberOfSpins = fileManager.GetSpinsByWaifu(fileManager.GetWaifuName());
+        numberOfSpins = fileManager.GetSpinsByWaifu(fileManager.GetActiveWaifuName());
     }
 
     void Update()

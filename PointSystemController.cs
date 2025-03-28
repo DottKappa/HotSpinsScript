@@ -27,7 +27,7 @@ public class PointSystemController : MonoBehaviour
 
         waifuStepsArray = GetWaifuStepsAsIntegers();
 
-        points = fileManager.GetPointsByWaifu(fileManager.GetWaifuName());
+        points = fileManager.GetPointsByWaifu(fileManager.GetActiveWaifuName());
         UpdatePointsText();
         UpdateWaifuImage();
     }
@@ -119,15 +119,16 @@ public class PointSystemController : MonoBehaviour
     private string addDot(string points)
     {
         int length = points.Length;
-        if (length % 4 != 0) return points; // Controlla se la lunghezza è un multiplo di 4
-
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         int counter = 0;
 
+        // Partiamo dal termine della stringa e aggiungiamo i punti ogni 3 caratteri
         for (int i = length - 1; i >= 0; i--)
         {
             sb.Insert(0, points[i]);
             counter++;
+
+            // Aggiungi un punto ogni 3 caratteri, ma non alla fine
             if (counter == 3 && i != 0)
             {
                 sb.Insert(0, '.');
@@ -161,7 +162,7 @@ public class PointSystemController : MonoBehaviour
 
     private void UpdateWaifuImage()
     {
-        string waifuName = fileManager.GetWaifuName().ToString();
+        string waifuName = fileManager.GetActiveWaifuName().ToString();
         
         for (int i = 0; i < waifuStepsArray.Length; i++) {
             if (points >= waifuStepsArray[i][0] && waifuStepsArray[i][1] == 0) {
@@ -175,24 +176,39 @@ public class PointSystemController : MonoBehaviour
 
     private int[][] GetWaifuStepsAsIntegers()
     {
-        WaifuSteps[] steps = (WaifuSteps[])System.Enum.GetValues(typeof(WaifuSteps));
-    
-        var waifuName = fileManager.GetWaifuName().ToString();
-        var filteredSteps = steps.Where(step => step.ToString().Contains(waifuName)).ToArray();
+        var waifuName = fileManager.GetActiveWaifuName().ToString();
+        int actualStep = fileManager.GetImageStepByWaifu(fileManager.GetActiveWaifuName());
+        int i = 1;
+        bool nextStepExist = true;
+        int stepValueLength = 0;
         
-        int[][] stepValues = new int[filteredSteps.Length][];
-        int actualStep = fileManager.GetImageStepByWaifu(fileManager.GetWaifuName());
-        for (int i = 0; i < filteredSteps.Length; i++) {
-            stepValues[i] = new int[2];
-            stepValues[i][0] = (int)filteredSteps[i];
+        while (nextStepExist) {
+            string index = i.ToString();
+            if (Enum.TryParse(waifuName+"_"+index, out WaifuSteps waifuStep)) {
+                stepValueLength++;
+                i++;
+            } else {
+                nextStepExist = false;
+                break;
+            }
+        }
 
-            // Estrai il numero del passo dalla stringa
-            var stepName = filteredSteps[i].ToString();
-            var stepNumberStr = new string(stepName.Where(c => Char.IsDigit(c)).ToArray()); // Estrae solo i numeri dalla stringa
-            int stepNumber = int.Parse(stepNumberStr);  // Converte la parte numerica in int
-            
-            // Se il passo è precedente ad actualStep, imposta stepValues[i][1] a 1
-            stepValues[i][1] = (stepNumber < actualStep) ? 1 : 0;
+        i = 1;
+        nextStepExist = true;
+        int[][] stepValues = new int[stepValueLength][];
+
+        while (nextStepExist) {
+            string index = i.ToString();
+            if (Enum.TryParse(waifuName+"_"+index, out WaifuSteps waifuStep)) {
+                stepValues[i - 1] = new int[2];
+                stepValues[i - 1][0] = (int)waifuStep;
+                // Metto true solo se l'ho sorpassato e sono a quello dopo
+                stepValues[i - 1][1] = (i < actualStep) ? 1 : 0;
+                i++;
+            } else {
+                nextStepExist = false;
+                break;
+            }
         }
 
         return stepValues;

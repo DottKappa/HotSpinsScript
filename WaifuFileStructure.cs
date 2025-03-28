@@ -23,7 +23,7 @@ public class WaifuFileStructure
             case Waifu.Chiho:
                 return chiho;
             default:
-                return chiho;
+                return new WaifuSave(waifuName.ToString());
         }
     }
 }

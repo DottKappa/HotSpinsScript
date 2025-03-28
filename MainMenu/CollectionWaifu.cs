@@ -10,9 +10,14 @@ public class CollectionWaifu : MonoBehaviour
     private string greenHex = "#87FF7E";
     private string redHex = "#FF7E94";
     private CollectionPage collectionPage;
+    private GameObject returnButton;
+    private FileManager fileManager;
+    public GameObject waifuPagePrefab;  // Il prefab di WaifuPage da istanziare
 
     void Start() {
         collectionPage = FindFirstObjectByType<CollectionPage>();
+        fileManager = FindFirstObjectByType<FileManager>();
+        returnButton = GameObject.Find("Return");
 
         waifuName = Capitalize(gameObject.name);
         if (PlayerPrefs.GetString("waifuName") == waifuName) {
@@ -20,10 +25,16 @@ public class CollectionWaifu : MonoBehaviour
         }
     }
 
-    public void ChiSono()
+    public void OpenWaifuPage()
     {
-        // Da sostituire con quello che ti fa vedere la collezione di immagini. 
-        Debug.Log("Il nome della waifu [" + waifuName + "]");
+        GameObject waifuInstance = Instantiate(waifuPagePrefab);
+        WaifuPage waifuPage = waifuInstance.GetComponent<WaifuPage>();
+        if (waifuPage != null) {
+            waifuPage.InitializeWaifu(waifuName, GetWaifuPoints(), GetWaifuSpins());
+            InteractWithGameObj(false);
+        } else {
+            Debug.LogError("[CollectionWaifu.cs] WaifuPage non trovato nel prefab");
+        }
     }
 
     public void SetWaifuActive()
@@ -71,5 +82,31 @@ public class CollectionWaifu : MonoBehaviour
 
         // La prima lettera in maiuscolo e il resto in minuscolo
         return char.ToUpper(input[0]) + input.Substring(1).ToLower();
+    }
+
+    public void InteractWithGameObj(bool setIsActive)
+    {
+        collectionPage.gameObject.SetActive(setIsActive);
+        returnButton.SetActive(setIsActive);
+    }
+
+    private string GetWaifuPoints()
+    {
+        Waifu waifuEnum;
+        if (Enum.TryParse(waifuName, out waifuEnum)) {
+            return fileManager.GetPointsByWaifu(waifuEnum).ToString();
+        }
+
+        return "0";
+    }
+
+    private string GetWaifuSpins()
+    {
+        Waifu waifuEnum;
+        if (Enum.TryParse(waifuName, out waifuEnum)) {
+            return fileManager.GetSpinsByWaifu(waifuEnum).ToString();
+        }
+
+        return "0";
     }
 }

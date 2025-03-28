@@ -18,19 +18,8 @@ public class FileManager : MonoBehaviour
         LoadWaifuFile();
     }
 
-    public Waifu GetWaifuName()
+    public Waifu GetActiveWaifuName()
     {
-        string waifuString = Waifu.Chiho.ToString();
-        if (Enum.IsDefined(typeof(Waifu), waifuString)) {
-            PlayerPrefs.SetString("waifuName", waifuString);
-        } else {
-            Debug.LogError("[FileManager.cs] Il nome della waifu non fa parte dell'enum");
-        }
-        
-        // TODO !!
-        // Lo prenderà da file 
-        // o da una decisione presa prima e salvata in una var globale di unity 
-        // o di base avrà Chiho
         return (Waifu)System.Enum.Parse(typeof(Waifu), PlayerPrefs.GetString("waifuName"));
     }
 
@@ -121,6 +110,7 @@ public class FileManager : MonoBehaviour
                 return;
             }
 
-            waifuFile = JsonUtility.FromJson<WaifuFileStructure>(json);}
+            waifuFile = JsonUtility.FromJson<WaifuFileStructure>(json);
+        }
     }
 }

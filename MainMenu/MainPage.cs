@@ -5,6 +5,7 @@ public class MainPage : MonoBehaviour
 {
     public Canvas mainPageCanvas;
     public Canvas collectionPageCanvas;
+    public GameObject fullScreenImage;
     
     public void PlayButton()
     {
@@ -25,6 +26,7 @@ public class MainPage : MonoBehaviour
         Debug.Log("Hai premuto collection");
         mainPageCanvas.gameObject.SetActive(false);
         collectionPageCanvas.gameObject.SetActive(true);
+        fullScreenImage.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void OptionButton()
