@@ -3,7 +3,7 @@ using UnityEngine;
 public class RespawnTrigger : MonoBehaviour
 {
     private SceneManager sceneManager;
-    private float[] weights = new float[6] {20f, 20f, 20f, 20f, 20f, 1000.1f};
+    private float[] weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.9f, 3.9f, 0.2f};
     private GameObject[] prefabs;
     private float speed = 23.0f;
     private int numberOfSpecialSpins = 0;
@@ -94,20 +94,33 @@ public class RespawnTrigger : MonoBehaviour
 
     public int GetIndexOfWeightsByTag(string tag)
     {
-        switch (tag.ToLower())
-        {
-            case "cell":
-                return 0;
+        switch (tag.ToLower()) {
             case "cherry":
-                return 1;
+                return 0;
             case "melon":
+                return 1;
+            case "strawberry":
                 return 2;
-            case "seven":
+            case "banana":
                 return 3;
-            case "special":
+            case "hearts":
                 return 4;
-            case "powerup":
+            case "diamonds":
                 return 5;
+            case "clubs":
+                return 6;
+            case "spades":
+                return 7;
+            case "sun":
+                return 8;
+            case "moon":
+                return 9;
+            case "seven":
+                return 10;
+            case "special":
+                return 11;
+            case "powerup":
+                return 12;               
             default:
                 return 0;
         }
@@ -115,10 +128,7 @@ public class RespawnTrigger : MonoBehaviour
 
     public void ResetWeights()
     {
-        for (int i = 0; i < weights.Length; i++) {
-            weights[i] = 20f;
-        }
-        weights[weights.Length-1] = 0.1f;
+        weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.9f, 3.9f, 0.2f};
     }
 
     public void ManipulateSpeed(float speed, int numberOfSpins)

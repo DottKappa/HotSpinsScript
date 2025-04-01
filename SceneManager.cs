@@ -90,31 +90,6 @@ public class SceneManager : MonoBehaviour
         return prefabs[Random.Range(0, prefabs.Length)];
     }
 
-    public GameObject GetCellPrefab()
-    {
-        return prefabs[0];
-    }
-    
-    public GameObject GetCherryPrefab()
-    {
-        return prefabs[1];
-    }
-    
-    public GameObject GetMelonPrefab()
-    {
-        return prefabs[2];
-    }
-    
-    public GameObject GetSevenPrefab()
-    {
-        return prefabs[3];
-    }
-    
-    public GameObject GetSpecialPrefab()
-    {
-        return prefabs[4];
-    }
-
     public Vector3[] GetAllStartingPosition()
     {
         return startingPositions;
