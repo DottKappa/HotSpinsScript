@@ -1,4 +1,5 @@
 using UnityEngine;
+using SceneManagement = UnityEngine.SceneManagement.SceneManager;
 
 public class SceneManager : MonoBehaviour
 {
@@ -77,6 +78,12 @@ public class SceneManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.A)) {
                 PickUpSpark();
             }
+        }
+
+        // Torno al menù principale
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            PlayerPrefs.SetInt("skipWelcomePage", 1);
+            SceneManagement.LoadScene("Menu");
         }
     }
 

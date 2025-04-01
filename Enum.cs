@@ -80,4 +80,5 @@ public enum PrestigeSteps
 /*
 -- CHIAVI PLAYER_PREFS
 - waifuName
+- skipWelcomePage [0/1]
 */

@@ -9,6 +9,10 @@ public class WelcomePage : MonoBehaviour
     private void Awake() {
         mainPageCanvas.gameObject.SetActive(false);
         collectionPageCanvas.gameObject.SetActive(false);
+        if (PlayerPrefs.GetInt("skipWelcomePage") == 1) {
+            PlayerPrefs.SetInt("skipWelcomePage", 0);
+            StartButton();
+        }
     }
 
     public void StartButton()
