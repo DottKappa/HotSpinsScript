@@ -2,11 +2,6 @@ using UnityEngine;
 
 public class RespawnTrigger : MonoBehaviour
 {
-    public int counterCell = 0;
-    public int counterCherry = 0;
-    public int counterMelon = 0;
-    public int counterSeven = 0;
-    public int counterSpecial = 0;
     private SceneManager sceneManager;
     private float[] weights = new float[6] {20f, 20f, 20f, 20f, 20f, 1000.1f};
     private GameObject[] prefabs;
@@ -60,34 +55,6 @@ public class RespawnTrigger : MonoBehaviour
         return 0;
     }
 
-// deprecated (for now)
-    private void CountNewObject(GameObject newObject)
-    {
-        switch (newObject.tag)
-        {
-            case string tag when tag.Contains("Cell_"):
-                counterCell++;
-                break;
-            case string tag when tag.Contains("Cherry_"):
-                counterCherry++;
-                break;
-            case string tag when tag.Contains("Melon_"):
-                counterMelon++;
-                break;
-            case string tag when tag.Contains("Seven_"):
-                counterSeven++;
-                break;
-            case string tag when tag.Contains("Special_"):
-                counterSpecial++;
-                break;
-        }
-    }
-// deprecated (for now)
-    private void ResetAllCounter()
-    {
-        counterCell = counterCherry = counterMelon = counterSeven = counterSpecial = 0;
-    }
-
     private GameObject GetRandomGameObjectByWeight()
     {
         if (prefabs.Length != weights.Length) {
@@ -112,7 +79,7 @@ public class RespawnTrigger : MonoBehaviour
         }
 
         // Se non viene selezionato nessun oggetto (cosa che non dovrebbe accadere mai)
-        Debug.LogError("Nessun oggetto selezionato. Controllare i pesi.");
+        Debug.LogError("[RespawnTrigger.cs] Nessun oggetto selezionato. Controllare i pesi.");
         return null;
     }
 

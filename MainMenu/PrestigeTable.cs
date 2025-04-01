@@ -10,8 +10,6 @@ public class PrestigeTable : MonoBehaviour
 
     void Start()
     {
-        //prefabIndices = new int[10] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        // Devo dare il prestigio per il punteggio 
         GenerateTable();
     }
 

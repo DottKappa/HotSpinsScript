@@ -48,7 +48,6 @@ public class BuffDebuffManager : MonoBehaviour
     void Start()
     {
         powerUpManager = FindFirstObjectByType<PowerUpManager>();
-        // Controllerà il file di salvataggio per aggiornare il dizionario
         fileManager = FindFirstObjectByType<FileManager>();
         LoadPowerUp(fileManager.GetBuffUsedByWaifu());
         LoadPowerUp(fileManager.GetDebuffUsedByWaifu());

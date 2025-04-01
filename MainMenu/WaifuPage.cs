@@ -58,7 +58,6 @@ public class WaifuPage : MonoBehaviour
             }
         }
 
-        // Opzionale: Aggiungi un po' di spazio tra gli oggetti nel content (se necessario)
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform);
     }
 
@@ -131,8 +130,6 @@ public class WaifuPage : MonoBehaviour
 
     public void ReturnButton()
     {
-        //collectionPageCanvas.gameObject.SetActive(true);
-        //posso utilizzare il metodo che ho creato per attivare e disattivare tutot
         collectionWaifu.InteractWithGameObj(true);
         Destroy(gameObject);
     }
