@@ -75,6 +75,9 @@ public class PointSystemController : MonoBehaviour
     private void checkHorizontal()
     {
         if (slotCells[1][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[1][2].tag) {
+            callAnimationCell(slotCells[1][0]);
+            callAnimationCell(slotCells[1][1]);
+            callAnimationCell(slotCells[1][2]);
             updatePoints(slotCells[1][0].tag.Split('_')[0], 1);
         }
     }
@@ -82,6 +85,9 @@ public class PointSystemController : MonoBehaviour
     private void checkDiagonalUpDown()
     {
         if (slotCells[0][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[2][2].tag) {
+            callAnimationCell(slotCells[0][0]);
+            callAnimationCell(slotCells[1][1]);
+            callAnimationCell(slotCells[2][2]);
             updatePoints(slotCells[0][0].tag.Split('_')[0], 2);
         }
     }
@@ -89,6 +95,9 @@ public class PointSystemController : MonoBehaviour
     private void checkDiagonalDownUp()
     {
         if (slotCells[2][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[0][2].tag) {
+            callAnimationCell(slotCells[2][0]);
+            callAnimationCell(slotCells[1][1]);
+            callAnimationCell(slotCells[0][2]);
             updatePoints(slotCells[2][0].tag.Split('_')[0], 2);
         }
     }
@@ -224,5 +233,15 @@ public class PointSystemController : MonoBehaviour
         }
         
         return waifuStepsArray.Length;
+    }
+
+    private void callAnimationCell(GameObject cell)
+    {
+        SlotController slotControllerScript = cell.GetComponent<SlotController>();
+        if (slotControllerScript != null) {
+            slotControllerScript.IncreaseScaleGradually();
+        } else {
+            Debug.LogError("[PointSystemController.cs] C'è un errore nel chiamare l'animazione della cella");
+        }
     }
 }
