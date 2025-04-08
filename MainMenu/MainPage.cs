@@ -5,6 +5,8 @@ public class MainPage : MonoBehaviour
 {
     public Canvas mainPageCanvas;
     public Canvas collectionPageCanvas;
+    public Canvas rulesPageCanvas;
+    public Canvas optionPageCanvas;
     public GameObject fullScreenImage;
     
     public void PlayButton()
@@ -31,6 +33,8 @@ public class MainPage : MonoBehaviour
 
     public void OptionButton()
     {
+        mainPageCanvas.gameObject.SetActive(false);
+        optionPageCanvas.gameObject.SetActive(true);
         Debug.Log("Hai premuto option");
     }
 
@@ -42,6 +46,8 @@ public class MainPage : MonoBehaviour
 
     public void RulesButton()
     {
+        mainPageCanvas.gameObject.SetActive(false);
+        rulesPageCanvas.gameObject.SetActive(true);
         Debug.Log("Hai premuto rules");
     }
 }

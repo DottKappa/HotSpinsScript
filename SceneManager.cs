@@ -16,6 +16,7 @@ public class SceneManager : MonoBehaviour
     private PowerUpManager powerUpManager;
     private FileManager fileManager;
     private BuffDebuffManager buffDebuffManager;
+    private CameraSlot cameraSlot;
 
     void Start()
     {
@@ -36,6 +37,7 @@ public class SceneManager : MonoBehaviour
         powerUpManager = FindFirstObjectByType<PowerUpManager>();
         fileManager = FindFirstObjectByType<FileManager>();
         buffDebuffManager = FindFirstObjectByType<BuffDebuffManager>();
+        cameraSlot = FindFirstObjectByType<CameraSlot>();
         
         numberOfSpins = fileManager.GetSpinsByWaifu(fileManager.GetActiveWaifuName());
     }
@@ -154,6 +156,7 @@ public class SceneManager : MonoBehaviour
 
     public void StopSlot()
     {
+        cameraSlot.StopSlotSound();
         SlotController[] slotControllers = FindObjectsByType<SlotController>(FindObjectsSortMode.None);
         foreach (SlotController slotController in slotControllers) {
             slotController.SetMoving(false);
@@ -187,6 +190,14 @@ public class SceneManager : MonoBehaviour
             } else if (Input.GetKeyDown(KeyCode.F)) {
                 column = SlotColumns.Third;
             }
+        }
+
+        if (column == SlotColumns.First && isRollingByColumn[0]) {
+            cameraSlot.StopSpinSound();
+        } else if (column == SlotColumns.Second && isRollingByColumn[1]) {
+            cameraSlot.StopSpinSound();
+        } else if (column == SlotColumns.Third && isRollingByColumn[2]) {
+            cameraSlot.StopSpinSound();
         }
 
         if (column != null) {

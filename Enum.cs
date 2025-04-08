@@ -30,7 +30,7 @@ public enum BuffType
     Every5DoubleScore,
     AddMoreSparks,
     AddMoreBasicCells,
-    AddMoreMultiplierCells,
+    AddMoreSpecialCells,
     ResetBuffSpawn,
     Nothing,
 }
@@ -42,7 +42,7 @@ public enum DebuffType
     Next5HalfScore,
     Every11HalfScore,
     RemoveSparks,
-    RemoveMultiplierCells,
+    RemoveSpecialCells,
     ResetDebuffSpawn,
     Nothing,
 }
@@ -81,4 +81,6 @@ public enum PrestigeSteps
 -- CHIAVI PLAYER_PREFS
 - waifuName
 - skipWelcomePage [0/1]
+- audioVolume [0-100]
+- isFullScreen [0/1]
 */

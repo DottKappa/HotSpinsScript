@@ -25,7 +25,7 @@ public class BuffDebuffManager : MonoBehaviour
         { BuffType.Every5DoubleScore, new PowerUpTupla("Double the score every spin multiple of 5") },
         { BuffType.AddMoreSparks, new PowerUpTupla("Add more probability to spawn sparks (until next win)") },
         { BuffType.AddMoreBasicCells, new PowerUpTupla("Add more probability to spawn basic cells (until next win)") },
-        { BuffType.AddMoreMultiplierCells, new PowerUpTupla("Add more probability to spawn multiplier (until next win)") },
+        { BuffType.AddMoreSpecialCells, new PowerUpTupla("Add more probability to spawn special (until next win)") },
         { BuffType.ResetBuffSpawn, new PowerUpTupla("Reset the probability of 'instant' or 'until next win' buff to spawn") }, // NB -> gli altri non devono essere modificati
         { BuffType.Nothing, new PowerUpTupla("Literally nothing") }
     };
@@ -37,7 +37,7 @@ public class BuffDebuffManager : MonoBehaviour
         { DebuffType.Next5HalfScore, new PowerUpTupla("Half the score for next 5 spins (instant)") },
         { DebuffType.Every11HalfScore, new PowerUpTupla("Half the score every spin multiple of 11") },
         { DebuffType.RemoveSparks, new PowerUpTupla("Remove probability to spawn sparks (until next win)") },
-        { DebuffType.RemoveMultiplierCells, new PowerUpTupla("Remove probability to spawn multiplier (until next win)") },
+        { DebuffType.RemoveSpecialCells, new PowerUpTupla("Remove probability to spawn special (until next win)") },
         { DebuffType.ResetDebuffSpawn, new PowerUpTupla("Reset the probability of 'instant' or 'until next win' debuff to spawn") },
         { DebuffType.Nothing, new PowerUpTupla("Literally nothing") }
     };

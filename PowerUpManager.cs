@@ -93,9 +93,11 @@ public class PowerUpManager : MonoBehaviour
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("banana"), 10f);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
-                case BuffType.AddMoreMultiplierCells:
+                case BuffType.AddMoreSpecialCells:
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("sun"), 10f);
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("moon"), 10f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 10f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 10f);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.ResetBuffSpawn:
@@ -132,9 +134,11 @@ public class PowerUpManager : MonoBehaviour
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 10f, false);
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
-                case DebuffType.RemoveMultiplierCells:
+                case DebuffType.RemoveSpecialCells:
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("sun"), 10f, false);
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("moon"), 10f, false);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 10f, false);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 10f, false);
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.ResetDebuffSpawn:
