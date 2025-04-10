@@ -11,6 +11,8 @@ public class PointSystemController : MonoBehaviour
     private RespawnTrigger respawnTrigger;
     private FileManager fileManager;
     private CanvasController canvasController;
+    private VfxManager vfxManager;
+    private CameraSlot cameraSlot;
     private GameObject[][] slotCells;
     private bool updated = false;
     private float customMultiplier = 1f;
@@ -24,6 +26,8 @@ public class PointSystemController : MonoBehaviour
         respawnTrigger = FindFirstObjectByType<RespawnTrigger>();
         fileManager = FindFirstObjectByType<FileManager>();
         canvasController = FindFirstObjectByType<CanvasController>();
+        vfxManager = FindFirstObjectByType<VfxManager>(); 
+        cameraSlot = FindFirstObjectByType<CameraSlot>();
 
         waifuStepsArray = GetWaifuStepsAsIntegers();
 
@@ -75,6 +79,8 @@ public class PointSystemController : MonoBehaviour
     private void checkHorizontal()
     {
         if (slotCells[1][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[1][2].tag) {
+            callAnimationThunder("H");
+            callWinSound();
             callAnimationCell(slotCells[1][0]);
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[1][2]);
@@ -85,6 +91,8 @@ public class PointSystemController : MonoBehaviour
     private void checkDiagonalUpDown()
     {
         if (slotCells[0][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[2][2].tag) {
+            callAnimationThunder("U");
+            callWinSound();
             callAnimationCell(slotCells[0][0]);
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[2][2]);
@@ -95,6 +103,8 @@ public class PointSystemController : MonoBehaviour
     private void checkDiagonalDownUp()
     {
         if (slotCells[2][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[0][2].tag) {
+            callAnimationThunder("D");
+            callWinSound();
             callAnimationCell(slotCells[2][0]);
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[0][2]);
@@ -243,5 +253,16 @@ public class PointSystemController : MonoBehaviour
         } else {
             Debug.LogError("[PointSystemController.cs] C'è un errore nel chiamare l'animazione della cella");
         }
+    }
+
+    private void callAnimationThunder(string rotation)
+    {
+        vfxManager.PlayThunder(rotation);
+    }
+
+    private void callWinSound()
+    {
+        cameraSlot.StartNormalWinSound();
+        canvasController.ShakeSlot();
     }
 }

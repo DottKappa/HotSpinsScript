@@ -66,6 +66,7 @@ public class SceneManager : MonoBehaviour
                 } else {
                     pointSystemController.setCustomMultiplier(1);
                 }
+                cameraSlot.StopSlotSpinSound();
                 pointSystemController.FetchPoints();
                 
                 if (needSave) {
@@ -138,6 +139,7 @@ public class SceneManager : MonoBehaviour
 
     public void StartSlot()
     {
+        cameraSlot.StartSlotSpinSound();
         EmptySlotMatrix();
         needSave = true;
 
@@ -156,7 +158,8 @@ public class SceneManager : MonoBehaviour
 
     public void StopSlot()
     {
-        cameraSlot.StopSlotSound();
+        cameraSlot.StopSpinSound();
+        cameraSlot.StopSlotSpinSound();
         SlotController[] slotControllers = FindObjectsByType<SlotController>(FindObjectsSortMode.None);
         foreach (SlotController slotController in slotControllers) {
             slotController.SetMoving(false);

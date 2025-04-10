@@ -71,13 +71,16 @@ public class SlotController : MonoBehaviour
     public void IncreaseScaleGradually()
     {
         StartCoroutine(ScaleCoroutine());
+        if (tag.Contains("Special_")) {
+            StartCoroutine(RotateY());
+        }
     }
 
     // Coroutine che cambia la scala gradualmente
     private IEnumerator ScaleCoroutine()
     {
         float timeElapsed = 0f; // Tempo trascorso
-        float duration = 0.3f; // Durata dell'animazione (1 secondo)
+        float duration = 0.3f; // Durata dell'animazione
         
         // Interpoliamo gradualmente dalla scala originale a quella ingrandita
         while (timeElapsed < duration) {
@@ -89,9 +92,6 @@ public class SlotController : MonoBehaviour
         // Assicuriamoci che alla fine la scala arrivi esattamente al target
         transform.localScale = targetScale;
 
-        // Aspettiamo un altro secondo e poi torniamo alla scala originale
-        //yield return new WaitForSeconds(1);
-
         // Interpoliamo di nuovo indietro verso la scala originale
         timeElapsed = 0f;
         while (timeElapsed < duration) {
@@ -102,5 +102,23 @@ public class SlotController : MonoBehaviour
 
         // Assicuriamoci che torni esattamente alla scala originale
         transform.localScale = originalScale;
+    }
+
+    private IEnumerator RotateY()
+    {
+        float rotationDuration = 0.3f;
+        float elapsedTime = 0f;
+        float startRotation = transform.eulerAngles.y;
+        float endRotation = startRotation + 360f;
+
+        while (elapsedTime < rotationDuration) {
+            float yRotation = Mathf.Lerp(startRotation, endRotation, elapsedTime / rotationDuration);
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, yRotation, transform.eulerAngles.z);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Rotazione finale precisa
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, endRotation, transform.eulerAngles.z);
     }
 }

@@ -4,6 +4,7 @@ public class CameraSlot : MonoBehaviour
 {
     private AudioSource musicAudioSource;  // AudioSource per la musica di sottofondo
     private AudioSource effectAudioSource;  // AudioSource per l'effetto sonoro
+    private AudioSource slotAudioSource; 
     private AudioClip backgroundMusicClip;
     private AudioClip effectAudioClip;
     private FileManager fileManager;
@@ -37,5 +38,32 @@ public class CameraSlot : MonoBehaviour
     {
         effectAudioSource.volume = 0.4f;
         effectAudioSource.PlayOneShot(effectAudioClip);
+    }
+
+    public void StartSlotSpinSound()
+    {
+        slotAudioSource = gameObject.AddComponent<AudioSource>();
+        AudioClip slotAudioClip = Resources.Load<AudioClip>("audio/slotSpin");
+        slotAudioSource.loop = true;
+        slotAudioSource.volume = 0.6f;
+        slotAudioSource.clip = slotAudioClip;
+        slotAudioSource.Play();        
+    }
+
+    public void StartNormalWinSound()
+    {
+        AudioSource normalWinAudioSource = gameObject.AddComponent<AudioSource>();
+        AudioClip normalWinAudioClip = Resources.Load<AudioClip>("audio/normalWin");
+        normalWinAudioSource.volume = 0.4f;
+        normalWinAudioSource.PlayOneShot(normalWinAudioClip);        
+    }
+
+    public void StopSlotSpinSound()
+    {
+        if (slotAudioSource != null) {
+            slotAudioSource.Stop();
+            Destroy(slotAudioSource);
+            slotAudioSource = null;
+        }
     }
 }

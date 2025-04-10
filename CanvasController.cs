@@ -1,15 +1,19 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 
 public class CanvasController : MonoBehaviour
 {
     public TextMeshProUGUI numberOfSlotsText;
     private SceneManager sceneManager;
     private PointSystemController pointSystemController;
+    private List<Transform> slotObjects = new List<Transform>();
 
     void Start() {
         sceneManager = FindFirstObjectByType<SceneManager>();
         pointSystemController = FindFirstObjectByType<PointSystemController>();
+        FindSlotObj();
     }
 
     void Update() {
@@ -19,7 +23,7 @@ public class CanvasController : MonoBehaviour
     public void ToggleCanvasElements(bool isActive)
     {
         foreach (Transform child in transform) {
-            if (!child.CompareTag("Waifu")) {
+            if (!child.CompareTag("Waifu") && !child.CompareTag("Background")) {
                 child.gameObject.SetActive(isActive);
             }
         }
@@ -76,5 +80,46 @@ public class CanvasController : MonoBehaviour
         } else {
             Debug.LogError("Waifu object not found.");
         }
+    }
+
+    private void FindSlotObj()
+    {
+        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+
+        foreach (GameObject obj in allObjects) {
+            if (!obj.activeInHierarchy) continue;
+
+            string tag = obj.tag;
+            if (tag == "Slot" || tag.Contains("_SlotCell")) {
+                slotObjects.Add(obj.transform);
+            }
+        }
+    }
+
+    public void ShakeSlot()
+    {
+        foreach (Transform obj in slotObjects) {
+            StartCoroutine(ShakeObject(obj));
+        }
+    }
+
+    private IEnumerator ShakeObject(Transform obj)
+    {
+        float shakeDuration = 0.3f;
+        float shakeIntensity = 0.1f;
+        Vector3 originalPos = obj.position;
+        float elapsed = 0f;
+
+        while (elapsed < shakeDuration) {
+            float offsetX = Random.Range(-1f, 1f) * shakeIntensity;
+            float offsetY = Random.Range(-1f, 1f) * shakeIntensity;
+
+            obj.position = new Vector3(originalPos.x + offsetX, originalPos.y + offsetY, originalPos.z);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        obj.position = originalPos;
     }
 }
