@@ -8,16 +8,29 @@ public class CanvasController : MonoBehaviour
     public TextMeshProUGUI numberOfSlotsText;
     private SceneManager sceneManager;
     private PointSystemController pointSystemController;
+    private FileManager fileManager;
     private List<Transform> slotObjects = new List<Transform>();
+    private bool waifuHidden = false;
 
     void Start() {
         sceneManager = FindFirstObjectByType<SceneManager>();
         pointSystemController = FindFirstObjectByType<PointSystemController>();
+        fileManager = FindFirstObjectByType<FileManager>();
         FindSlotObj();
     }
 
     void Update() {
         numberOfSlotsText.text = "Spins: " + addDot(sceneManager.GetNumberOfSpins());
+        if (Input.GetKeyDown(KeyCode.C)) {
+            string waifuName = fileManager.GetActiveWaifuName().ToString();
+            if (waifuHidden == false) {
+                SetWaifuImage(waifuName, "HideWaifu");
+                waifuHidden = true;
+            } else {
+                SetWaifuImage(waifuName, waifuName+"_"+pointSystemController.GetActualImageStep().ToString());
+                waifuHidden = false;
+            }            
+        }
     }
 
     public void ToggleCanvasElements(bool isActive)
@@ -60,25 +73,25 @@ public class CanvasController : MonoBehaviour
 
     public void SetWaifuImage(string imageFolder, string imageName)
     {
-        Transform waifuTransform = transform.Find("Waifu");
-        if (waifuTransform != null) {
-            GameObject waifuImageObject = waifuTransform.gameObject;
-            UnityEngine.UI.Image imageComponent = waifuImageObject.GetComponent<UnityEngine.UI.Image>();
-            if (imageComponent != null) {
-                Sprite newSprite = Resources.Load<Sprite>("Texture/Waifu/" + imageFolder + "/" + imageName);
-                if (newSprite != null) {
-                    imageComponent.sprite = newSprite;
+        if (waifuHidden == false) {
+            Transform waifuTransform = transform.Find("Waifu");
+            if (waifuTransform != null) {
+                GameObject waifuImageObject = waifuTransform.gameObject;
+                UnityEngine.UI.Image imageComponent = waifuImageObject.GetComponent<UnityEngine.UI.Image>();
+                if (imageComponent != null) {
+                    Sprite newSprite = Resources.Load<Sprite>("Texture/Waifu/" + imageFolder + "/" + imageName);
+                    if (newSprite != null) {
+                        imageComponent.sprite = newSprite;
+                    }
+                    else {
+                        Debug.LogError("Image not found: " + imageName);
+                    }
+                } else {
+                    Debug.LogError("ImageComponent component not found on Waifu object.");
                 }
-                else {
-                    Debug.LogError("Image not found: " + imageName);
-                }
+            } else {
+                Debug.LogError("Waifu object not found.");
             }
-            else
-            {
-                Debug.LogError("ImageComponent component not found on Waifu object.");
-            }
-        } else {
-            Debug.LogError("Waifu object not found.");
         }
     }
 

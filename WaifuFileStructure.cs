@@ -8,12 +8,12 @@ using UnityEngine;
 public class WaifuFileStructure
 {
     [SerializeField] private WaifuSave chiho;
-    [SerializeField] private WaifuSave erikaTMP;
+    [SerializeField] private WaifuSave hina;
 
-    public WaifuFileStructure(WaifuSave chiho, WaifuSave erikaTMP)
+    public WaifuFileStructure(WaifuSave chiho, WaifuSave hina)
     {
         this.chiho = chiho;
-        this.erikaTMP = erikaTMP;
+        this.hina = hina;
     }
 
 // Ritorna l'oggetto waifuSave, se non lo trova tornerà quella di base (Chiho)
@@ -22,6 +22,8 @@ public class WaifuFileStructure
         switch(waifuName) {
             case Waifu.Chiho:
                 return chiho;
+            case Waifu.Hina:
+                return hina;
             default:
                 return new WaifuSave(waifuName.ToString());
         }
@@ -48,6 +50,11 @@ public class WaifuSave
         this.imageStep = imageStep;
         this.buffUsed = buffUsed ?? new PowerUpUsed<BuffType>();
         this.debuffUsed = debuffUsed ?? new PowerUpUsed<DebuffType>();
+    }
+
+    public string GetWaifuName()
+    {
+        return waifuName;
     }
 
     public int GetPoints()

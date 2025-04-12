@@ -49,8 +49,8 @@ public class BuffDebuffManager : MonoBehaviour
     {
         powerUpManager = FindFirstObjectByType<PowerUpManager>();
         fileManager = FindFirstObjectByType<FileManager>();
-        LoadPowerUp(fileManager.GetBuffUsedByWaifu());
-        LoadPowerUp(fileManager.GetDebuffUsedByWaifu());
+        LoadPowerUp(fileManager.GetBuffUsedByWaifu(fileManager.GetActiveWaifuName()));
+        LoadPowerUp(fileManager.GetDebuffUsedByWaifu(fileManager.GetActiveWaifuName()));
     }
 
     private void LoadPowerUp(PowerUpUsed<BuffType> buffs)

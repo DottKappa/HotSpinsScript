@@ -60,21 +60,30 @@ public enum WaifuSteps
     Chiho_1 = 0,
     Chiho_2 = 100,
     Chiho_3 = 10000,
-    Erika_1 = 0,
+    Hina_1 = 0,
+    Hina_2 = 3500,
+    Hina_3 = 9000,
+    Hina_4 = 12000,
+    Hina_5 = 22000,
+    Hina_6 = 35000,
+    Hina_7 = 45000,
+    Hina_8 = 60000,
+    Hina_9 = 80000,
+    Hina_10 = 999999,
 }
 
 public enum PrestigeSteps
 {
-    Step_1 = 100000,
-    Step_2 = 200000,
-    Step_3 = 300000,
-    Step_4 = 400000,
-    Step_5 = 500000,
-    Step_6 = 600000,
-    Step_7 = 700000,
-    Step_8 = 800000,
-    Step_9 = 900000,
-    Step_10 = 999999,
+    Step_1 = 10000,
+    Step_2 = 20000,
+    Step_3 = 30000,
+    Step_4 = 40000,
+    Step_5 = 50000,
+    Step_6 = 60000,
+    Step_7 = 70000,
+    Step_8 = 80000,
+    Step_9 = 90000,
+    Step_10 = 99999,
 }
 
 /*

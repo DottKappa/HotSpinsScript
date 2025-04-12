@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class WelcomePage : MonoBehaviour
 {
@@ -13,6 +14,12 @@ public class WelcomePage : MonoBehaviour
         collectionPageCanvas.gameObject.SetActive(false);
         rulesPageCanvas.gameObject.SetActive(false);
         optionPageCanvas.gameObject.SetActive(false);
+
+        float oldVolume = PlayerPrefs.GetFloat("audioVolume", 0f);
+        if (oldVolume != 0f) {
+            AudioListener.volume = oldVolume;
+        }
+
         if (PlayerPrefs.GetInt("skipWelcomePage") == 1) {
             PlayerPrefs.SetInt("skipWelcomePage", 0);
             StartButton();

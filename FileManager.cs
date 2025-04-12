@@ -5,7 +5,7 @@ using UnityEngine;
 public class FileManager : MonoBehaviour
 {
     private string folder = "dataFiles";
-    private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave());
+    private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave("Hina"));
 
     void Awake() 
     {
@@ -110,7 +110,45 @@ public class FileManager : MonoBehaviour
                 return;
             }
 
-            waifuFile = JsonUtility.FromJson<WaifuFileStructure>(json);
+            WaifuFileStructure loadedWaifuFile = JsonUtility.FromJson<WaifuFileStructure>(json);
+            foreach (Waifu waifuType in Enum.GetValues(typeof(Waifu))) {
+                ReplaceWaifuIfNameMatch(waifuType, loadedWaifuFile);
+            }
         }
+    }
+
+    private void ReplaceWaifuIfNameMatch(Waifu waifuType, WaifuFileStructure loadedFile)
+    {
+        WaifuSave current = waifuFile.GetWaifuDataByName(waifuType);
+        WaifuSave loaded = loadedFile.GetWaifuDataByName(waifuType);
+
+        if (current == null || loaded == null) {
+            //Debug.LogWarning($"[Skip] Dati mancanti per {waifuType}");
+            return;
+        }
+
+        if (current.GetWaifuName() != loaded.GetWaifuName()) {
+            //Debug.Log($"[Skip] waifuName mismatch: current = {current.GetWaifuName()}, loaded = {loaded.GetWaifuName()}");
+            return;
+        }
+
+        if (current.Equals(loaded)) {
+            //Debug.Log($"[Skip] I dati per {waifuType} sono già aggiornati.");
+            return;
+        }
+
+        // Crea un nuovo WaifuFileStructure con i dati aggiornati
+        waifuFile = CreateUpdatedWaifuFile(waifuType, loaded);
+    }
+
+    private WaifuFileStructure CreateUpdatedWaifuFile(Waifu toReplace, WaifuSave newData)
+    {
+        // Recupera i waifu attuali
+        WaifuSave chiho = (toReplace == Waifu.Chiho) ? newData : waifuFile.GetWaifuDataByName(Waifu.Chiho);
+        WaifuSave hina  = (toReplace == Waifu.Hina)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Hina);
+        // Qui aggiungo la nuova waifu in futuro
+        // WaifuSave misaki = (toReplace == Waifu.Misaki) ? newData : waifuFile.GetWaifuDataByName(Waifu.Misaki);
+
+        return new WaifuFileStructure(chiho, hina); // Qui dovrò aggiungere misaki +
     }
 }
