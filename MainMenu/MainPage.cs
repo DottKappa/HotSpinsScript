@@ -20,7 +20,17 @@ public class MainPage : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        SceneManagement.LoadScene("Slot");
+        int seeTutorial = PlayerPrefs.GetInt("seeTutorial", 1);
+        if (seeTutorial == 1) {
+            rulesPageCanvas.gameObject.SetActive(true);
+            foreach (Transform child in rulesPageCanvas.transform) {
+                child.gameObject.SetActive(false);
+            }
+            RulesPage rulesScript = rulesPageCanvas.GetComponent<RulesPage>();
+            rulesScript.TutorialButton(true);
+        } else {
+            SceneManagement.LoadScene("Slot");
+        }
     }
 
     public void CollectionButton()

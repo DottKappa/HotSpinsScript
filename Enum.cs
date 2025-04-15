@@ -91,6 +91,7 @@ public enum PrestigeSteps
 -- CHIAVI PLAYER_PREFS
 - waifuName
 - skipWelcomePage [0/1]
+- seeTutorial [0/1]
 - audioVolume [0-100]
 - isFullScreen [0/1]
 */
