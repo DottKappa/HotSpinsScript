@@ -60,6 +60,7 @@ public enum WaifuSteps
     Chiho_1 = 0,
     Chiho_2 = 100,
     Chiho_3 = 10000,
+    Chiho_10 = 99999,
     Hina_1 = 0,
     Hina_2 = 3500,
     Hina_3 = 9000,
@@ -69,7 +70,7 @@ public enum WaifuSteps
     Hina_7 = 45000,
     Hina_8 = 60000,
     Hina_9 = 80000,
-    Hina_10 = 999999,
+    Hina_10 = 99999,
 }
 
 public enum PrestigeSteps

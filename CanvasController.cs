@@ -6,17 +6,24 @@ using System.Collections.Generic;
 public class CanvasController : MonoBehaviour
 {
     public TextMeshProUGUI numberOfSlotsText;
+    public TextMeshProUGUI nextArtAt;
     private SceneManager sceneManager;
     private PointSystemController pointSystemController;
     private FileManager fileManager;
     private List<Transform> slotObjects = new List<Transform>();
+    private List<Vector3> originalSlotObjectsPositions = new List<Vector3>();
     private bool waifuHidden = false;
+
+    void Awake()
+    {
+        pointSystemController = FindFirstObjectByType<PointSystemController>();
+    }
 
     void Start() {
         sceneManager = FindFirstObjectByType<SceneManager>();
-        pointSystemController = FindFirstObjectByType<PointSystemController>();
         fileManager = FindFirstObjectByType<FileManager>();
         FindSlotObj();
+        SetNextArtAt();
     }
 
     void Update() {
@@ -27,8 +34,8 @@ public class CanvasController : MonoBehaviour
                 SetWaifuImage(waifuName, "HideWaifu");
                 waifuHidden = true;
             } else {
-                SetWaifuImage(waifuName, waifuName+"_"+pointSystemController.GetActualImageStep().ToString());
                 waifuHidden = false;
+                SetWaifuImage(waifuName, waifuName+"_"+pointSystemController.GetActualImageStep().ToString());
             }            
         }
     }
@@ -73,6 +80,7 @@ public class CanvasController : MonoBehaviour
 
     public void SetWaifuImage(string imageFolder, string imageName)
     {
+        SetNextArtAt();
         if (waifuHidden == false) {
             Transform waifuTransform = transform.Find("Waifu");
             if (waifuTransform != null) {
@@ -105,22 +113,37 @@ public class CanvasController : MonoBehaviour
             string tag = obj.tag;
             if (tag == "Slot" || tag.Contains("_SlotCell")) {
                 slotObjects.Add(obj.transform);
+                originalSlotObjectsPositions.Add(obj.transform.position);
             }
+        }
+    }
+
+    private void SetNextArtAt()
+    {
+        int pointsForNextArt = pointSystemController.GetPointsForNextArt();
+        
+        if (pointsForNextArt != -999) {
+            nextArtAt.text = "Next art at: " + addDot(pointsForNextArt);
+        } else {
+            // Vuol dire che ho finito le art
+            nextArtAt.text = "All arts unlocked";
         }
     }
 
     public void ShakeSlot()
     {
-        foreach (Transform obj in slotObjects) {
-            StartCoroutine(ShakeObject(obj));
+        for (int i = 0; i < slotObjects.Count; i++) {
+            Transform obj = slotObjects[i];
+            Vector3 originalPos = originalSlotObjectsPositions[i];
+            obj.position = originalPos;
+            StartCoroutine(ShakeObject(obj, originalPos));
         }
     }
 
-    private IEnumerator ShakeObject(Transform obj)
+    private IEnumerator ShakeObject(Transform obj, Vector3 originalPos)
     {
         float shakeDuration = 0.3f;
         float shakeIntensity = 0.1f;
-        Vector3 originalPos = obj.position;
         float elapsed = 0f;
 
         while (elapsed < shakeDuration) {

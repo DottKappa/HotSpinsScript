@@ -1,5 +1,6 @@
 using UnityEngine;
 using SceneManagement = UnityEngine.SceneManagement.SceneManager;
+using System.Collections;
 
 public class SceneManager : MonoBehaviour
 {
@@ -78,7 +79,7 @@ public class SceneManager : MonoBehaviour
         }
 
         if (!MatrixHasEmptySlot() && !isRolling) {
-            if (Input.GetKeyDown(KeyCode.A)) {
+            if (Input.GetKeyDown(KeyCode.W)) {
                 PickUpSpark();
             }
         }
@@ -158,17 +159,33 @@ public class SceneManager : MonoBehaviour
 
     public void StopSlot()
     {
-        cameraSlot.StopSpinSound();
-        cameraSlot.StopSlotSpinSound();
         SlotController[] slotControllers = FindObjectsByType<SlotController>(FindObjectsSortMode.None);
         foreach (SlotController slotController in slotControllers) {
             slotController.SetMoving(false);
         }
-
         
         isRolling = false;
         isRollingByColumn = new bool[3] {false, false, false};
+
+        if (GetNumberOfSparksInSlot() > 0) {
+            cameraSlot.StartSparkInSlotSound();
+        }
         RoundPositionByMatrix();
+        StartCoroutine(StopSlotWithDelay());
+    }
+
+    private IEnumerator StopSlotWithDelay()
+    {
+        StopSlotByColumn(SlotColumns.First);
+        cameraSlot.StopSpinSound();
+        yield return new WaitForSeconds(0.08f);
+
+        StopSlotByColumn(SlotColumns.Second);
+        cameraSlot.StopSpinSound();
+        yield return new WaitForSeconds(0.08f);
+
+        StopSlotByColumn(SlotColumns.Third);
+        cameraSlot.StopSpinSound();
     }
 
     public void EmptySlotMatrix()
@@ -186,11 +203,11 @@ public class SceneManager : MonoBehaviour
     public void StopSlotByColumn(SlotColumns? column = null)
     {
         if (column == null) {
-            if (Input.GetKeyDown(KeyCode.S)) {
+            if (Input.GetKeyDown(KeyCode.A)) {
                 column = SlotColumns.First;
-            } else if (Input.GetKeyDown(KeyCode.D)) {
+            } else if (Input.GetKeyDown(KeyCode.S)) {
                 column = SlotColumns.Second;
-            } else if (Input.GetKeyDown(KeyCode.F)) {
+            } else if (Input.GetKeyDown(KeyCode.D)) {
                 column = SlotColumns.Third;
             }
         }
@@ -264,6 +281,7 @@ public class SceneManager : MonoBehaviour
         slotCells[0][column] = null;
     }
 
+// TODO: Deprecated
     public void RoundPositionByMatrix()
     {
         int positionIndex = 0;
@@ -296,7 +314,13 @@ public class SceneManager : MonoBehaviour
         }
 
         for (int row = 0; row < slotCells.Length; row++) {
-            slotCells[row][column].transform.position = startingPositions[positions[row]];
+            Vector3 finalPosition = startingPositions[positions[row]];
+
+            if (row == (slotCells.Length - 1)) {
+                StartCoroutine(DropAndRise(slotCells[row][column].transform, finalPosition, 0.3f, 15f));
+            } else {
+                slotCells[row][column].transform.position = finalPosition;
+            }
         }
     }
 
@@ -336,6 +360,35 @@ public class SceneManager : MonoBehaviour
     {
         spinWithMultiplier = spins;
         pointSystemController.setCustomMultiplier(multiplier);
+    }
+
+    private IEnumerator DropAndRise(Transform obj, Vector3 targetPos, float dropDistance, float speed)
+    {
+        if (obj == null) yield break;
+        Vector3 startPos = obj.position;
+        Vector3 dropPos = startPos - new Vector3(0f, dropDistance, 0f);
+
+        // Scende
+        float t = 0f;
+        while (t < 1f) {
+            if (obj == null) yield break;
+            t += Time.deltaTime * speed / dropDistance;
+            obj.position = Vector3.Lerp(startPos, dropPos, t);
+            yield return null;
+        }
+
+        // Risale verso la posizione finale
+        t = 0f;
+        while (t < 1f) {
+            if (obj == null) yield break;
+            t += Time.deltaTime * speed / Vector3.Distance(dropPos, targetPos);
+            obj.position = Vector3.Lerp(dropPos, targetPos, t);
+            yield return null;
+        }
+
+        if (obj == null) {
+            obj.position = targetPos; // Assicura posizione finale
+        }
     }
 
     private void saveWaifuData()

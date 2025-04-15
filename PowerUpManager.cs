@@ -83,7 +83,7 @@ public class PowerUpManager : MonoBehaviour
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.AddMoreSparks:
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 10f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 1f);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.AddMoreBasicCells:

@@ -63,12 +63,14 @@ public class PointSystemController : MonoBehaviour
     {
         points *= multiplier;
         UpdatePointsText();
+        UpdateWaifuImage();
     }
 
     public void DividePoints(int multiplier)
     {
         points /= multiplier;
         UpdatePointsText();
+        UpdateWaifuImage();
     }
 
     public void setCustomMultiplier(float multiplier)
@@ -182,7 +184,6 @@ public class PointSystemController : MonoBehaviour
     private void UpdateWaifuImage()
     {
         string waifuName = fileManager.GetActiveWaifuName().ToString();
-        
         for (int i = 0; i < waifuStepsArray.Length; i++) {
             if (points >= waifuStepsArray[i][0] && waifuStepsArray[i][1] == 0) {
                 canvasController.SetWaifuImage(waifuName, waifuName + "_" + (i + 1));
@@ -243,6 +244,33 @@ public class PointSystemController : MonoBehaviour
         }
         
         return waifuStepsArray.Length;
+    }
+
+    public int GetPointsForNextArt()
+    {
+        if (waifuStepsArray != null && waifuStepsArray.Length > 0) {
+            for (int i = 0; i < waifuStepsArray.Length; i++) {
+                if (waifuStepsArray[i][1] == 0) {
+                    if (i + 1 >= waifuStepsArray.Length) {
+                        return -999; // Vuol dire che ho finito le art
+                    } else {
+                        return waifuStepsArray[i][0];
+                    }                    
+                }
+            }
+
+            return -999;
+        } 
+
+        var waifuSteps = Enum.GetValues(typeof(WaifuSteps))
+                            .Cast<WaifuSteps>()
+                            .Where(e => e.ToString().ToLower().Contains(fileManager.GetActiveWaifuName().ToString().ToLower()))
+                            .ToList();
+        if (waifuSteps.Count >= 1) {
+            return (int)waifuSteps[0];
+        } 
+
+        return -1; // non ci sono abbastanza elementi con "ActiveWaifuName"    
     }
 
     private void callAnimationCell(GameObject cell)

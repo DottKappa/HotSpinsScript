@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CameraSlot : MonoBehaviour
 {
@@ -65,5 +66,21 @@ public class CameraSlot : MonoBehaviour
             Destroy(slotAudioSource);
             slotAudioSource = null;
         }
+    }
+
+    public void StartSparkInSlotSound()
+    {
+        AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+        AudioClip audioclip = Resources.Load<AudioClip>("audio/sparkSound");
+        StartCoroutine(PlaySoundWithDelay(audioSource, audioclip, 0.6f, 0.8f));
+    }
+
+    private IEnumerator PlaySoundWithDelay(AudioSource source, AudioClip clip, float delay, float volume)
+    {
+        if (source == null || clip == null) yield break;
+
+        yield return new WaitForSeconds(delay);
+        source.volume = volume;
+        source.PlayOneShot(clip);
     }
 }
