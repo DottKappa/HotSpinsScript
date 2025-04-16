@@ -6,6 +6,13 @@ public class RulesPage : MonoBehaviour
     public Canvas mainPageCanvas;
     public Canvas rulesPageCanvas;
     
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            ReturnButton();
+        }
+    }
+
     public void ReturnButton()
     {
         rulesPageCanvas.gameObject.SetActive(false);

@@ -24,6 +24,10 @@ public class CollectionPage : MonoBehaviour
         if (scrollInput != 0) {
             ScrollWithMouse(scrollInput);
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            ReturnButton();
+        }
     }
 
     public void SetAllChildInactive()

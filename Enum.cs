@@ -58,9 +58,15 @@ public enum Waifu
 public enum WaifuSteps
 {
     Chiho_1 = 0,
-    Chiho_2 = 100,
-    Chiho_3 = 10000,
-    Chiho_10 = 99999,
+    Chiho_2 = 2500,
+    Chiho_3 = 5000,
+    Chiho_4 = 8000,
+    Chiho_5 = 14000,
+    Chiho_6 = 20000,
+    Chiho_7 = 28000,
+    Chiho_8 = 35000,
+    Chiho_9 = 50000,
+    Chiho_10 = 79999,
     Hina_1 = 0,
     Hina_2 = 3500,
     Hina_3 = 9000,
@@ -73,6 +79,7 @@ public enum WaifuSteps
     Hina_10 = 99999,
 }
 
+//potrebbe diventare tipo "hina" e mettere quanti punti per la sua scena zozza
 public enum PrestigeSteps
 {
     Step_1 = 10000,

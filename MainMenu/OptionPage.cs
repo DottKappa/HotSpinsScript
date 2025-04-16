@@ -32,6 +32,13 @@ public class OptionPage : MonoBehaviour
         fullscreenToggle.onValueChanged.AddListener(OnFullscreenChanged);
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            ReturnButton();
+        }
+    }
+
     // Funzione per cambiare il volume
     public void OnVolumeChanged(float value)
     {

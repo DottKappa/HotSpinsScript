@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using System.Linq;
 
 public class WaifuPage : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class WaifuPage : MonoBehaviour
     public GameObject waifuDetailPrefab; // Riferimento al prefab
     public RectTransform contentTransform; // Riferimento al content della ScrollView
     private CollectionWaifu collectionWaifu;
+    [SerializeField] private TextMeshProUGUI[] waifuInfoFields;
     private FileManager fileManager;
 
     public void InitializeWaifu(string waifuName, string points, string spins)
@@ -40,7 +42,7 @@ public class WaifuPage : MonoBehaviour
                 WaifuDetail imageToggleScript = imageToggleInstance.GetComponentInChildren<WaifuDetail>();
                 
                 string buttonImagePath = "Texture/Waifu/"+waifuName+"/"+waifuName+"_"+index;
-                string fullScreenImagePath = "Texture/Waifu/"+waifuName+"/FullScreen/"+waifuName+"_"+index;
+                string fullScreenImagePath = "Texture/Waifu/"+waifuName+"/"+waifuName+"_"+index; // TODO-> deprecato? -> "Texture/Waifu/"+waifuName+"/FullScreen/"+waifuName+"_"+index;
                 bool isButtonEnabled = false;
 
                 if (i <= waifuStep) {
@@ -59,6 +61,7 @@ public class WaifuPage : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform);
+        SetWaifuInfoData();
     }
 
     private void SetText()
@@ -73,9 +76,10 @@ public class WaifuPage : MonoBehaviour
         int[] prestigeArray = new int[10];
         int pointsInt;
         int.TryParse(points, out pointsInt);
+        int[] waifuSteps = GetEnumValuesStartingWith(waifuName);
 
         for (int i = 0; i < prestigeArray.Length; i++) {
-            if (pointsInt >= (int)System.Enum.GetValues(typeof(PrestigeSteps)).GetValue(i)) {
+            if (pointsInt >= waifuSteps[i]) {
                 prestigeArray[i] = 1;
             } else {
                 prestigeArray[i] = 0;
@@ -89,6 +93,7 @@ public class WaifuPage : MonoBehaviour
 
             if (prestigeTableScript != null) {
                 prestigeTableScript.prefabIndices = prestigeArray;
+                prestigeTableScript.SetUpPrestigeTable(waifuName);
             } else {
                 Debug.LogError("PrestigeTable script non trovato sul GameObject Table.");
             }
@@ -174,5 +179,32 @@ public class WaifuPage : MonoBehaviour
         }
 
         return null; // Non trovato
+    }
+
+    private int[] GetEnumValuesStartingWith(string prefix)
+    {
+        return Enum.GetNames(typeof(WaifuSteps))
+                   .Where(name => name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                   .Select(name => (int)Enum.Parse(typeof(WaifuSteps), name))
+                   .ToArray();
+    }
+
+    private void SetWaifuInfoData()
+    {
+        string[] info = WaifuInfoStatic.GetInfoByWaifu(waifuName.ToLower());
+        
+        if (info.Length > 0) {
+            int waifuStep = GetWaifuStep();
+            int index = 2;
+
+            for (int i = 0; i < waifuInfoFields.Length && i < info.Length; i++) {
+                if (waifuInfoFields[i] != null && waifuStep >= index) {
+                    waifuInfoFields[i].text = info[i];
+                    index += 2;
+                }
+            }
+        } else {
+            Debug.LogError("[WaifuPage.cs] Non esistono le info per la waifu " + waifuName + " nella classe [WaifuInfoStatic.cs]");
+        }
     }
 }

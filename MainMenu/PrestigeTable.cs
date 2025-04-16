@@ -1,5 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System;
+using System.Linq;
+using System.Globalization;
 
 public class PrestigeTable : MonoBehaviour
 {
@@ -7,9 +11,11 @@ public class PrestigeTable : MonoBehaviour
     public GameObject cellOn;      // Riferimento al secondo prefab
     public Transform gridPanel;     // Riferimento al pannello (GridLayoutGroup)
     public int[] prefabIndices;     // Array di indici che determinano quale prefab usare per ogni cella
+    private int[] waifuSteps;
 
-    void Start()
+    public void SetUpPrestigeTable(string waifuName)
     {
+        waifuSteps = GetEnumValuesStartingWith(waifuName);
         GenerateTable();
     }
 
@@ -18,21 +24,44 @@ public class PrestigeTable : MonoBehaviour
         int rows = 2;
         int cols = 5;
 
-        // Loop attraverso tutte le celle
-        for (int i = 0; i < rows * cols; i++) {
-            // Determina quale prefab usare
-            GameObject prefabToInstantiate = cellOff;  // Default è cellOff
+        int waifuIndex = 0;
+        bool firstHidden = true;
+
+        for (int i = 0; i < rows * cols; i++)
+        {
+            GameObject prefabToInstantiate = cellOff;
+            bool isCellOn = false;
+
             if (prefabIndices.Length > i && prefabIndices[i] == 1) {
-                prefabToInstantiate = cellOn;  // Se l'indice è 1, usa cellOn
+                prefabToInstantiate = cellOn;
+                isCellOn = true;
             }
 
-            // Instanzia il prefab direttamente nel gridPanel
             GameObject instantiatedPrefab = Instantiate(prefabToInstantiate, gridPanel);
-
-            // Puoi anche fare in modo che la posizione del prefab si adatti al layout della griglia
             instantiatedPrefab.transform.localPosition = Vector3.zero;
+            instantiatedPrefab.transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
 
-            instantiatedPrefab.transform.localScale = new Vector3(5f, 5f, 5f);
+            if (isCellOn || firstHidden) {
+                Transform hoverTextTransform = instantiatedPrefab.transform.Find("HoverText");
+                if (hoverTextTransform != null) {
+                    TMP_Text tmpText = hoverTextTransform.GetComponent<TMP_Text>();
+                    if (tmpText != null && waifuIndex < waifuSteps.Length) {
+                        tmpText.text = waifuSteps[waifuIndex].ToString("N0", new CultureInfo("it-IT")); // formato con separatori (es: 35,000)
+                        waifuIndex++;
+                    }
+                }
+                if (!isCellOn) {
+                    firstHidden = false;
+                }
+            }
         }
+    }
+
+    private int[] GetEnumValuesStartingWith(string prefix)
+    {
+        return Enum.GetNames(typeof(WaifuSteps))
+                   .Where(name => name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                   .Select(name => (int)Enum.Parse(typeof(WaifuSteps), name))
+                   .ToArray();
     }
 }
