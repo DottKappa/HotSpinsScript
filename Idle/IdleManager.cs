@@ -10,11 +10,11 @@ public class IdleManager : MonoBehaviour
 
     private float fadeDuration = 1f;
     private IdleFileManager idleFileManager;
+    bool isHidingUnhiding = false;
 
     void Start()
     {
         idleFileManager = FindFirstObjectByType<IdleFileManager>();
-        DisableAllVisibility();
 
         string[] allRooms = IdleStatic.GetAllRooms();
         for (int i = 0; i < allRooms.Length; i++) {
@@ -23,6 +23,7 @@ public class IdleManager : MonoBehaviour
                 GameObject roomGameObj = GetRoomGameObjByName(allRooms[i]);
                 if (roomGameObj != null) {
                     roomGameObj.SetActive(true);
+                    DestroyUnlockableNeedOnButtonByRoomName(allRooms[i]);
                     Image imageComponent = GetImageComponentByGameObj(roomGameObj);
                     string waifuName = idleFileManager.GetActiveWaifuByRoomName(allRooms[i]);
                     Sprite sprite = GetSpriteByWaifuName(waifuName);
@@ -48,20 +49,31 @@ public class IdleManager : MonoBehaviour
 
     public void HideUnhideRoomButton(string roomName)
     {
-        GameObject roomGameObj = GetRoomGameObjByName(roomName);
-        if (roomGameObj == null) { return; }
-        CanvasGroup cg = roomGameObj.GetComponent<CanvasGroup>();
-        if (cg == null)  { return; }
-        DisableAllVisibility();
-        StartCoroutine(InvertVisibility(cg));
+        if (!isHidingUnhiding) {
+            isHidingUnhiding = true;
+            GameObject roomGameObj = GetRoomGameObjByName(roomName);
+            if (roomGameObj == null) { isHidingUnhiding = false; return; }
+            if (roomGameObj == GetActiveRoom()) { isHidingUnhiding = false; return; }
+
+            // se è il gamobj è disattivo devo vedere se lo posso attivare con un unlockable
+            if (!roomGameObj.activeSelf) {
+                ActiveRoom(roomGameObj);
+            }
+
+            CanvasGroup cg = roomGameObj.GetComponent<CanvasGroup>();
+            if (cg == null)  { isHidingUnhiding = false; return; }
+            DisableAllVisibility();
+            StartCoroutine(InvertVisibility(cg));
+        }
     }
 
     private IEnumerator InvertVisibility(CanvasGroup canvasGroup)
     {
         float targetAlpha = canvasGroup.alpha == 0f ? 1f : 0f;
         float startAlpha = canvasGroup.alpha;
-
         float elapsedTime = 0f;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
 
         while (elapsedTime < fadeDuration) {
             canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / fadeDuration);
@@ -72,6 +84,7 @@ public class IdleManager : MonoBehaviour
         canvasGroup.alpha = targetAlpha;
         canvasGroup.interactable = targetAlpha == 1f;
         canvasGroup.blocksRaycasts = targetAlpha == 1f;
+        isHidingUnhiding = false;
     }
 
     private void DisableAllVisibility()
@@ -88,6 +101,8 @@ public class IdleManager : MonoBehaviour
     {
         float startAlpha = canvasGroup.alpha;
         float elapsedTime = 0f;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
 
         while (elapsedTime < fadeDuration) {
             canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / fadeDuration);
@@ -96,8 +111,59 @@ public class IdleManager : MonoBehaviour
         }
 
         canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
+    }
+
+    private void ActiveRoom(GameObject roomGameObj)
+    {
+        int unlockable = idleFileManager.GetNumberOfUnlockableRoom();
+        float unlockableNeeded = IdleStatic.GetUnlockableNeededByRoomName(roomGameObj.name);
+        // Controllo se è un .5, quindi se ha bisogno di tutte le altre stanze sbloccate
+        if (Mathf.Abs(unlockableNeeded % 1f - 0.5f) < 0.0001f) {
+            if (!CheckUnlockedRoomByRoomNameLocked(roomGameObj.name)) {
+                isHidingUnhiding = false;
+                throw new InvalidOperationException("[IdleManager.cs] Impossibile sbloccare la stanza [" + roomGameObj.name + "] non hai sbloccato le stanze precedenti");
+            }
+        }
+        if (unlockable < (int)unlockableNeeded) {
+            isHidingUnhiding = false;
+            // TODO -> mostrarlo anche a schermo in qualche modo
+            throw new InvalidOperationException("[IdleManager.cs] Impossibile sbloccare la stanza [" + roomGameObj.name + "] non hai abbastanza unlockable");
+        }
+
+        idleFileManager.UseUnlockableRoom((int)unlockableNeeded);
+        roomGameObj.SetActive(true);
+        DestroyUnlockableNeedOnButtonByRoomName(roomGameObj.name);
+    }
+
+    private bool CheckUnlockedRoomByRoomNameLocked(string roomName)
+    {
+        // Controlla che tutte le stanze diverse da quella in input siano attive
+        string[] roomNames = IdleStatic.GetAllRooms();
+        bool allActive = true;
+
+        for (int i = 0; i < roomNames.Length; i++) {
+            GameObject roomGameObj = GetRoomGameObjByName(roomNames[i]);
+            if (roomGameObj == null) {
+                isHidingUnhiding = false;
+                throw new InvalidOperationException("[IdleManager.cs] Impossibile trovare la stanza [" + roomNames[i] + "]");
+            }
+            if (!roomGameObj.activeSelf && roomGameObj.name != roomName) {
+                allActive = false;
+            } 
+        }
+
+        return allActive;
+    }
+
+    private void DestroyUnlockableNeedOnButtonByRoomName(string roomName)
+    {
+        string path = $"RoomsButtons/{roomName}Button/UnlockNeeded";
+        Transform unlockNeeded = transform.Find(path);
+
+        if (unlockNeeded != null) {
+            Destroy(unlockNeeded.gameObject);
+            Debug.Log($"[IdleManager.cs] UnlockNeeded distrutto per la stanza: {roomName}");
+        }
     }
 
     private GameObject GetActiveRoom()

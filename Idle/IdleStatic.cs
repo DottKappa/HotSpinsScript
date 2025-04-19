@@ -14,7 +14,7 @@ public static class IdleStatic
         "Kitchen"
     };
 
-    // Se si aggiunge una stanza va aggiunto la relativa durata di base
+    // Se si aggiunge una stanza va aggiunto la relativa durata di base..
     private static readonly float[] roomsDuration = new float[]
     {
         3600f,
@@ -23,6 +23,17 @@ public static class IdleStatic
         2700f,
         2400f,
         2100f
+    };
+
+    //..E il costo in sbloccabili
+    private static readonly float[] roomsUnlockableNeeded = new float[]
+    {
+        0f,
+        1f,
+        2f,
+        3f,
+        4f,
+        4.5f, // il .5 significa che necessita tutti quelli prima sbloccati + 4 unlockable
     };
 
     public static string GetBasicRoom()
@@ -49,6 +60,19 @@ public static class IdleStatic
         }
 
         return roomsDuration[0] * 2;
+    }
+
+    public static float GetUnlockableNeededByRoomName(string roomName)
+    {
+        if (ExistsRoom(roomName)) {
+            for (int i = 0; i < rooms.Length; i++) {
+                if (roomName == rooms[i]) {
+                    return roomsUnlockableNeeded[i];
+                }
+            }    
+        }
+
+        throw new Exception("[IdleStatic.cs] La stanza passata [" + roomName + "] non esiste o non ha un corrispettivo di sbloccabili");
     }
 
 // == POWERUPS

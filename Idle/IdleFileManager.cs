@@ -55,6 +55,22 @@ public class IdleFileManager : MonoBehaviour
         return room.SelectedWaifu;
     }
 
+    public int GetNumberOfUnlockableRoom()
+    {
+        return idleFileStructure.UnlockableRoom;
+    }
+
+    public int UseUnlockableRoom(int use = 1)
+    {
+        int numberOfUnlockable = GetNumberOfUnlockableRoom();
+        if (numberOfUnlockable < use) {
+            throw new InvalidOperationException("[IdleFileManager.cs] Impossibile usare un unclockableRoom, nel file ne sono presenti [" + numberOfUnlockable + "]");
+        }
+
+        idleFileStructure.UnlockableRoom = numberOfUnlockable - use;
+        return idleFileStructure.UnlockableRoom;
+    }
+
     public void SaveIdleFile()
     {
         string nameFile = "idleData.json";
