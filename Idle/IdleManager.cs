@@ -2,11 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using TMPro;
 
 public class IdleManager : MonoBehaviour
 {
     //[Header("GameObj")]
     public GameObject[] roomsGameObj;
+    public TextMeshProUGUI numberOfUnlockableText;
 
     private float fadeDuration = 1f;
     private IdleFileManager idleFileManager;
@@ -24,6 +26,12 @@ public class IdleManager : MonoBehaviour
                 if (roomGameObj != null) {
                     roomGameObj.SetActive(true);
                     DestroyUnlockableNeedOnButtonByRoomName(allRooms[i]);
+                    int roomLv = idleFileManager.GetRoomLvByName(allRooms[i]);
+                    int baseLv = 1;
+                    while (baseLv != roomLv) {
+                        UnlockRoomLvByGameObjAndLv(roomGameObj, roomLv);
+                        roomLv--;
+                    }
                     Image imageComponent = GetImageComponentByGameObj(roomGameObj);
                     string waifuName = idleFileManager.GetActiveWaifuByRoomName(allRooms[i]);
                     Sprite sprite = GetSpriteByWaifuName(waifuName);
@@ -34,6 +42,7 @@ public class IdleManager : MonoBehaviour
 
         DisableAllVisibility();
         HideUnhideRoomButton(IdleStatic.GetBasicRoom());
+        UpdateNumberOfUnlockableText(idleFileManager.GetNumberOfUnlockableRoom());
     }
 
     private GameObject GetRoomGameObjByName(string roomName)
@@ -65,6 +74,26 @@ public class IdleManager : MonoBehaviour
             DisableAllVisibility();
             StartCoroutine(InvertVisibility(cg));
         }
+    }
+
+    public void UpdateLvButton(string roomNameAndLv)
+    {
+        string[] parts = roomNameAndLv.Split(';');
+        string roomName = parts[0];
+        int lvRequested = int.Parse(parts[1]);
+
+        GameObject room = GetRoomGameObjByName(roomName);
+        if (room == null) { Debug.LogError("[IdleManager.cs] Errore nel tovare la stanza richiesta [" + roomName + "]"); return; }
+        int roomLv = idleFileManager.GetRoomLvByName(roomName);
+        if ((roomLv) == lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] già presente"); return; }
+        if ((roomLv + 1) != lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] troppo alto rispetto a quello attuale ["+roomLv+"]"); return; }
+        
+        int unlockable = idleFileManager.GetNumberOfUnlockableRoom();
+        if (unlockable < 1) { throw new InvalidOperationException("[IdleManager.cs] Impossibile aumentare al livello [" + lvRequested + "] la stanza [" + roomName + "]"); }
+        int numberOfUnlockable = idleFileManager.UseUnlockableRoom(1);
+        idleFileManager.SetRoomLvByName(roomName, lvRequested);
+        UpdateNumberOfUnlockableText(numberOfUnlockable);
+        UnlockRoomLvByGameObjAndLv(room, lvRequested);
     }
 
     private IEnumerator InvertVisibility(CanvasGroup canvasGroup)
@@ -130,7 +159,8 @@ public class IdleManager : MonoBehaviour
             throw new InvalidOperationException("[IdleManager.cs] Impossibile sbloccare la stanza [" + roomGameObj.name + "] non hai abbastanza unlockable");
         }
 
-        idleFileManager.UseUnlockableRoom((int)unlockableNeeded);
+        int numberOfUnlockable = idleFileManager.UseUnlockableRoom((int)unlockableNeeded);
+        UpdateNumberOfUnlockableText(numberOfUnlockable);
         roomGameObj.SetActive(true);
         DestroyUnlockableNeedOnButtonByRoomName(roomGameObj.name);
     }
@@ -264,5 +294,21 @@ public class IdleManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void UpdateNumberOfUnlockableText(int numberOfUnlockable)
+    {
+        string prefix = numberOfUnlockable < 10 ? " x" : "x";
+        string formatted = prefix + numberOfUnlockable;
+        numberOfUnlockableText.text = formatted;
+    }
+
+    private void UnlockRoomLvByGameObjAndLv(GameObject room, int lvRequested)
+    {
+        Transform lv = room.transform.Find("RoomLv/Lv"+lvRequested);
+        Transform locked = lv.Find("Locked");
+        Transform unlocked = lv.Find("Unlocked");
+        GameObject.Destroy(locked.gameObject);
+        unlocked.gameObject.SetActive(true);
     }
 }

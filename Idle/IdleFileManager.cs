@@ -71,6 +71,18 @@ public class IdleFileManager : MonoBehaviour
         return idleFileStructure.UnlockableRoom;
     }
 
+    public int GetRoomLvByName(string roomName)
+    {
+        Room room = GetRoomByName(roomName);
+        return room.Lv;
+    }
+
+    public void SetRoomLvByName(string roomName, int lv)
+    {
+        Room room = GetRoomByName(roomName);
+        room.Lv = lv;
+    }
+
     public void SaveIdleFile()
     {
         string nameFile = "idleData.json";
