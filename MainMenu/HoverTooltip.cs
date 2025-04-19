@@ -9,12 +9,12 @@ public class HoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     Coroutine fadeCoroutine;
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         StartFade(1f); // Fade in
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         StartFade(0f); // Fade out
     }

@@ -7,8 +7,36 @@ public class MainPage : MonoBehaviour
     public Canvas collectionPageCanvas;
     public Canvas rulesPageCanvas;
     public Canvas optionPageCanvas;
+    public Canvas idleCanvas;
     public GameObject fullScreenImage;
+    private IdleFileManager idleFileManager;
     
+    void Start()
+    {
+        idleFileManager = FindFirstObjectByType<IdleFileManager>();
+    }
+
+    private void OnEnable() 
+    {
+        if (idleCanvas != null) {
+            idleCanvas.gameObject.SetActive(true);
+            CanvasGroup cg = idleCanvas.gameObject.GetComponent<CanvasGroup>();
+            cg.alpha = 1f;
+            cg.interactable = true;
+            cg.blocksRaycasts = true;
+        }
+    }
+
+    private void OnDisable() 
+    {
+        if (idleCanvas != null) {
+            CanvasGroup cg = idleCanvas.gameObject.GetComponent<CanvasGroup>();
+            cg.alpha = 0f;
+            cg.interactable = false;
+            cg.blocksRaycasts = false;
+        }
+    }
+
     public void PlayButton()
     {
         Debug.Log("Hai premuto play");
@@ -50,6 +78,7 @@ public class MainPage : MonoBehaviour
 
     public void ExitButton()
     {
+        idleFileManager.SaveIdleFile();
         Debug.Log("Hai premuto exit");
         Application.Quit();
     }
