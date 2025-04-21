@@ -22,20 +22,7 @@ public class ProgressBarTimer : MonoBehaviour
 
     void Start()
     {
-        string nomePadre = transform.parent.name;
-        if (IdleStatic.ExistsRoom(nomePadre)) {
-            Room room = idleFileManager.GetOrCreateRoomByName(nomePadre);
-            totalDurationInSeconds = totalDurationInSeconds / room.TimeMultiplier;
-            if (room.TimeNextReward == 0) {
-                elapsedTime = 0;
-            } else {
-                elapsedTime = totalDurationInSeconds - room.TimeNextReward;
-            }
-        } else {
-            totalDurationInSeconds = totalDurationInSeconds * 2;
-            Debug.LogWarning("[ProgressBarTimer.cs] Non è stato possibile riconoscere il tipo di stanza. Inizializzazione di default");
-        }
-
+        UpdateTimerMultiplier();
 
         Debug.Log("elapsed time: " + elapsedTime);
         Debug.Log("total duration: " + totalDurationInSeconds);
@@ -67,5 +54,23 @@ public class ProgressBarTimer : MonoBehaviour
     {
         Debug.Log("ELAPSED TIME -> " + Mathf.Floor(timeRemaining));
         return Mathf.Floor(timeRemaining);
+    }
+
+    public void UpdateTimerMultiplier()
+    {
+        string nomePadre = transform.parent.name;
+        if (IdleStatic.ExistsRoom(nomePadre)) {
+            totalDurationInSeconds = IdleStatic.GetRoomDurationByRoomName(nomePadre);
+            Room room = idleFileManager.GetOrCreateRoomByName(nomePadre);
+            totalDurationInSeconds = totalDurationInSeconds / room.TimeMultiplier;
+            if (room.TimeNextReward == 0) {
+                elapsedTime = 0;
+            } else {
+                elapsedTime = totalDurationInSeconds - (room.TimeNextReward / room.TimeMultiplier);
+            }
+        } else {
+            totalDurationInSeconds = totalDurationInSeconds * 2;
+            Debug.LogWarning("[ProgressBarTimer.cs] Non è stato possibile riconoscere il tipo di stanza. Inizializzazione di default");
+        }
     }
 }

@@ -96,6 +96,33 @@ public class IdleManager : MonoBehaviour
         UnlockRoomLvByGameObjAndLv(room, lvRequested);
     }
 
+    public void UpdateTimerButton(string roomNameAndLv)
+    {
+        string[] parts = roomNameAndLv.Split(';');
+        string roomName = parts[0];
+        int lvRequested = int.Parse(parts[1]);
+
+        GameObject room = GetRoomGameObjByName(roomName);
+        if (room == null) { Debug.LogError("[IdleManager.cs] Errore nel tovare la stanza richiesta [" + roomName + "]"); return; }
+        int timerLv = (int)idleFileManager.GetTimerLvByRoomName(roomName);
+        if ((timerLv) == lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] già presente"); return; }
+        if ((timerLv + 1) != lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] troppo alto rispetto a quello attuale ["+timerLv+"]"); return; }
+        int unlockable = idleFileManager.GetNumberOfUnlockableRoom();
+        if (unlockable < 1) { throw new InvalidOperationException("[IdleManager.cs] Impossibile aumentare al livello [" + lvRequested + "] il timer della stanza [" + roomName + "]"); }
+        int numberOfUnlockable = idleFileManager.UseUnlockableRoom(1);
+        idleFileManager.SetTimerLvByName(roomName, (float)lvRequested);
+        UpdateNumberOfUnlockableText(numberOfUnlockable);
+        UnlockRoomTimerByGameObjAndLv(room, lvRequested);
+        
+        Transform progressTransform = room.transform.Find("ProgressObj");
+        if (progressTransform != null) {
+            ProgressBarTimer progressScript = progressTransform.GetComponent<ProgressBarTimer>();
+            if (progressScript != null) {
+                progressScript.UpdateTimerMultiplier();
+            }
+        }
+    }
+
     private IEnumerator InvertVisibility(CanvasGroup canvasGroup)
     {
         float targetAlpha = canvasGroup.alpha == 0f ? 1f : 0f;
@@ -310,5 +337,12 @@ public class IdleManager : MonoBehaviour
         Transform unlocked = lv.Find("Unlocked");
         GameObject.Destroy(locked.gameObject);
         unlocked.gameObject.SetActive(true);
+    }
+
+    private void UnlockRoomTimerByGameObjAndLv(GameObject room, int lvRequested)
+    {
+        Transform lv = room.transform.Find("TimerLv/Lv"+lvRequested);
+        Transform locked = lv.Find("Locked");
+        GameObject.Destroy(locked.gameObject);
     }
 }

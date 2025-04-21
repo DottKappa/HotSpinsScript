@@ -83,6 +83,18 @@ public class IdleFileManager : MonoBehaviour
         room.Lv = lv;
     }
 
+    public float GetTimerLvByRoomName(string roomName)
+    {
+        Room room = GetRoomByName(roomName);
+        return room.TimeMultiplier;
+    }
+
+    public void SetTimerLvByName(string roomName, float lv)
+    {
+        Room room = GetRoomByName(roomName);
+        room.TimeMultiplier = lv;
+    }
+
     public void SaveIdleFile()
     {
         string nameFile = "idleData.json";
