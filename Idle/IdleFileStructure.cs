@@ -68,6 +68,12 @@ public class PowerUpData
         this.Type = IdleStatic.GetRandomPowerUp(rarity);
         this.Quantity = 1;
     }
+
+    public void CreatePowerUpByType(string type, int quantity = 1)
+    {
+        this.Type = type;
+        this.Quantity = quantity;
+    }
 }
 
 [Serializable]

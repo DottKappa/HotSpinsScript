@@ -14,6 +14,7 @@ public class ProgressBarTimer : MonoBehaviour
     private float elapsedTime = 0f;
     private float timeRemaining = 3600f;
     private IdleFileManager idleFileManager;
+    private IdlePowerUpManager idlePowerUpManager;
 
     void Awake()
     {
@@ -22,6 +23,7 @@ public class ProgressBarTimer : MonoBehaviour
 
     void Start()
     {
+        idlePowerUpManager = GetComponentInParent<IdlePowerUpManager>();
         UpdateTimerMultiplier();
 
         Debug.Log("elapsed time: " + elapsedTime);
@@ -47,6 +49,8 @@ public class ProgressBarTimer : MonoBehaviour
             // Tempo terminato, forza il completamento della barra e fissa il testo su 00:00
             progressBar.value = 1f;
             timeText.text = "00:00";
+            CallPowerUpCreation();
+            ResetTimer();
         }
     }
 
@@ -72,5 +76,21 @@ public class ProgressBarTimer : MonoBehaviour
             totalDurationInSeconds = totalDurationInSeconds * 2;
             Debug.LogWarning("[ProgressBarTimer.cs] Non è stato possibile riconoscere il tipo di stanza. Inizializzazione di default");
         }
+    }
+
+    private void CallPowerUpCreation()
+    {
+        string[] createdPowerUp = idlePowerUpManager.CreateRandomPowerUp();
+        idleFileManager.UpdateOrCreatePowerUp(createdPowerUp[0], int.Parse(createdPowerUp[1]));
+    }
+
+    private void ResetTimer()
+    {
+        string nomePadre = transform.parent.name;
+        Room room = idleFileManager.GetRoomByName(nomePadre);
+        room.TimeNextReward = IdleStatic.GetRoomDurationByRoomName(nomePadre);
+        timeRemaining = IdleStatic.GetRoomDurationByRoomName(nomePadre);
+        UpdateTimerMultiplier();
+        idleFileManager.SaveIdleFile();
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class IdleFileManager : MonoBehaviour
 {
@@ -23,13 +24,36 @@ public class IdleFileManager : MonoBehaviour
     {
         idleManager = FindFirstObjectByType<IdleManager>();
     }
-//    Debug.Log(idleFileStructure.TryGetRoomByName("hall").Lv);
+
+// == POWER UP ==
 
     public PowerUpData GetPowerUpByName(string powerUpName)
     {
         return idleFileStructure.TryGetPowerUpByType(powerUpName, out PowerUpData powerUp) ? powerUp : null;
     }
 
+    public List<PowerUpData> GetAllPowerUp()
+    {
+        return idleFileStructure.GetPowerUpList();
+    }
+
+    public void UpdateOrCreatePowerUp(string powerUpTitle, int availability)
+    {
+        PowerUpData powerUp = GetPowerUpByName(powerUpTitle);
+        if (powerUp == null) {
+            powerUp = new PowerUpData();
+            powerUp.CreatePowerUpByType(powerUpTitle, availability);
+            idleFileStructure.AddPowerUp(powerUp);
+            Debug.Log("[IdleFileManager] Ho creato il nuovo powerUp [" + powerUpTitle + "] nel idleFileStructure");
+        } else {
+            powerUp.Quantity = availability;
+            if (availability == 0) {
+                idleFileStructure.GetPowerUpList().Remove(powerUp);
+            }
+        }
+    }
+
+// == ROOM ==
     public Room GetRoomByName(string roomName)
     {
         return idleFileStructure.TryGetRoomByName(roomName, out var room) ? room : null;
@@ -55,6 +79,8 @@ public class IdleFileManager : MonoBehaviour
         return room.SelectedWaifu;
     }
 
+// == UNLOCKABLE ==
+
     public int GetNumberOfUnlockableRoom()
     {
         return idleFileStructure.UnlockableRoom;
@@ -70,6 +96,8 @@ public class IdleFileManager : MonoBehaviour
         idleFileStructure.UnlockableRoom = numberOfUnlockable - use;
         return idleFileStructure.UnlockableRoom;
     }
+
+// == SET/GET ==
 
     public int GetRoomLvByName(string roomName)
     {

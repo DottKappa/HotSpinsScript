@@ -7,6 +7,7 @@ public class HoverTooltipSmartPositioning : HoverTooltip
     public string parentObjectName = "PowerUpAvailable";
     public string tooltipObjectName = "TooltipPowerUp";
 
+    public TextMeshProUGUI availabilityText;
     private GameObject tooltipGO;
     private TextMeshProUGUI tooltipText;
 
@@ -52,5 +53,26 @@ public class HoverTooltipSmartPositioning : HoverTooltip
     {
         if (tooltipText != null)
             tooltipText.text = text;
+    }
+
+    public int UpdateAvailability(int numberOfNewAvailability = 1)
+    {
+        string text = availabilityText.text;
+        int value = 0;
+
+        if (!string.IsNullOrEmpty(text) && text.Length > 1) {
+            string numberPart = text.Substring(1); // rimuove la 'x'
+            int.TryParse(numberPart, out value);
+        }
+
+        int newValue = value + numberOfNewAvailability;
+
+        if (newValue <= 0) {
+            Destroy(this.gameObject);
+            return 0;
+        }
+
+        availabilityText.text = "x" + newValue;
+        return newValue;
     }
 }

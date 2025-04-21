@@ -83,9 +83,36 @@ public static class IdleStatic
         "mythic"
     };
 
+    private static readonly float[] weightsLv1 = new float[]
+    {
+        90f,
+        10f,
+        0f
+    };
+
+    private static readonly float[] weightsLv2 = new float[]
+    {
+        65f,
+        27f,
+        8f
+    };
+
+    private static readonly float[] weightsLv3 = new float[]
+    {
+        30f,
+        54f,
+        16f
+    };
+
+
     private static readonly string[] idleCommonPowerUps = new string[]
     {
         "3x_on_horizontal"
+    };
+
+    private static readonly string[] idleCommonPowerUpsDesc = new string[]
+    {
+        "The horizontal line values become 3x"
     };
 
     private static readonly string[] idleRarePowerUps = new string[]
@@ -93,14 +120,47 @@ public static class IdleStatic
         "5x_on_horizontal"
     };
 
+    private static readonly string[] idleRarePowerUpsDesc = new string[]
+    {
+        "The horizontal line values become 5x"
+    };
+
     private static readonly string[] idleMythicPowerUps = new string[]
     {
         "10x_on_horizontal"
     };
 
+    private static readonly string[] idleMythicPowerUpsDesc = new string[]
+    {
+        "The horizontal line values become 10x"
+    };
+
     public static string[] GetRarities()
     {
         return rarities;
+    }
+
+    public static string GetPowerUpDescriptionByTitle(string title)
+    {
+        // Common
+        for (int i = 0; i < idleCommonPowerUps.Length; i++){
+            if (idleCommonPowerUps[i] == title)
+                return idleCommonPowerUpsDesc[i];
+        }
+
+        // Rare
+        for (int i = 0; i < idleRarePowerUps.Length; i++) {
+            if (idleRarePowerUps[i] == title)
+                return idleRarePowerUpsDesc[i];
+        }
+
+        // Mythic
+        for (int i = 0; i < idleMythicPowerUps.Length; i++) {
+            if (idleMythicPowerUps[i] == title)
+                return idleMythicPowerUpsDesc[i];
+        }
+
+        return null;
     }
 
     public static string GetRandomPowerUp(string rarity)
@@ -112,6 +172,17 @@ public static class IdleStatic
         }
 
         return GetRandomPowerUpByRarity(rarity);
+    }
+
+    public static float[] GetWeightsByRoomLv(int lv)
+    {
+        switch (lv) {
+            case 1: return weightsLv1;
+            case 2: return weightsLv2;
+            case 3: return weightsLv3;
+        }
+
+        return weightsLv1;
     }
 
     private static string GetRandomPowerUpByRarity(string rarity)

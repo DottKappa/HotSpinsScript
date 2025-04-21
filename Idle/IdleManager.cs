@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 using TMPro;
 
 public class IdleManager : MonoBehaviour
@@ -12,11 +13,13 @@ public class IdleManager : MonoBehaviour
 
     private float fadeDuration = 1f;
     private IdleFileManager idleFileManager;
+    private IdlePowerUpManager idlePowerUpManager;
     bool isHidingUnhiding = false;
 
     void Start()
     {
         idleFileManager = FindFirstObjectByType<IdleFileManager>();
+        idlePowerUpManager = FindFirstObjectByType<IdlePowerUpManager>();
 
         string[] allRooms = IdleStatic.GetAllRooms();
         for (int i = 0; i < allRooms.Length; i++) {
@@ -43,6 +46,7 @@ public class IdleManager : MonoBehaviour
         DisableAllVisibility();
         HideUnhideRoomButton(IdleStatic.GetBasicRoom());
         UpdateNumberOfUnlockableText(idleFileManager.GetNumberOfUnlockableRoom());
+        SetUpPowerUp();
     }
 
     private GameObject GetRoomGameObjByName(string roomName)
@@ -344,5 +348,13 @@ public class IdleManager : MonoBehaviour
         Transform lv = room.transform.Find("TimerLv/Lv"+lvRequested);
         Transform locked = lv.Find("Locked");
         GameObject.Destroy(locked.gameObject);
+    }
+
+    private void SetUpPowerUp()
+    {
+        List<PowerUpData> allPowerUp = idleFileManager.GetAllPowerUp();
+        foreach (PowerUpData powerUp in allPowerUp) {
+            idlePowerUpManager.CreateNewPowerUp(powerUp.Type, powerUp.Quantity);
+        }
     }
 }
