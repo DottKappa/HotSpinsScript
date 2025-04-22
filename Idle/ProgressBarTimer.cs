@@ -15,6 +15,8 @@ public class ProgressBarTimer : MonoBehaviour
     private float timeRemaining = 3600f;
     private IdleFileManager idleFileManager;
     private IdlePowerUpManager idlePowerUpManager;
+    private UIBumpScaler uiBumpScaler;
+    private WaifuChibi waifuChibi;
 
     void Awake()
     {
@@ -24,6 +26,10 @@ public class ProgressBarTimer : MonoBehaviour
     void Start()
     {
         idlePowerUpManager = GetComponentInParent<IdlePowerUpManager>();
+        Transform giftImageTransform = transform.parent.Find("Gift/GiftImage");
+        uiBumpScaler = giftImageTransform.GetComponent<UIBumpScaler>();
+        Transform waifuChibiTransform = transform.parent.Find("Background/WaifuChibi");
+        waifuChibi = waifuChibiTransform.GetComponent<WaifuChibi>();
         UpdateTimerMultiplier();
     }
 
@@ -46,8 +52,9 @@ public class ProgressBarTimer : MonoBehaviour
             // Tempo terminato, forza il completamento della barra e fissa il testo su 00:00
             progressBar.value = 1f;
             timeText.text = "00:00";
-            CallPowerUpCreation();
-            ResetTimer();
+ 
+            waifuChibi.StartStopWaifu(false);
+            uiBumpScaler.PopUpGiftButton();
         }
     }
 
@@ -74,6 +81,13 @@ public class ProgressBarTimer : MonoBehaviour
         }
     }
 
+    public void PickUpGift()
+    {
+        CallPowerUpCreation();
+        ResetTimer();
+        uiBumpScaler.HideButton();
+    }
+
     private void CallPowerUpCreation()
     {
         string[] createdPowerUp = idlePowerUpManager.CreateRandomPowerUp();
@@ -88,5 +102,6 @@ public class ProgressBarTimer : MonoBehaviour
         timeRemaining = IdleStatic.GetRoomDurationByRoomName(nomePadre);
         UpdateTimerMultiplier();
         idleFileManager.SaveIdleFile();
+        waifuChibi.StartStopWaifu(true);
     }
 }

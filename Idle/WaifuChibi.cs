@@ -23,6 +23,7 @@ public class WaifuChibi : MonoBehaviour
     private bool isWaiting = false;
     private float baseY;
     private Vector3 originalScale;
+    private bool canMove = true;
 
     private void Start()
     {
@@ -36,26 +37,33 @@ public class WaifuChibi : MonoBehaviour
 
     private void Update()
     {
-        if (rectTransform == null) return;
+        if (canMove) {
+            if (rectTransform == null) return;
 
-        Vector3 pos = rectTransform.localPosition;
+            Vector3 pos = rectTransform.localPosition;
 
-        if (isWaiting)
-        {
-            IdleBreath(); // effetto idle mentre fermo
-            return;
+            if (isWaiting)
+            {
+                IdleBreath(); // effetto idle mentre fermo
+                return;
+            }
+
+            float targetX = goingLeft ? leftX : rightX;
+            pos.x = Mathf.MoveTowards(pos.x, targetX, speed * Time.deltaTime);
+            pos.y = ApplyBounce();
+
+            rectTransform.localPosition = pos;
+
+            if (Mathf.Approximately(pos.x, targetX))
+            {
+                StartCoroutine(FlipAfterDelay());
+            }
         }
+    }
 
-        float targetX = goingLeft ? leftX : rightX;
-        pos.x = Mathf.MoveTowards(pos.x, targetX, speed * Time.deltaTime);
-        pos.y = ApplyBounce();
-
-        rectTransform.localPosition = pos;
-
-        if (Mathf.Approximately(pos.x, targetX))
-        {
-            StartCoroutine(FlipAfterDelay());
-        }
+    public void StartStopWaifu(bool can = false)
+    {
+        canMove = can;
     }
 
     private IEnumerator FlipAfterDelay()
