@@ -25,9 +25,6 @@ public class ProgressBarTimer : MonoBehaviour
     {
         idlePowerUpManager = GetComponentInParent<IdlePowerUpManager>();
         UpdateTimerMultiplier();
-
-        Debug.Log("elapsed time: " + elapsedTime);
-        Debug.Log("total duration: " + totalDurationInSeconds);
     }
 
     void Update()
@@ -56,7 +53,6 @@ public class ProgressBarTimer : MonoBehaviour
 
     public float GetTimeForNextReward()
     {
-        Debug.Log("ELAPSED TIME -> " + Mathf.Floor(timeRemaining));
         return Mathf.Floor(timeRemaining);
     }
 

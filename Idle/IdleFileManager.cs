@@ -2,12 +2,14 @@ using System;
 using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class IdleFileManager : MonoBehaviour
 {
     private string folder = "dataFiles";
     private IdleFileStructure idleFileStructure = new IdleFileStructure();
     private IdleManager idleManager;
+    private MessageFadeController messageFadeController;
 
     private void Awake() 
     {
@@ -23,6 +25,14 @@ public class IdleFileManager : MonoBehaviour
     void Start()
     {
         idleManager = FindFirstObjectByType<IdleManager>();
+        messageFadeController = FindFirstObjectByType<MessageFadeController>();
+        StartCoroutine(AutoSaveRoutine());
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveIdleFile();
+        Debug.Log("[IdleFileManager] Salvataggio all'uscita del gioco.");
     }
 
 // == POWER UP ==
@@ -90,6 +100,7 @@ public class IdleFileManager : MonoBehaviour
     {
         int numberOfUnlockable = GetNumberOfUnlockableRoom();
         if (numberOfUnlockable < use) {
+            messageFadeController.ShowText("Impossible to use [" + use + "] diamonds. You have only [" + numberOfUnlockable + "]");
             throw new InvalidOperationException("[IdleFileManager.cs] Impossibile usare un unclockableRoom, nel file ne sono presenti [" + numberOfUnlockable + "]");
         }
 
@@ -218,6 +229,15 @@ public class IdleFileManager : MonoBehaviour
             } else {
                 Debug.LogWarning("[IdleFileManager][SAVE] Impossibile trovare la stanza [" + allRooms[i] + "]");
             }
+        }
+    }
+
+    private IEnumerator AutoSaveRoutine()
+    {
+        while (true) {
+            yield return new WaitForSecondsRealtime(300f); // 5 minuti reali
+            SaveIdleFile();
+            Debug.Log("[IdleFileManager] Autosalvataggio effettuato ogni 5 minuti.");
         }
     }
 }

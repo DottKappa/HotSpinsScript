@@ -14,12 +14,14 @@ public class IdleManager : MonoBehaviour
     private float fadeDuration = 1f;
     private IdleFileManager idleFileManager;
     private IdlePowerUpManager idlePowerUpManager;
+    private MessageFadeController messageFadeController;
     bool isHidingUnhiding = false;
 
     void Start()
     {
         idleFileManager = FindFirstObjectByType<IdleFileManager>();
         idlePowerUpManager = FindFirstObjectByType<IdlePowerUpManager>();
+        messageFadeController = FindFirstObjectByType<MessageFadeController>();
 
         string[] allRooms = IdleStatic.GetAllRooms();
         for (int i = 0; i < allRooms.Length; i++) {
@@ -86,14 +88,7 @@ public class IdleManager : MonoBehaviour
         string roomName = parts[0];
         int lvRequested = int.Parse(parts[1]);
 
-        GameObject room = GetRoomGameObjByName(roomName);
-        if (room == null) { Debug.LogError("[IdleManager.cs] Errore nel tovare la stanza richiesta [" + roomName + "]"); return; }
-        int roomLv = idleFileManager.GetRoomLvByName(roomName);
-        if ((roomLv) == lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] già presente"); return; }
-        if ((roomLv + 1) != lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] troppo alto rispetto a quello attuale ["+roomLv+"]"); return; }
-        
-        int unlockable = idleFileManager.GetNumberOfUnlockableRoom();
-        if (unlockable < 1) { throw new InvalidOperationException("[IdleManager.cs] Impossibile aumentare al livello [" + lvRequested + "] la stanza [" + roomName + "]"); }
+        GameObject room = CheckLvUp(roomName, lvRequested, idleFileManager.GetRoomLvByName(roomName), "room");
         int numberOfUnlockable = idleFileManager.UseUnlockableRoom(1);
         idleFileManager.SetRoomLvByName(roomName, lvRequested);
         UpdateNumberOfUnlockableText(numberOfUnlockable);
@@ -106,13 +101,7 @@ public class IdleManager : MonoBehaviour
         string roomName = parts[0];
         int lvRequested = int.Parse(parts[1]);
 
-        GameObject room = GetRoomGameObjByName(roomName);
-        if (room == null) { Debug.LogError("[IdleManager.cs] Errore nel tovare la stanza richiesta [" + roomName + "]"); return; }
-        int timerLv = (int)idleFileManager.GetTimerLvByRoomName(roomName);
-        if ((timerLv) == lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] già presente"); return; }
-        if ((timerLv + 1) != lvRequested) { Debug.LogError("[IdleManager.cs] Livello richiesto ["+lvRequested+"] troppo alto rispetto a quello attuale ["+timerLv+"]"); return; }
-        int unlockable = idleFileManager.GetNumberOfUnlockableRoom();
-        if (unlockable < 1) { throw new InvalidOperationException("[IdleManager.cs] Impossibile aumentare al livello [" + lvRequested + "] il timer della stanza [" + roomName + "]"); }
+        GameObject room = CheckLvUp(roomName, lvRequested, (int)idleFileManager.GetTimerLvByRoomName(roomName), "timer");        
         int numberOfUnlockable = idleFileManager.UseUnlockableRoom(1);
         idleFileManager.SetTimerLvByName(roomName, (float)lvRequested);
         UpdateNumberOfUnlockableText(numberOfUnlockable);
@@ -125,6 +114,27 @@ public class IdleManager : MonoBehaviour
                 progressScript.UpdateTimerMultiplier();
             }
         }
+    }
+
+    private GameObject CheckLvUp(string roomName, int lvRequested, int actualLv, string typeOfCheck)
+    {
+        GameObject room = GetRoomGameObjByName(roomName);
+        if (room == null) { throw new InvalidOperationException("[IdleManager.cs] Errore nel tovare la stanza richiesta [" + roomName + "]"); }
+        if ((actualLv) == lvRequested) { 
+            messageFadeController.ShowText("The lv you are requesting ["+lvRequested+"] is already active");
+            throw new InvalidOperationException("[IdleManager.cs] Livello richiesto ["+lvRequested+"] già presente");
+        }
+        if ((actualLv + 1) != lvRequested) { 
+            messageFadeController.ShowText("The lv you are requesting ["+lvRequested+"] is too high compared to the current one ["+actualLv+"]");
+            throw new InvalidOperationException("[IdleManager.cs] Livello richiesto ["+lvRequested+"] troppo alto rispetto a quello attuale ["+actualLv+"]");
+        }
+        int unlockable = idleFileManager.GetNumberOfUnlockableRoom();
+        if (unlockable < 1) { 
+            messageFadeController.ShowText("Impossible lvup the " + typeOfCheck + " [" + roomName + "] to lv [" + lvRequested + "]. Not enoght diamonds");
+            throw new InvalidOperationException("[IdleManager.cs] Impossibile aumentare al livello [" + lvRequested + "] il " + typeOfCheck + " della stanza [" + roomName + "]"); 
+        }
+
+        return room;
     }
 
     private IEnumerator InvertVisibility(CanvasGroup canvasGroup)
@@ -181,12 +191,13 @@ public class IdleManager : MonoBehaviour
         if (Mathf.Abs(unlockableNeeded % 1f - 0.5f) < 0.0001f) {
             if (!CheckUnlockedRoomByRoomNameLocked(roomGameObj.name)) {
                 isHidingUnhiding = false;
+                messageFadeController.ShowText("Impossible unlock the room [" + roomGameObj.name + "]. All previus room have to be unlocked");
                 throw new InvalidOperationException("[IdleManager.cs] Impossibile sbloccare la stanza [" + roomGameObj.name + "] non hai sbloccato le stanze precedenti");
             }
         }
         if (unlockable < (int)unlockableNeeded) {
             isHidingUnhiding = false;
-            // TODO -> mostrarlo anche a schermo in qualche modo
+            messageFadeController.ShowText("Impossible unlock the room [" + roomGameObj.name + "]. Not enoght diamonds");
             throw new InvalidOperationException("[IdleManager.cs] Impossibile sbloccare la stanza [" + roomGameObj.name + "] non hai abbastanza unlockable");
         }
 
@@ -223,7 +234,7 @@ public class IdleManager : MonoBehaviour
 
         if (unlockNeeded != null) {
             Destroy(unlockNeeded.gameObject);
-            Debug.Log($"[IdleManager.cs] UnlockNeeded distrutto per la stanza: {roomName}");
+            //Debug.Log($"[IdleManager.cs] UnlockNeeded distrutto per la stanza: {roomName}");
         }
     }
 
