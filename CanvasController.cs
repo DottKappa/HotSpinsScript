@@ -42,8 +42,8 @@ public class CanvasController : MonoBehaviour
 
     public void ToggleCanvasElements(bool isActive)
     {
-        foreach (Transform child in transform) {
-            if (!child.CompareTag("Waifu") && !child.CompareTag("Background")) {
+        foreach (Transform child in GetComponentsInChildren<Transform>(true)) {
+            if (child.name == "CanvasSlotContainer") {
                 child.gameObject.SetActive(isActive);
             }
         }
@@ -82,7 +82,7 @@ public class CanvasController : MonoBehaviour
     {
         SetNextArtAt();
         if (waifuHidden == false) {
-            Transform waifuTransform = transform.Find("Waifu");
+            Transform waifuTransform = transform.Find("CanvasBackgroundContainer/Waifu");
             if (waifuTransform != null) {
                 GameObject waifuImageObject = waifuTransform.gameObject;
                 UnityEngine.UI.Image imageComponent = waifuImageObject.GetComponent<UnityEngine.UI.Image>();

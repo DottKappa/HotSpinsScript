@@ -40,6 +40,7 @@ public class MainPage : MonoBehaviour
     public void PlayButton()
     {
         Debug.Log("Hai premuto play");
+        idleFileManager.SaveIdleFile();
 
         string waifuName = PlayerPrefs.GetString("waifuName");
         if (string.IsNullOrEmpty(waifuName)) {

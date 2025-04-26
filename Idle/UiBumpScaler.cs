@@ -13,6 +13,8 @@ public class UIBumpScaler : MonoBehaviour
     CanvasGroup canvasGroup;
     private ProgressBarTimer progressBarTimer;
     private bool isAnimating = false;
+    private AudioSource giftAudioSource;
+    private AudioClip giftClip;
 
     void Awake()
     {
@@ -20,6 +22,12 @@ public class UIBumpScaler : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
         if (targetImage == null)
             targetImage = GetComponent<Image>();
+
+        // Inizializza AudioSource una volta sola
+        giftAudioSource = gameObject.AddComponent<AudioSource>();
+        giftAudioSource.volume = 0.4f;
+        giftAudioSource.playOnAwake = false;
+        giftClip = Resources.Load<AudioClip>("audio/gift");
     }
 
     void Start()
@@ -38,6 +46,7 @@ public class UIBumpScaler : MonoBehaviour
     IEnumerator PlayShowAnimation()
     {
         isAnimating = true;
+        PlayGiftSound();
 
         // Mostra canvas (alpha 1)
         if (canvasGroup != null) {
@@ -72,8 +81,17 @@ public class UIBumpScaler : MonoBehaviour
 
     public void GiftButton()
     {
-        Debug.Log("Ecco il regalo");
+        if (giftAudioSource != null && giftAudioSource.isPlaying) {
+            giftAudioSource.Stop();
+        }
         progressBarTimer.PickUpGift();
+    }
+
+    private void PlayGiftSound()
+    {
+        if (giftAudioSource != null && !giftAudioSource.isPlaying) {
+            giftAudioSource.PlayOneShot(giftClip);
+        }
     }
 
     public void HideButton()
