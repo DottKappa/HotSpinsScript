@@ -13,6 +13,7 @@ public class PointSystemController : MonoBehaviour
     private CanvasController canvasController;
     private VfxManager vfxManager;
     private CameraSlot cameraSlot;
+    private PointSystemIdleController pointSystemIdleController;
     private GameObject[][] slotCells;
     private bool updated = false;
     private float customMultiplier = 1f;
@@ -28,6 +29,7 @@ public class PointSystemController : MonoBehaviour
         canvasController = FindFirstObjectByType<CanvasController>();
         vfxManager = FindFirstObjectByType<VfxManager>(); 
         cameraSlot = FindFirstObjectByType<CameraSlot>();
+        pointSystemIdleController = GetComponent<PointSystemIdleController>();
 
         waifuStepsArray = GetWaifuStepsAsIntegers();
 
@@ -46,6 +48,9 @@ public class PointSystemController : MonoBehaviour
             UpdatePointsText();
             UpdateWaifuImage();
             updated = true;
+            if (pointSystemIdleController.GetNumberOfHorizontal() > 0) pointSystemIdleController.SetNumberOfHorizontal(-1);
+            if (pointSystemIdleController.GetNumberOfUpDown() > 0) pointSystemIdleController.SetNumberOfUpDown(-1);
+            if (pointSystemIdleController.GetNumberOfDownUp() > 0) pointSystemIdleController.SetNumberOfDownUp(-1);
         }
     }
 
@@ -81,23 +86,31 @@ public class PointSystemController : MonoBehaviour
     private void checkHorizontal()
     {
         if (slotCells[1][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[1][2].tag) {
+            int multiplier = 1;
             callAnimationThunder("H");
             callWinSound();
             callAnimationCell(slotCells[1][0]);
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[1][2]);
-            updatePoints(slotCells[1][0].tag.Split('_')[0], 1);
+            if (pointSystemIdleController.GetNumberOfHorizontal() > 0) {
+                multiplier = multiplier * pointSystemIdleController.GetHorizontalMultiplier();
+            }
+            updatePoints(slotCells[1][0].tag.Split('_')[0], multiplier);
         }
     }
 
     private void checkDiagonalUpDown()
     {
         if (slotCells[0][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[2][2].tag) {
+            int multiplier = 2;
             callAnimationThunder("U");
             callWinSound();
             callAnimationCell(slotCells[0][0]);
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[2][2]);
+            if (pointSystemIdleController.GetNumberOfUpDown() > 0) {
+                multiplier = multiplier * pointSystemIdleController.GetUpDownlMultiplier();
+            }
             updatePoints(slotCells[0][0].tag.Split('_')[0], 2);
         }
     }
@@ -105,11 +118,15 @@ public class PointSystemController : MonoBehaviour
     private void checkDiagonalDownUp()
     {
         if (slotCells[2][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[0][2].tag) {
+            int multiplier = 2;
             callAnimationThunder("D");
             callWinSound();
             callAnimationCell(slotCells[2][0]);
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[0][2]);
+            if (pointSystemIdleController.GetNumberOfDownUp() > 0) {
+                multiplier = multiplier * pointSystemIdleController.GetDownUpMultiplier();
+            }
             updatePoints(slotCells[2][0].tag.Split('_')[0], 2);
         }
     }

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using SceneManagement = UnityEngine.SceneManagement.SceneManager;
 
 public class IdlePowerUpManager : MonoBehaviour
 {
@@ -70,7 +71,11 @@ public class IdlePowerUpManager : MonoBehaviour
         }
         Button buttonComponent = powerUp.GetComponent<Button>();
         if (buttonComponent != null) {
-            buttonComponent.enabled = false;
+            if (SceneManagement.GetActiveScene().name == "Slot") {
+                buttonComponent.enabled = true;
+            } else {
+                buttonComponent.enabled = false;
+            }
         }
 
         Image imageComponent = powerUp.GetComponent<Image>();

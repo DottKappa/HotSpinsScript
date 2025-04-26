@@ -112,7 +112,7 @@ public static class IdleStatic
 
     private static readonly string[] idleCommonPowerUpsDesc = new string[]
     {
-        "The horizontal line values become 3x"
+        "Multiply horizontal line 3 times"
     };
 
     private static readonly string[] idleRarePowerUps = new string[]
@@ -122,7 +122,7 @@ public static class IdleStatic
 
     private static readonly string[] idleRarePowerUpsDesc = new string[]
     {
-        "The horizontal line values become 5x"
+        "Multiply horizontal line 5 times"
     };
 
     private static readonly string[] idleMythicPowerUps = new string[]
@@ -132,12 +132,20 @@ public static class IdleStatic
 
     private static readonly string[] idleMythicPowerUpsDesc = new string[]
     {
-        "The horizontal line values become 10x"
+        "Multiply horizontal line 10 times"
     };
 
     public static string[] GetRarities()
     {
         return rarities;
+    }
+
+    public static string GetRarityByPowerUpName(string title)
+    {
+        if (Array.Exists(idleCommonPowerUps, p => p == title)) return "common";
+        if (Array.Exists(idleRarePowerUps, p => p == title)) return "rare";
+        if (Array.Exists(idleMythicPowerUps, p => p == title)) return "mythic";
+        return null;
     }
 
     public static string GetPowerUpDescriptionByTitle(string title)

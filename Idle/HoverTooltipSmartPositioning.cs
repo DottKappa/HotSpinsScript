@@ -10,6 +10,7 @@ public class HoverTooltipSmartPositioning : HoverTooltip
     public TextMeshProUGUI availabilityText;
     private GameObject tooltipGO;
     private TextMeshProUGUI tooltipText;
+    private string myTooltip;
 
     void Awake()
     {
@@ -39,6 +40,7 @@ public class HoverTooltipSmartPositioning : HoverTooltip
         if (tooltipGO == null) return;
 
         tooltipGO.SetActive(true);
+        SetTooltipText(myTooltip);
         base.OnPointerEnter(eventData); // usa il fade ereditato
     }
 
@@ -48,11 +50,13 @@ public class HoverTooltipSmartPositioning : HoverTooltip
 
         base.OnPointerExit(eventData); // usa il fade out
     }
-
+    
     public void SetTooltipText(string text)
     {
-        if (tooltipText != null)
+        if (tooltipText != null) {
             tooltipText.text = text;
+            myTooltip=text;
+        }
     }
 
     public int UpdateAvailability(int numberOfNewAvailability = 1)
@@ -74,5 +78,18 @@ public class HoverTooltipSmartPositioning : HoverTooltip
 
         availabilityText.text = "x" + newValue;
         return newValue;
+    }
+
+    public int GetAvailability()
+    {
+        string text = availabilityText.text;
+        int value = 0;
+        
+        if (!string.IsNullOrEmpty(text) && text.Length > 1) {
+            string numberPart = text.Substring(1);
+            int.TryParse(numberPart, out value);
+        }
+
+        return value;
     }
 }
