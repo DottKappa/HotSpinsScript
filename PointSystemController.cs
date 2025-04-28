@@ -51,6 +51,7 @@ public class PointSystemController : MonoBehaviour
             if (pointSystemIdleController.GetNumberOfHorizontal() > 0) pointSystemIdleController.SetNumberOfHorizontal(-1);
             if (pointSystemIdleController.GetNumberOfUpDown() > 0) pointSystemIdleController.SetNumberOfUpDown(-1);
             if (pointSystemIdleController.GetNumberOfDownUp() > 0) pointSystemIdleController.SetNumberOfDownUp(-1);
+            pointSystemIdleController.UpdateIdleMultipliers();
         }
     }
 
@@ -93,7 +94,7 @@ public class PointSystemController : MonoBehaviour
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[1][2]);
             if (pointSystemIdleController.GetNumberOfHorizontal() > 0) {
-                multiplier = multiplier * pointSystemIdleController.GetHorizontalMultiplier();
+                multiplier = pointSystemIdleController.GetHorizontalMultiplier();
             }
             updatePoints(slotCells[1][0].tag.Split('_')[0], multiplier);
         }
@@ -109,9 +110,9 @@ public class PointSystemController : MonoBehaviour
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[2][2]);
             if (pointSystemIdleController.GetNumberOfUpDown() > 0) {
-                multiplier = multiplier * pointSystemIdleController.GetUpDownlMultiplier();
+                multiplier = pointSystemIdleController.GetUpDownlMultiplier();
             }
-            updatePoints(slotCells[0][0].tag.Split('_')[0], 2);
+            updatePoints(slotCells[0][0].tag.Split('_')[0], multiplier);
         }
     }
 
@@ -125,9 +126,9 @@ public class PointSystemController : MonoBehaviour
             callAnimationCell(slotCells[1][1]);
             callAnimationCell(slotCells[0][2]);
             if (pointSystemIdleController.GetNumberOfDownUp() > 0) {
-                multiplier = multiplier * pointSystemIdleController.GetDownUpMultiplier();
+                multiplier = pointSystemIdleController.GetDownUpMultiplier();
             }
-            updatePoints(slotCells[2][0].tag.Split('_')[0], 2);
+            updatePoints(slotCells[2][0].tag.Split('_')[0], multiplier);
         }
     }
 

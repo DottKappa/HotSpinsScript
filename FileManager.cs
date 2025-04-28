@@ -53,6 +53,12 @@ public class FileManager : MonoBehaviour
         return waifuSave.GetDebuffUsed();
     }
 
+    public Multiplier GetMultiplierByWaifu(Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        return waifuSave.GetMultiplier();
+    }
+
     public void SetPointsByWaifu(int points, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
@@ -81,6 +87,12 @@ public class FileManager : MonoBehaviour
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetDebuffUsed(names, isUsed);
+    }
+
+    public void SetMultiplierByWaifu(MultiplierData horizontal, MultiplierData upDown, MultiplierData downUp, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetMultiplier(horizontal, upDown, downUp);
     }
 
     public void SaveWaifuFile()

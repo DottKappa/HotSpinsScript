@@ -6,6 +6,7 @@ using System.Collections;
 
 public class IdleFileManager : MonoBehaviour
 {
+    public GameObject autosaveGameObj;
     private string folder = "dataFiles";
     private IdleFileStructure idleFileStructure = new IdleFileStructure();
     private IdleManager idleManager;
@@ -236,6 +237,8 @@ public class IdleFileManager : MonoBehaviour
     {
         while (true) {
             yield return new WaitForSecondsRealtime(300f); // 5 minuti reali
+            AutosaveImage autosaveImageScript = autosaveGameObj.GetComponent<AutosaveImage>();
+            autosaveImageScript.SaveAnimation();
             SaveIdleFile();
             Debug.Log("[IdleFileManager] Autosalvataggio effettuato ogni 5 minuti.");
         }
