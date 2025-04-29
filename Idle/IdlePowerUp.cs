@@ -44,6 +44,16 @@ public class IdlePowerUp : MonoBehaviour
                 pointSystemIdleController.SetHorizontalMultiplier(3);
                 break;
             }
+            case "2x_on_updown": {
+                pointSystemIdleController.SetNumberOfUpDown(3);
+                pointSystemIdleController.SetUpDownMultiplier(2);
+                break;
+            }
+            case "2x_on_downup": {
+                pointSystemIdleController.SetNumberOfDownUp(3);
+                pointSystemIdleController.SetDownUpMultiplier(2);
+                break;
+            }
         }
     }
 
@@ -55,6 +65,16 @@ public class IdlePowerUp : MonoBehaviour
                 pointSystemIdleController.SetHorizontalMultiplier(5);
                 break;
             }
+            case "4x_on_updown": {
+                pointSystemIdleController.SetNumberOfUpDown(2);
+                pointSystemIdleController.SetUpDownMultiplier(4);
+                break;
+            }
+            case "4x_on_downup": {
+                pointSystemIdleController.SetNumberOfDownUp(2);
+                pointSystemIdleController.SetDownUpMultiplier(4);
+                break;
+            }
         }
     }
 
@@ -64,6 +84,16 @@ public class IdlePowerUp : MonoBehaviour
             case "10x_on_horizontal": {
                 pointSystemIdleController.SetNumberOfHorizontal(1);
                 pointSystemIdleController.SetHorizontalMultiplier(10);
+                break;
+            }
+            case "7x_on_updown": {
+                pointSystemIdleController.SetNumberOfUpDown(1);
+                pointSystemIdleController.SetUpDownMultiplier(7);
+                break;
+            }
+            case "7x_on_downup": {
+                pointSystemIdleController.SetNumberOfDownUp(1);
+                pointSystemIdleController.SetDownUpMultiplier(7);
                 break;
             }
         }

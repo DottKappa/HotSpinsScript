@@ -22,7 +22,7 @@ public class PointSystemIdleController : MonoBehaviour
     public void SetNumberOfUpDown(int value) { numberOfUpDown += value; }
     public void SetNumberOfDownUp(int value) { numberOfDownUp += value; }
     public void SetHorizontalMultiplier(int multiplier) { horizontalMultiplier = horizontalMultiplier * multiplier; }
-    public void SetUpDownlMultiplier(int multiplier) { upDownMultiplier = upDownMultiplier * multiplier; }
+    public void SetUpDownMultiplier(int multiplier) { upDownMultiplier = upDownMultiplier * multiplier; }
     public void SetDownUpMultiplier(int multiplier) { downUpMultiplier = downUpMultiplier * multiplier; }
 
 // == GET

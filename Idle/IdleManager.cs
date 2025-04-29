@@ -37,6 +37,12 @@ public class IdleManager : MonoBehaviour
                         UnlockRoomLvByGameObjAndLv(roomGameObj, roomLv);
                         roomLv--;
                     }
+                    int timerLv = (int)idleFileManager.GetTimerLvByRoomName(allRooms[i]);
+                    int baseTimerLv = 1;
+                    while (baseTimerLv != timerLv) {
+                        UnlockRoomTimerByGameObjAndLv(roomGameObj, timerLv);
+                        timerLv--;
+                    }
                     Image imageComponent = GetImageComponentByGameObj(roomGameObj);
                     string waifuName = idleFileManager.GetActiveWaifuByRoomName(allRooms[i]);
                     Sprite sprite = GetSpriteByWaifuName(waifuName);
@@ -111,7 +117,7 @@ public class IdleManager : MonoBehaviour
         if (progressTransform != null) {
             ProgressBarTimer progressScript = progressTransform.GetComponent<ProgressBarTimer>();
             if (progressScript != null) {
-                progressScript.UpdateTimerMultiplier();
+                progressScript.UpdateTimerMultiplierForLvUp();
             }
         }
     }
@@ -338,7 +344,7 @@ public class IdleManager : MonoBehaviour
         return null;
     }
 
-    private void UpdateNumberOfUnlockableText(int numberOfUnlockable)
+    public void UpdateNumberOfUnlockableText(int numberOfUnlockable)
     {
         string prefix = numberOfUnlockable < 10 ? " x" : "x";
         string formatted = prefix + numberOfUnlockable;

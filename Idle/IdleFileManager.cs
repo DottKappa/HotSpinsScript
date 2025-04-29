@@ -109,6 +109,13 @@ public class IdleFileManager : MonoBehaviour
         return idleFileStructure.UnlockableRoom;
     }
 
+    public void UpdateNumberOfUnlockableRoom(int unlockable = 1)
+    {
+        int numberOfUnlockable = GetNumberOfUnlockableRoom();
+        idleFileStructure.UnlockableRoom = numberOfUnlockable + unlockable;
+        idleManager.UpdateNumberOfUnlockableText(idleFileStructure.UnlockableRoom);
+    }
+
 // == SET/GET ==
 
     public int GetRoomLvByName(string roomName)

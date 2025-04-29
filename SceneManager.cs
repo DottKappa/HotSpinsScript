@@ -18,6 +18,7 @@ public class SceneManager : MonoBehaviour
     private FileManager fileManager;
     private BuffDebuffManager buffDebuffManager;
     private CameraSlot cameraSlot;
+    private IdleFileManager idleFileManager;
 
     void Start()
     {
@@ -39,6 +40,7 @@ public class SceneManager : MonoBehaviour
         fileManager = FindFirstObjectByType<FileManager>();
         buffDebuffManager = FindFirstObjectByType<BuffDebuffManager>();
         cameraSlot = FindFirstObjectByType<CameraSlot>();
+        idleFileManager = FindFirstObjectByType<IdleFileManager>();
         
         numberOfSpins = fileManager.GetSpinsByWaifu(fileManager.GetActiveWaifuName());
     }
@@ -87,6 +89,7 @@ public class SceneManager : MonoBehaviour
         // Torno al menù principale
         if (Input.GetKeyDown(KeyCode.Escape)) {
             PlayerPrefs.SetInt("skipWelcomePage", 1);
+            idleFileManager.SaveIdleFile();
             SceneManagement.LoadScene("Menu");
         }
     }
@@ -352,6 +355,7 @@ public class SceneManager : MonoBehaviour
         int numberOfSparksInSlot = GetNumberOfSparksInSlot();
         if (numberOfSparksInSlot > 0) {
             EmptySlotMatrix();
+            idleFileManager.UpdateNumberOfUnlockableRoom(numberOfSparksInSlot);
             powerUpManager.addSpark(numberOfSparksInSlot);
         }
     }

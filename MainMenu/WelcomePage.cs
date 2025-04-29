@@ -9,12 +9,14 @@ public class WelcomePage : MonoBehaviour
     public Canvas rulesPageCanvas;
     public Canvas optionPageCanvas;
     public Canvas idleCanvas;
+    public Canvas rulesIdlePageCanvas;
 
     private void Awake() {
         mainPageCanvas.gameObject.SetActive(false);
         collectionPageCanvas.gameObject.SetActive(false);
         rulesPageCanvas.gameObject.SetActive(false);
         optionPageCanvas.gameObject.SetActive(false);
+        rulesIdlePageCanvas.gameObject.SetActive(false);
         idleCanvas.gameObject.SetActive(false);
 
         float oldVolume = PlayerPrefs.GetFloat("audioVolume", 0f);

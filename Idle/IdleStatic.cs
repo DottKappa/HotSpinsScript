@@ -104,35 +104,47 @@ public static class IdleStatic
         16f
     };
 
-
+// Va aggiunto poi in IdlePowerUp.cs nei vari switch
     private static readonly string[] idleCommonPowerUps = new string[]
     {
-        "3x_on_horizontal"
+        "3x_on_horizontal",
+        "2x_on_updown",
+        "2x_on_downup",
     };
 
     private static readonly string[] idleCommonPowerUpsDesc = new string[]
     {
-        "Multiply horizontal line 3 times"
+        "Multiply horizontal line 3 times",
+        "Multiply from up to down line 2 times",
+        "Multiply from down to up line 2 times",
     };
 
     private static readonly string[] idleRarePowerUps = new string[]
     {
-        "5x_on_horizontal"
+        "5x_on_horizontal",
+        "4x_on_updown",
+        "4x_on_downup",
     };
 
     private static readonly string[] idleRarePowerUpsDesc = new string[]
     {
-        "Multiply horizontal line 5 times"
+        "Multiply horizontal line 5 times",
+        "Multiply from up to down line 4 times",
+        "Multiply from down to up line 4 times",
     };
 
     private static readonly string[] idleMythicPowerUps = new string[]
     {
-        "10x_on_horizontal"
+        "10x_on_horizontal",
+        "7x_on_updown",
+        "7x_on_downup",
     };
 
     private static readonly string[] idleMythicPowerUpsDesc = new string[]
     {
-        "Multiply horizontal line 10 times"
+        "Multiply horizontal line 10 times",
+        "Multiply from up to down line 7 times",
+        "Multiply from down to up line 2 times",
     };
 
     public static string[] GetRarities()

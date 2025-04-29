@@ -8,6 +8,7 @@ public class MainPage : MonoBehaviour
     public Canvas rulesPageCanvas;
     public Canvas optionPageCanvas;
     public Canvas idleCanvas;
+    public Canvas rulesIdlePageCanvas;
     public GameObject fullScreenImage;
     private IdleFileManager idleFileManager;
     
@@ -39,7 +40,6 @@ public class MainPage : MonoBehaviour
 
     public void PlayButton()
     {
-        Debug.Log("Hai premuto play");
         idleFileManager.SaveIdleFile();
 
         string waifuName = PlayerPrefs.GetString("waifuName");
@@ -64,7 +64,6 @@ public class MainPage : MonoBehaviour
 
     public void CollectionButton()
     {
-        Debug.Log("Hai premuto collection");
         mainPageCanvas.gameObject.SetActive(false);
         collectionPageCanvas.gameObject.SetActive(true);
         fullScreenImage.transform.GetChild(0).gameObject.SetActive(false);
@@ -74,13 +73,11 @@ public class MainPage : MonoBehaviour
     {
         mainPageCanvas.gameObject.SetActive(false);
         optionPageCanvas.gameObject.SetActive(true);
-        Debug.Log("Hai premuto option");
     }
 
     public void ExitButton()
     {
         idleFileManager.SaveIdleFile();
-        Debug.Log("Hai premuto exit");
         Application.Quit();
     }
 
@@ -88,6 +85,11 @@ public class MainPage : MonoBehaviour
     {
         mainPageCanvas.gameObject.SetActive(false);
         rulesPageCanvas.gameObject.SetActive(true);
-        Debug.Log("Hai premuto rules");
+    }
+
+    public void RulesIdleButton()
+    {
+        mainPageCanvas.gameObject.SetActive(false);
+        rulesIdlePageCanvas.gameObject.SetActive(true);
     }
 }
