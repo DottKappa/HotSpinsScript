@@ -3,7 +3,8 @@ using UnityEngine;
 public class RespawnTrigger : MonoBehaviour
 {
     private SceneManager sceneManager;
-    private float[] weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.9f, 3.9f, 0.2f};
+    private FileManager fileManager;
+    private float[] weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.8f, 3.7f, 0.5f};
     private GameObject[] prefabs;
     private float speed = 23.0f;
     private int numberOfSpecialSpins = 0;
@@ -11,6 +12,10 @@ public class RespawnTrigger : MonoBehaviour
     void Start()
     {
         sceneManager = FindFirstObjectByType<SceneManager>();
+        fileManager = FindFirstObjectByType<FileManager>();
+
+        Waifu waifuName = (Waifu)System.Enum.Parse(typeof(Waifu), PlayerPrefs.GetString("waifuName"));
+        weights = fileManager.GetWeightsByWaifu(waifuName);
         prefabs = sceneManager.GetAllPrefabs();
     }
 
@@ -128,7 +133,17 @@ public class RespawnTrigger : MonoBehaviour
 
     public void ResetWeights()
     {
-        weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.9f, 3.9f, 0.2f};
+        weights = GetDefaultWeights();
+    }
+
+    public float[] GetWeights()
+    {
+        return weights;
+    }
+
+    public float[] GetDefaultWeights()
+    {
+        return new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.8f, 3.7f, 0.5f};
     }
 
     public void ManipulateSpeed(float speed, int numberOfSpins)

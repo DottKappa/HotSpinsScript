@@ -71,11 +71,9 @@ public class PowerUpManager : MonoBehaviour
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.DoubleScore:
-                    pointSystemController.MultipliePoints(2);
-                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
-                    break;
-                case BuffType.Next3TripleScore:
-                    sceneManager.ManipulateMultiplierBySpins(3f, 3);
+                    int actualPoints = pointSystemController.GetPoints();
+                    float multiplier = CalculateMultiplier(actualPoints, true);
+                    pointSystemController.MultipliePoints(multiplier);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.Every5DoubleScore:
@@ -83,26 +81,31 @@ public class PowerUpManager : MonoBehaviour
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.AddMoreSparks:
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 1f);
+                    respawnTrigger.ResetWeights();
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 2f);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
+                    buffDebuffManager.SetPowerUpUnused(BuffType.AddMoreBasicCells.ToString(), true);
+                    buffDebuffManager.SetPowerUpUnused(BuffType.AddMoreSpecialCells.ToString(), true);
                     break;
                 case BuffType.AddMoreBasicCells:
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("cherry"), 10f);
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("melon"), 10f);
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("strawberry"), 10f);
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("banana"), 10f);
-                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
+                    respawnTrigger.ResetWeights();
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("cherry"), 20f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("melon"), 20f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("strawberry"), 20f);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("banana"), 20f);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);                    
+                    buffDebuffManager.SetPowerUpUnused(BuffType.AddMoreSparks.ToString(), true);
+                    buffDebuffManager.SetPowerUpUnused(BuffType.AddMoreSpecialCells.ToString(), true);
                     break;
                 case BuffType.AddMoreSpecialCells:
+                    respawnTrigger.ResetWeights();
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("sun"), 10f);
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("moon"), 10f);
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 10f);
                     respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 10f);
-                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
-                    break;
-                case BuffType.ResetBuffSpawn:
-                    buffDebuffManager.ResetBuffDictionary();
-                    buffDebuffManager.SetPowerUpUsed(BuffType.Every5DoubleScore.ToString(), true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);                    
+                    buffDebuffManager.SetPowerUpUnused(BuffType.AddMoreSparks.ToString(), true);
+                    buffDebuffManager.SetPowerUpUnused(BuffType.AddMoreBasicCells.ToString(), true);
                     break;
                 case BuffType.Nothing:
                     buffDebuffManager.SetPowerUpUsed(BuffType.Nothing.ToString(), true);
@@ -119,11 +122,9 @@ public class PowerUpManager : MonoBehaviour
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.HalfScore:
-                    pointSystemController.DividePoints(2);
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
-                    break;
-                case DebuffType.Next5HalfScore:
-                    sceneManager.ManipulateMultiplierBySpins(0.5f, 5);
+                    int actualPoints = pointSystemController.GetPoints();
+                    float multiplier = CalculateMultiplier(actualPoints, false);
+                    pointSystemController.DividePoints(multiplier);
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.Every11HalfScore:
@@ -131,27 +132,47 @@ public class PowerUpManager : MonoBehaviour
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.RemoveSparks:
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 10f, false);
+                    respawnTrigger.ResetWeights();
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("powerup"), 0.3f, false);
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
+                    buffDebuffManager.SetPowerUpUnused(DebuffType.RemoveSpecialCells.ToString(), false);
                     break;
                 case DebuffType.RemoveSpecialCells:
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("sun"), 10f, false);
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("moon"), 10f, false);
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 10f, false);
-                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 10f, false);
+                    respawnTrigger.ResetWeights();
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("sun"), 6f, false);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("moon"), 6f, false);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("seven"), 3.8f, false);
+                    respawnTrigger.ManipulateWeights(respawnTrigger.GetIndexOfWeightsByTag("special"), 3.7f, false);
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
+                    buffDebuffManager.SetPowerUpUnused(DebuffType.RemoveSparks.ToString(), false);
                     break;
                 case DebuffType.ResetDebuffSpawn:
                     buffDebuffManager.ResetDebuffDictionary();
                     buffDebuffManager.SetPowerUpUsed(DebuffType.Every11HalfScore.ToString(), false);
-                    break;
-                case DebuffType.Nothing:
-                    buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 default:
                     Debug.LogWarning("Unhandled power-up debuff type: " + powerUpDebuff);
                     break;
             }
         }
+    }
+
+    private float CalculateMultiplier(int punti, bool invertito = false)
+    {
+        if (punti < 10000)
+            return invertito ? 2.0f : 1.1f;
+
+        int step = (punti - 10000) / 10000;
+        float moltiplicatore;
+
+        if (invertito) {
+            moltiplicatore = 2.0f - (step * 0.1f);
+            moltiplicatore = Mathf.Max(moltiplicatore, 1.1f);
+        } else {
+            moltiplicatore = 1.1f + (step * 0.1f);
+            moltiplicatore = Mathf.Min(moltiplicatore, 2.0f);
+        }
+
+        return moltiplicatore;
     }
 }

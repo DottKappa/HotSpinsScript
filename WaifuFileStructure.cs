@@ -41,8 +41,9 @@ public class WaifuSave
     [SerializeField] private PowerUpUsed<BuffType> buffUsed;
     [SerializeField] private PowerUpUsed<DebuffType> debuffUsed;
     [SerializeField] private Multiplier multiplier;
+    [SerializeField] private float[] weights;
 
-    public WaifuSave(string waifuName = "Chiho", bool isUnlocked = false, int points = 0, int spins = 0, int imageStep = 1, PowerUpUsed<BuffType> buffUsed = null, PowerUpUsed<DebuffType> debuffUsed = null, Multiplier multiplier = null)
+    public WaifuSave(string waifuName = "Chiho", bool isUnlocked = false, int points = 0, int spins = 0, int imageStep = 1, PowerUpUsed<BuffType> buffUsed = null, PowerUpUsed<DebuffType> debuffUsed = null, Multiplier multiplier = null, float[] weights = null)
     {
         this.waifuName = waifuName;
         this.isUnlocked = isUnlocked;
@@ -52,6 +53,7 @@ public class WaifuSave
         this.buffUsed = buffUsed ?? new PowerUpUsed<BuffType>();
         this.debuffUsed = debuffUsed ?? new PowerUpUsed<DebuffType>();
         this.multiplier = multiplier ?? new Multiplier(new MultiplierData(1, 0), new MultiplierData(2, 0), new MultiplierData(2, 0));
+        this.weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.9f, 3.9f, 0.5f};
     }
 
     public string GetWaifuName()
@@ -89,6 +91,11 @@ public class WaifuSave
         return multiplier;
     }
 
+    public float[] GetWeights()
+    {
+        return weights;
+    }
+
     public void SetPoints(int points)
     {
         this.points = points;
@@ -124,6 +131,11 @@ public class WaifuSave
         this.multiplier.SetHorizontal(horizontal);
         this.multiplier.SetUpDown(upDown);
         this.multiplier.SetDownUp(downUp);
+    }
+
+    public void SetWeights(float[] weights)
+    {
+        this.weights = weights;
     }
 }
 

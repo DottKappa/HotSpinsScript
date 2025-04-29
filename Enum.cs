@@ -26,12 +26,10 @@ public enum BuffType
 {
     SlowDown,
     DoubleScore,
-    Next3TripleScore,
     Every5DoubleScore,
     AddMoreSparks,
     AddMoreBasicCells,
     AddMoreSpecialCells,
-    ResetBuffSpawn,
     Nothing,
 }
 
@@ -39,12 +37,10 @@ public enum DebuffType
 {
     SpeedUp,
     HalfScore,
-    Next5HalfScore,
     Every11HalfScore,
     RemoveSparks,
     RemoveSpecialCells,
     ResetDebuffSpawn,
-    Nothing,
 }
 
 public enum Waifu

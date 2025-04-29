@@ -59,6 +59,12 @@ public class FileManager : MonoBehaviour
         return waifuSave.GetMultiplier();
     }
 
+    public float[] GetWeightsByWaifu(Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        return waifuSave.GetWeights();
+    }
+
     public void SetPointsByWaifu(int points, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
@@ -93,6 +99,12 @@ public class FileManager : MonoBehaviour
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetMultiplier(horizontal, upDown, downUp);
+    }
+
+    public void SetWeightsByWaifu(float[] weights, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetWeights(weights);
     }
 
     public void SaveWaifuFile()

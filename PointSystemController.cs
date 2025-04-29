@@ -16,7 +16,6 @@ public class PointSystemController : MonoBehaviour
     private PointSystemIdleController pointSystemIdleController;
     private GameObject[][] slotCells;
     private bool updated = false;
-    private float customMultiplier = 1f;
     private int numberOfSpinToBuff = 0;
     private int numberOfSpinToDebuff = 0;
     private int[][] waifuStepsArray;
@@ -65,23 +64,18 @@ public class PointSystemController : MonoBehaviour
         updated = value;
     }
 
-    public void MultipliePoints(int multiplier)
+    public void MultipliePoints(float multiplier)
     {
-        points *= multiplier;
+        points = Mathf.FloorToInt(points * multiplier);
         UpdatePointsText();
         UpdateWaifuImage();
     }
 
-    public void DividePoints(int multiplier)
+    public void DividePoints(float multiplier)
     {
-        points /= multiplier;
+        points = Mathf.FloorToInt(points / multiplier);
         UpdatePointsText();
         UpdateWaifuImage();
-    }
-
-    public void setCustomMultiplier(float multiplier)
-    {
-        customMultiplier = multiplier;
     }
 
     private void checkHorizontal()
@@ -137,13 +131,13 @@ public class PointSystemController : MonoBehaviour
         float calculatePoints = points;
         if (System.Enum.TryParse(tag, out SlotSymbols symbol)) {
             int value = (int)symbol;
-            calculatePoints += value * multiplier * customMultiplier;
+            calculatePoints += value * multiplier;
         } else {
-            calculatePoints += 1 * multiplier * customMultiplier;
+            calculatePoints += 1 * multiplier;
         }
         points = ManipulateWinWithPowerUp(calculatePoints);
 
-        respawnTrigger.ResetWeights();
+        //respawnTrigger.ResetWeights(); -> Non mi interessa più resettarli
     }
 
     private void UpdatePointsText()

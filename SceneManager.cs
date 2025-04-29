@@ -10,7 +10,6 @@ public class SceneManager : MonoBehaviour
     private bool isRolling = false;
     private int numberOfSpins = 0;
     private bool[] isRollingByColumn = new bool[3] {true, true, true};
-    private int spinWithMultiplier = 0;
     private bool needSave = true;
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
@@ -64,17 +63,11 @@ public class SceneManager : MonoBehaviour
                 isRolling = false;
             }
             if (!isRollingByColumn[0] && !isRollingByColumn[1] && !isRollingByColumn[2] && !isRolling) {
-                if (spinWithMultiplier > 0) {
-                    spinWithMultiplier--;
-                } else {
-                    pointSystemController.setCustomMultiplier(1);
-                }
                 cameraSlot.StopSlotSpinSound();
                 pointSystemController.FetchPoints();
                 
                 if (needSave) {
                     saveWaifuData();
-                    fileManager.SaveWaifuFile();
                     needSave = false;
                 }
             }
@@ -90,6 +83,7 @@ public class SceneManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) {
             PlayerPrefs.SetInt("skipWelcomePage", 1);
             idleFileManager.SaveIdleFile();
+            saveWaifuData();
             SceneManagement.LoadScene("Menu");
         }
     }
@@ -331,21 +325,21 @@ public class SceneManager : MonoBehaviour
     {
         switch (numberOfSpins) {
             case int n when n % 3 == 0:
-            respawnTrigger.ManipulateWeights(0, 4f);
+            respawnTrigger.ManipulateWeights(4, 4f);
             break;
             case int n when n % 5 == 0:
-            respawnTrigger.ManipulateWeights(0, -10f);
-            respawnTrigger.ManipulateWeights(1, -2f);
+            respawnTrigger.ManipulateWeights(5, -10f);
+            respawnTrigger.ManipulateWeights(4, -2f);
             break;
             case int n when n % 7 == 0:
-            respawnTrigger.ManipulateWeights(2, 10f);
+            respawnTrigger.ManipulateWeights(6, 10f);
             break;
             case int n when n % 11 == 0:
-            respawnTrigger.ManipulateWeights(1, 3f);
-            respawnTrigger.ManipulateWeights(2, -3f);
+            respawnTrigger.ManipulateWeights(7, 3f);
+            respawnTrigger.ManipulateWeights(6, -3f);
             break;
             case int n when n % 13 == 0:
-            respawnTrigger.ManipulateWeights(4, 20f);
+            respawnTrigger.ManipulateWeights(5, 20f);
             break;
         }
     }
@@ -358,12 +352,6 @@ public class SceneManager : MonoBehaviour
             idleFileManager.UpdateNumberOfUnlockableRoom(numberOfSparksInSlot);
             powerUpManager.addSpark(numberOfSparksInSlot);
         }
-    }
-
-    public void ManipulateMultiplierBySpins(float multiplier, int spins)
-    {
-        spinWithMultiplier = spins;
-        pointSystemController.setCustomMultiplier(multiplier);
     }
 
     private IEnumerator DropAndRise(Transform obj, Vector3 targetPos, float dropDistance, float speed)
@@ -404,5 +392,14 @@ public class SceneManager : MonoBehaviour
         fileManager.SetImageStepByWaifu(pointSystemController.GetActualImageStep(), waifuName);
         fileManager.SetBuffUsedByWaifu(System.Enum.GetNames(typeof(BuffType)), buffDebuffManager.GetIsUsedByDictionary(true), waifuName);
         fileManager.SetDebuffUsedByWaifu(System.Enum.GetNames(typeof(DebuffType)), buffDebuffManager.GetIsUsedByDictionary(false), waifuName);
+        fileManager.SetWeightsByWaifu(respawnTrigger.GetWeights(), waifuName);
+
+        Debug.Log("[SceneManager] Salvataggio dati waifu");
+        fileManager.SaveWaifuFile();
+    }
+
+    private void OnApplicationQuit()
+    {
+        saveWaifuData();
     }
 }

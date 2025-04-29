@@ -19,27 +19,23 @@ public class BuffDebuffManager : MonoBehaviour
 {
     private Dictionary<BuffType, PowerUpTupla> buffDescriptions = new Dictionary<BuffType, PowerUpTupla>
     {
-        { BuffType.SlowDown, new PowerUpTupla("Next 3 spins will be slow (istant)") },
-        { BuffType.DoubleScore, new PowerUpTupla("Double the score (instant)") },
-        { BuffType.Next3TripleScore, new PowerUpTupla("Triple the score for next 3 spins (instant)") },
+        { BuffType.SlowDown, new PowerUpTupla("Next 3 spins will be slow") },
+        { BuffType.DoubleScore, new PowerUpTupla("Double the total score from 2x to 1.1x (every 10k -0.1 until 100k+ 1.1x)") },
         { BuffType.Every5DoubleScore, new PowerUpTupla("Double the score every spin multiple of 5") },
-        { BuffType.AddMoreSparks, new PowerUpTupla("Add more probability to spawn sparks (until next win)") },
-        { BuffType.AddMoreBasicCells, new PowerUpTupla("Add more probability to spawn basic cells (until next win)") },
-        { BuffType.AddMoreSpecialCells, new PowerUpTupla("Add more probability to spawn special (until next win)") },
-        { BuffType.ResetBuffSpawn, new PowerUpTupla("Reset the probability of 'instant' or 'until next win' buff to spawn") }, // NB -> gli altri non devono essere modificati
+        { BuffType.AddMoreSparks, new PowerUpTupla("More probability to spawn diamond (2.45%)(Reset others spawn)") },
+        { BuffType.AddMoreBasicCells, new PowerUpTupla("More probability to spawn basic cells (16.67%)(Reset others spawn)") },
+        { BuffType.AddMoreSpecialCells, new PowerUpTupla("More probability to spawn special (11.43%)(Reset others spawn)") },
         { BuffType.Nothing, new PowerUpTupla("Literally nothing") }
     };
 
     private Dictionary<DebuffType, PowerUpTupla> debuffDescriptions = new Dictionary<DebuffType, PowerUpTupla>
     {
-        { DebuffType.SpeedUp, new PowerUpTupla("Next 3 spins will be speed up (istant)") },
-        { DebuffType.HalfScore, new PowerUpTupla("Half the score (instant)") },
-        { DebuffType.Next5HalfScore, new PowerUpTupla("Half the score for next 5 spins (instant)") },
+        { DebuffType.SpeedUp, new PowerUpTupla("Next 3 spins will be speed up") },
+        { DebuffType.HalfScore, new PowerUpTupla("Half the total score from 1.1x to 2x (every 10k +0.1 until 100k+ 2x)") },
         { DebuffType.Every11HalfScore, new PowerUpTupla("Half the score every spin multiple of 11") },
-        { DebuffType.RemoveSparks, new PowerUpTupla("Remove probability to spawn sparks (until next win)") },
-        { DebuffType.RemoveSpecialCells, new PowerUpTupla("Remove probability to spawn special (until next win)") },
-        { DebuffType.ResetDebuffSpawn, new PowerUpTupla("Reset the probability of 'instant' or 'until next win' debuff to spawn") },
-        { DebuffType.Nothing, new PowerUpTupla("Literally nothing") }
+        { DebuffType.RemoveSparks, new PowerUpTupla("Remove probability to spawn sparks (0.2%)(Reset others spawn)") },
+        { DebuffType.RemoveSpecialCells, new PowerUpTupla("Remove probability to spawn special (0%)(Reset others spawn)") },
+        { DebuffType.ResetDebuffSpawn, new PowerUpTupla("Reset the debuff spawn") },
     };
 
     private FileManager fileManager;
@@ -112,7 +108,7 @@ public class BuffDebuffManager : MonoBehaviour
                 var randomDebuffKey = unusedDebuffs.Keys.ElementAt(random.Next(unusedDebuffs.Count));
                 return new string[] { randomDebuffKey.ToString(), unusedDebuffs[randomDebuffKey].Description };
             } else {
-                return new string[] { DebuffType.Nothing.ToString(), debuffDescriptions[DebuffType.Nothing].Description };
+                return new string[] { DebuffType.ResetDebuffSpawn.ToString(), debuffDescriptions[DebuffType.ResetDebuffSpawn].Description };
             }
         }
     }
@@ -130,6 +126,25 @@ public class BuffDebuffManager : MonoBehaviour
             foreach (var debuff in debuffDescriptions) {
                 if (debuff.Key.ToString().Equals(key, System.StringComparison.OrdinalIgnoreCase)) {
                     debuff.Value.IsUsed = true;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void SetPowerUpUnused(string key, bool isBuff)
+    {
+        if (isBuff) {
+            foreach (var buff in buffDescriptions) {
+                if (buff.Key.ToString().Equals(key, System.StringComparison.OrdinalIgnoreCase)) {
+                    buff.Value.IsUsed = false;
+                    return;
+                }
+            }
+        } else {
+            foreach (var debuff in debuffDescriptions) {
+                if (debuff.Key.ToString().Equals(key, System.StringComparison.OrdinalIgnoreCase)) {
+                    debuff.Value.IsUsed = false;
                     return;
                 }
             }
