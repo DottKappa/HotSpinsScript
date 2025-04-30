@@ -12,7 +12,7 @@ public class PowerUpManager : MonoBehaviour
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
 
-    private void Start()
+    private void Awake()
     {
         canvasController = FindFirstObjectByType<CanvasController>();
         sceneManager = FindFirstObjectByType<SceneManager>();
@@ -109,6 +109,14 @@ public class PowerUpManager : MonoBehaviour
                     break;
                 case BuffType.Nothing:
                     buffDebuffManager.SetPowerUpUsed(BuffType.Nothing.ToString(), true);
+                    break;
+                case BuffType.CreateHorizontalUp:
+                    pointSystemController.SetHorizontalUp(true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
+                    break;
+                case BuffType.CreateHorizontalDown:
+                    pointSystemController.SetHorizontalDown(true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 default:
                     Debug.LogWarning("Unhandled power-up buff type: " + powerUpBuff);

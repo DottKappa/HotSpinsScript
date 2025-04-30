@@ -12,6 +12,10 @@ public class VfxManager : MonoBehaviour
 
         if (rotation == "H") {
             SetHorizontal(thunderInstance);
+        } else if (rotation == "HU") {
+            SetHorizontalUp(thunderInstance);
+        } else if (rotation == "HD") {
+            SetHorizontalDown(thunderInstance);
         } else if (rotation == "U") {
             SetUpDown(thunderInstance);
         } else if (rotation == "D") {
@@ -24,6 +28,18 @@ public class VfxManager : MonoBehaviour
     private void SetHorizontal(GameObject gameObject)
     {
         gameObject.transform.rotation = Quaternion.Euler(0, 0, 90);
+    }
+
+    private void SetHorizontalUp(GameObject gameObject)
+    {
+        SetHorizontal(gameObject);
+        gameObject.transform.position += new Vector3(0, 1.5f, 0);
+    }
+    
+    private void SetHorizontalDown(GameObject gameObject)
+    {
+        SetHorizontal(gameObject);
+        gameObject.transform.position += new Vector3(0, -1.65f, 0);
     }
 
     private void SetUpDown(GameObject gameObject)

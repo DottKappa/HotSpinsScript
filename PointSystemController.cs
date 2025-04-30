@@ -19,6 +19,8 @@ public class PointSystemController : MonoBehaviour
     private int numberOfSpinToBuff = 0;
     private int numberOfSpinToDebuff = 0;
     private int[][] waifuStepsArray;
+    private bool isHorizontalUpActive = false;
+    private bool isHorizontalDownActive = false;
 
     void Start()
     {
@@ -42,6 +44,12 @@ public class PointSystemController : MonoBehaviour
         if (!updated) {
             slotCells = sceneManager.GetMatrix();
             checkHorizontal();
+            if (isHorizontalUpActive) {
+                checkHorizontal(0, "HU");
+            }
+            if (isHorizontalDownActive) {
+                checkHorizontal(2, "HD");
+            }
             checkDiagonalUpDown();
             checkDiagonalDownUp();
             UpdatePointsText();
@@ -64,6 +72,16 @@ public class PointSystemController : MonoBehaviour
         updated = value;
     }
 
+    public void SetHorizontalUp(bool value)
+    {
+        isHorizontalUpActive = value;
+    }
+
+    public void SetHorizontalDown(bool value)
+    {
+        isHorizontalDownActive = value;
+    }
+
     public void MultipliePoints(float multiplier)
     {
         points = Mathf.FloorToInt(points * multiplier);
@@ -78,19 +96,19 @@ public class PointSystemController : MonoBehaviour
         UpdateWaifuImage();
     }
 
-    private void checkHorizontal()
+    private void checkHorizontal(int row = 1, string animationPosition = "H")
     {
-        if (slotCells[1][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[1][2].tag) {
+        if (slotCells[row][0].tag == slotCells[row][1].tag && slotCells[row][1].tag == slotCells[row][2].tag) {
             int multiplier = 1;
-            callAnimationThunder("H");
+            callAnimationThunder(animationPosition);
             callWinSound();
-            callAnimationCell(slotCells[1][0]);
-            callAnimationCell(slotCells[1][1]);
-            callAnimationCell(slotCells[1][2]);
+            callAnimationCell(slotCells[row][0]);
+            callAnimationCell(slotCells[row][1]);
+            callAnimationCell(slotCells[row][2]);
             if (pointSystemIdleController.GetNumberOfHorizontal() > 0) {
                 multiplier = pointSystemIdleController.GetHorizontalMultiplier();
             }
-            updatePoints(slotCells[1][0].tag.Split('_')[0], multiplier);
+            updatePoints(slotCells[row][0].tag.Split('_')[0], multiplier);
         }
     }
 

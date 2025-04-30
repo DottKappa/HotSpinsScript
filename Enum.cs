@@ -30,6 +30,8 @@ public enum BuffType
     AddMoreSparks,
     AddMoreBasicCells,
     AddMoreSpecialCells,
+    CreateHorizontalUp,
+    CreateHorizontalDown,
     Nothing,
 }
 
