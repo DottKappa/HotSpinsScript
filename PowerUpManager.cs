@@ -67,7 +67,7 @@ public class PowerUpManager : MonoBehaviour
             Debug.Log("Parsed BuffType: " + powerUpBuff);
             switch (powerUpBuff) {
                 case BuffType.SlowDown:
-                    respawnTrigger.ManipulateSpeed(13.0f, 3);
+                    respawnTrigger.ManipulateSpeed(15.0f, 3);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.DoubleScore:
@@ -118,7 +118,7 @@ public class PowerUpManager : MonoBehaviour
             Debug.Log("Parsed DebuffType: " + powerUpDebuff);
             switch (powerUpDebuff) {
                 case DebuffType.SpeedUp:
-                    respawnTrigger.ManipulateSpeed(33.0f, 3);
+                    respawnTrigger.ManipulateSpeed(31.0f, 3);
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.HalfScore:

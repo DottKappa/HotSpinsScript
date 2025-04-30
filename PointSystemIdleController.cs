@@ -7,6 +7,10 @@ public class PointSystemIdleController : MonoBehaviour
     public TextMeshProUGUI upDownText;
     public TextMeshProUGUI horizontalText;
     public TextMeshProUGUI downUpText;
+    [Header("Multiplier usage")]
+    public TextMeshProUGUI upDownUsage;
+    public TextMeshProUGUI horizontalUsage;
+    public TextMeshProUGUI downUpUsage;
 
     private int numberOfHorizontal = 0;
     private int numberOfUpDown = 0;
@@ -43,6 +47,7 @@ public class PointSystemIdleController : MonoBehaviour
         numberOfUpDown = multiplier.GetUpDown().GetUsesLeft();
         downUpMultiplier = multiplier.GetDownUp().GetValue();
         numberOfDownUp = multiplier.GetDownUp().GetUsesLeft();
+        UpdateIdleMultipliers();
     }
 
     void Update()
@@ -54,6 +59,7 @@ public class PointSystemIdleController : MonoBehaviour
         UpdateFontSize(upDownText, upDownMultiplier);
         UpdateFontSize(horizontalText, horizontalMultiplier);
         UpdateFontSize(downUpText, downUpMultiplier);
+        UpdateIdleMultipliers();
     }
 
     private void UpdateFontSize(TextMeshProUGUI text, int multiplier)
@@ -76,6 +82,7 @@ public class PointSystemIdleController : MonoBehaviour
         SetUpMinimumMultiplier();
         fileManager.SetMultiplierByWaifu(new MultiplierData(horizontalMultiplier, numberOfHorizontal), 
             new MultiplierData(upDownMultiplier, numberOfUpDown), new MultiplierData(downUpMultiplier, numberOfDownUp), fileManager.GetActiveWaifuName());
+        SetRemainingUsage();
     }
 
     private void HalveIfZero(ref int count, ref int multiplier)
@@ -99,5 +106,12 @@ public class PointSystemIdleController : MonoBehaviour
         if (downUpMultiplier <= 1) {
             downUpMultiplier = 2;
         }
+    }
+
+    private void SetRemainingUsage()
+    {
+        upDownUsage.text = numberOfUpDown.ToString();
+        horizontalUsage.text = numberOfHorizontal.ToString();
+        downUpUsage.text = numberOfDownUp.ToString();
     }
 }

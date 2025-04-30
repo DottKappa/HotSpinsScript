@@ -205,6 +205,9 @@ public class IdleFileManager : MonoBehaviour
                     var progressBarScript = progressBar.GetComponent<ProgressBarTimer>();
                     if (progressBarScript != null) {
                         fileRoom.TimeNextReward = progressBarScript.GetTimeForNextReward();
+                        if (fileRoom.TimeNextReward <= 1) {
+                            fileRoom.TimeNextReward = 1;
+                        }
                     } else {
                         Debug.LogError("[IdleFileManager][SAVE] Impossibile trovare lo script della barra del progresso [" + allRooms[i] + "]");
                         continue;

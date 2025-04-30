@@ -116,8 +116,8 @@ public class ProgressBarTimer : MonoBehaviour
     {
         string nomePadre = transform.parent.name;
         Room room = idleFileManager.GetRoomByName(nomePadre);
-        room.TimeNextReward = IdleStatic.GetRoomDurationByRoomName(nomePadre);
-        timeRemaining = IdleStatic.GetRoomDurationByRoomName(nomePadre);
+        room.TimeNextReward = (IdleStatic.GetRoomDurationByRoomName(nomePadre) / room.TimeMultiplier);
+        timeRemaining = (IdleStatic.GetRoomDurationByRoomName(nomePadre) / room.TimeMultiplier);
         UpdateTimerMultiplier();
         idleFileManager.SaveIdleFile();
         waifuChibi.StartStopWaifu(true);
