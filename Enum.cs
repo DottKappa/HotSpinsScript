@@ -75,6 +75,16 @@ public enum WaifuSteps
     Hina_8 = 60000,
     Hina_9 = 80000,
     Hina_10 = 99999,
+    Shiori_1 = 0,
+    Shiori_2 = 4500,
+    Shiori_3 = 10000,
+    Shiori_4 = 15000,
+    Shiori_5 = 25000,
+    Shiori_6 = 45000,
+    Shiori_7 = 55000,
+    Shiori_8 = 65000,
+    Shiori_9 = 85000,
+    Shiori_10 = 110000,
 }
 
 //potrebbe diventare tipo "hina" e mettere quanti punti per la sua scena zozza

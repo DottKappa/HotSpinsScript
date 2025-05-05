@@ -158,4 +158,13 @@ public class CanvasController : MonoBehaviour
 
         obj.position = originalPos;
     }
+
+    public void CheckIfWaifuIsHidden()
+    {
+        if (!waifuHidden) {
+            pointSystemController.DividePoints(1.5f);
+        } else {
+            pointSystemController.MultipliePoints(1.01f);
+        }
+    }
 }
