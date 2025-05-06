@@ -155,6 +155,11 @@ public class PointSystemController : MonoBehaviour
         }
         points = ManipulateWinWithPowerUp(calculatePoints);
 
+        int limitPoints = 9999999;
+        if (points >= limitPoints) {
+            points = limitPoints;
+        }
+
         //respawnTrigger.ResetWeights(); -> Non mi interessa più resettarli
     }
 

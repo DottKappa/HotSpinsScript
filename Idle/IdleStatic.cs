@@ -114,9 +114,9 @@ public static class IdleStatic
 
     private static readonly string[] idleCommonPowerUpsDesc = new string[]
     {
-        "Multiply horizontal line 3 times",
-        "Multiply from up to down line 2 times",
-        "Multiply from down to up line 2 times",
+        "Multiply horizontal line by 3, 3 times",
+        "Multiply from up to down line by 2, 3 times",
+        "Multiply from down to up line by 2, 3 times",
     };
 
     private static readonly string[] idleRarePowerUps = new string[]
@@ -128,9 +128,9 @@ public static class IdleStatic
 
     private static readonly string[] idleRarePowerUpsDesc = new string[]
     {
-        "Multiply horizontal line 5 times",
-        "Multiply from up to down line 4 times",
-        "Multiply from down to up line 4 times",
+        "Multiply horizontal line by 5, 2 times",
+        "Multiply from up to down line by 4, 2 times",
+        "Multiply from down to up line by 4, 2 times",
     };
 
     private static readonly string[] idleMythicPowerUps = new string[]
@@ -142,9 +142,9 @@ public static class IdleStatic
 
     private static readonly string[] idleMythicPowerUpsDesc = new string[]
     {
-        "Multiply horizontal line 10 times",
-        "Multiply from up to down line 7 times",
-        "Multiply from down to up line 2 times",
+        "Multiply horizontal line by 10, 1 times",
+        "Multiply from up to down line by 7, 1 times",
+        "Multiply from down to up line by 7, 1 times",
     };
 
     public static string[] GetRarities()

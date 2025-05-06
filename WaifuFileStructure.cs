@@ -9,11 +9,13 @@ public class WaifuFileStructure
 {
     [SerializeField] private WaifuSave chiho;
     [SerializeField] private WaifuSave hina;
+    [SerializeField] private WaifuSave shiori;
 
-    public WaifuFileStructure(WaifuSave chiho, WaifuSave hina)
+    public WaifuFileStructure(WaifuSave chiho, WaifuSave hina, WaifuSave shiori)
     {
         this.chiho = chiho;
         this.hina = hina;
+        this.shiori = shiori;
     }
 
 // Ritorna l'oggetto waifuSave, se non lo trova tornerà quella di base (Chiho)
@@ -24,7 +26,10 @@ public class WaifuFileStructure
                 return chiho;
             case Waifu.Hina:
                 return hina;
+            case Waifu.Shiori:
+                return shiori;
             default:
+                Debug.LogWarning("[WaifuFileStructure] Non ho la waifu associata ["+waifuName.ToString()+"]. Controllare che sia settata");
                 return new WaifuSave(waifuName.ToString());
         }
     }
@@ -61,6 +66,11 @@ public class WaifuSave
         return waifuName;
     }
 
+    public bool GetIsUnlocked()
+    {
+        return isUnlocked;
+    }
+
     public int GetPoints()
     {
         return points;
@@ -94,6 +104,11 @@ public class WaifuSave
     public float[] GetWeights()
     {
         return weights;
+    }
+
+    public void SetIsUnlocked(bool isUnlocked)
+    {
+        this.isUnlocked = isUnlocked;
     }
 
     public void SetPoints(int points)

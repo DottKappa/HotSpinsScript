@@ -9,11 +9,18 @@ public class CollectionPage : MonoBehaviour
     private CollectionWaifu[] childScripts;
     public Canvas mainPageCanvas;
     public Canvas collectionPageCanvas;
+    private FileManager fileManager;
 
     void Start()
     {
         childScripts = GetComponentsInChildren<CollectionWaifu>();
         SetAllChildInactive();
+        GameObject fileManagerObject = GameObject.Find("FileManager");
+        if (fileManagerObject != null) {
+            fileManager = fileManagerObject.GetComponent<FileManager>();
+        } else {
+            Debug.LogError("[CollectionPage.cs] Non ho trovato l'elemento FileManager");
+        }
     }
 
     void Update()
@@ -39,6 +46,7 @@ public class CollectionPage : MonoBehaviour
 
     public void ReturnButton()
     {
+        fileManager.SaveWaifuFile();
         collectionPageCanvas.gameObject.SetActive(false);
         mainPageCanvas.gameObject.SetActive(true);        
     }

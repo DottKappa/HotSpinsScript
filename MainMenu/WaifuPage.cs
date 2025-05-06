@@ -64,6 +64,13 @@ public class WaifuPage : MonoBehaviour
         SetWaifuInfoData();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            ReturnButton();
+        }
+    }
+
     private void SetText()
     {
         titleText.text = waifuName;

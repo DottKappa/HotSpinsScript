@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class ProgressBarTimer : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class ProgressBarTimer : MonoBehaviour
     private IdlePowerUpManager idlePowerUpManager;
     private UIBumpScaler uiBumpScaler;
     private WaifuChibi waifuChibi;
+    private Coroutine colorCoroutine;
+    private bool isPulsating = false;
 
     void Awake()
     {
@@ -55,6 +58,10 @@ public class ProgressBarTimer : MonoBehaviour
  
             waifuChibi.StartStopWaifu(false);
             uiBumpScaler.PopUpGiftButton();
+            if (!isPulsating) {
+                StartPulsatingEffect();
+                isPulsating = true;
+            }
         }
     }
 
@@ -103,6 +110,8 @@ public class ProgressBarTimer : MonoBehaviour
     {
         CallPowerUpCreation();
         ResetTimer();
+        StopPulsatingEffect();
+        isPulsating = false;
         uiBumpScaler.HideButton();
     }
 
@@ -121,5 +130,54 @@ public class ProgressBarTimer : MonoBehaviour
         UpdateTimerMultiplier();
         idleFileManager.SaveIdleFile();
         waifuChibi.StartStopWaifu(true);
+    }
+
+    private void StartPulsatingEffect()
+    {
+        string nomePadre = transform.parent.name;
+        GameObject target = GameObject.Find(nomePadre + "Button");
+        if (target == null) {
+            Debug.LogError($"[ProgressBarTimer] GameObject con nome '{nomePadre}Button' non trovato");
+            return;
+        }
+
+        Image img = target.GetComponent<Image>();
+        if (colorCoroutine != null) {
+            StopCoroutine(colorCoroutine);
+        }
+
+        colorCoroutine = StartCoroutine(ColorPulse(img));
+    }
+
+    private IEnumerator ColorPulse(Image image)
+    {
+        Color colorA = Color.green;
+        Color colorB = Color.white;
+        float interval = 0.4f;
+
+        while (true) {
+            image.CrossFadeColor(colorA, 0.1f, true, true);
+            yield return new WaitForSeconds(interval);
+            image.CrossFadeColor(colorB, 0.1f, true, true);
+            yield return new WaitForSeconds(interval);
+        }
+    }
+
+    // Funzione per stoppare il pulsare
+    private void StopPulsatingEffect()
+    {
+        if (colorCoroutine != null) {
+            StopCoroutine(colorCoroutine);
+            colorCoroutine = null;
+        }
+
+        string nomePadre = transform.parent.name;
+        GameObject target = GameObject.Find(nomePadre + "Button");
+        if (target != null) {
+            Image img = target.GetComponent<Image>();
+            if (img != null) {
+                img.color = Color.white;
+            }
+        }
     }
 }

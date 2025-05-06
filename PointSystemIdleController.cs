@@ -59,7 +59,8 @@ public class PointSystemIdleController : MonoBehaviour
         UpdateFontSize(upDownText, upDownMultiplier);
         UpdateFontSize(horizontalText, horizontalMultiplier);
         UpdateFontSize(downUpText, downUpMultiplier);
-        UpdateIdleMultipliers();
+        SetRemainingUsage();
+        LimitMultipliers();
     }
 
     private void UpdateFontSize(TextMeshProUGUI text, int multiplier)
@@ -113,5 +114,21 @@ public class PointSystemIdleController : MonoBehaviour
         upDownUsage.text = numberOfUpDown.ToString();
         horizontalUsage.text = numberOfHorizontal.ToString();
         downUpUsage.text = numberOfDownUp.ToString();
+    }
+
+    private void LimitMultipliers()
+    {
+        int maxLimit = 10000;
+        if (horizontalMultiplier >= maxLimit) {
+            horizontalMultiplier = maxLimit;
+        }
+
+        if (upDownMultiplier >= maxLimit) {
+            upDownMultiplier = maxLimit;
+        }
+
+        if (downUpMultiplier >= maxLimit) {
+            downUpMultiplier = maxLimit;
+        }
     }
 }

@@ -16,6 +16,9 @@ public class RespawnTrigger : MonoBehaviour
 
         Waifu waifuName = (Waifu)System.Enum.Parse(typeof(Waifu), PlayerPrefs.GetString("waifuName"));
         weights = fileManager.GetWeightsByWaifu(waifuName);
+        if (weights == null || weights.Length == 0) {
+            weights = GetDefaultWeights();
+        }
         prefabs = sceneManager.GetAllPrefabs();
     }
 
