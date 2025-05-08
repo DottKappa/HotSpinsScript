@@ -19,6 +19,11 @@ public class SceneManager : MonoBehaviour
     private CameraSlot cameraSlot;
     private IdleFileManager idleFileManager;
 
+    // Gestione Bug colonne
+    private bool isBusy = false;
+    public bool IsBusy() => isBusy;
+    public void SetBusy(bool value) => isBusy = value;
+
     void Start()
     {
         // Assicurati che l'array di posizioni abbia esattamente 9 elementi
@@ -47,7 +52,7 @@ public class SceneManager : MonoBehaviour
     void Update()
     {
         if (!MatrixHasEmptySlot() || !isRolling) {
-            if (Input.GetKeyDown(KeyCode.Space)) {
+            if (Input.GetKeyDown(KeyCode.Space) && !IsBusy()) {
                 if (!isRolling) {
                     StartSlot();                    
                 } else {
@@ -55,7 +60,7 @@ public class SceneManager : MonoBehaviour
                 }
             }
 
-            if (isRollingByColumn[0] || isRollingByColumn[1] || isRollingByColumn[2]) {
+            if (!IsBusy() && isRollingByColumn[0] || isRollingByColumn[1] || isRollingByColumn[2]) {
                 StopSlotByColumn();
                 pointSystemController.setUpdated(false);
             }
@@ -195,6 +200,17 @@ public class SceneManager : MonoBehaviour
                 }
             }
         }
+
+        // Cancellare se diventa troppo pesante
+        GameObject[] allObjects = Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+        foreach (GameObject obj in allObjects) {
+            if (obj != null &&
+                obj.name.Contains("(Clone)") &&
+                obj.tag.Contains("_SlotCell"))
+            {
+                Destroy(obj);
+            }
+        }
     }
 
     public void StopSlotByColumn(SlotColumns? column = null)
@@ -314,7 +330,7 @@ public class SceneManager : MonoBehaviour
             Vector3 finalPosition = startingPositions[positions[row]];
 
             if (row == (slotCells.Length - 1)) {
-                StartCoroutine(DropAndRise(slotCells[row][column].transform, finalPosition, 0.3f, 15f));
+                slotCells[row][column].GetComponent<SlotController>().StartDropAndRise(finalPosition, 0.3f, 15f);
             } else {
                 slotCells[row][column].transform.position = finalPosition;
             }
@@ -351,35 +367,6 @@ public class SceneManager : MonoBehaviour
             EmptySlotMatrix();
             idleFileManager.UpdateNumberOfUnlockableRoom(numberOfSparksInSlot);
             powerUpManager.addSpark(numberOfSparksInSlot);
-        }
-    }
-
-    private IEnumerator DropAndRise(Transform obj, Vector3 targetPos, float dropDistance, float speed)
-    {
-        if (obj == null) yield break;
-        Vector3 startPos = obj.position;
-        Vector3 dropPos = startPos - new Vector3(0f, dropDistance, 0f);
-
-        // Scende
-        float t = 0f;
-        while (t < 1f) {
-            if (obj == null) yield break;
-            t += Time.deltaTime * speed / dropDistance;
-            obj.position = Vector3.Lerp(startPos, dropPos, t);
-            yield return null;
-        }
-
-        // Risale verso la posizione finale
-        t = 0f;
-        while (t < 1f) {
-            if (obj == null) yield break;
-            t += Time.deltaTime * speed / Vector3.Distance(dropPos, targetPos);
-            obj.position = Vector3.Lerp(dropPos, targetPos, t);
-            yield return null;
-        }
-
-        if (obj == null) {
-            obj.position = targetPos; // Assicura posizione finale
         }
     }
 

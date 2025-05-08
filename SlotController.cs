@@ -16,6 +16,8 @@ public class SlotController : MonoBehaviour
     private Vector3 originalScale;
     private Vector3 targetScale;
 
+    private Coroutine dropCoroutine;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -65,6 +67,11 @@ public class SlotController : MonoBehaviour
     public void SetMoving(bool moving)
     {
         this.moving = moving;
+    }
+
+    public bool GetMoving()
+    {
+        return moving;
     }
 
     // Funzione per aumentare lo scaling gradualmente
@@ -120,5 +127,39 @@ public class SlotController : MonoBehaviour
 
         // Rotazione finale precisa
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, endRotation, transform.eulerAngles.z);
+    }
+
+    public void StartDropAndRise(Vector3 targetPos, float dropDistance, float speed)
+    {
+        if (dropCoroutine != null)
+            StopCoroutine(dropCoroutine);
+
+        dropCoroutine = StartCoroutine(DropAndRise(targetPos, dropDistance, speed));
+    }
+
+    private IEnumerator DropAndRise(Vector3 targetPos, float dropDistance, float speed)
+    {
+        if (this == null) yield break;
+        Vector3 startPos = transform.position;
+        Vector3 dropPos = startPos - new Vector3(0f, dropDistance, 0f);
+
+        float t = 0f;
+        while (t < 1f) {
+            if (this == null) yield break;
+            t += Time.deltaTime * speed / dropDistance;
+            transform.position = Vector3.Lerp(startPos, dropPos, t);
+            yield return null;
+        }
+
+        t = 0f;
+        while (t < 1f) {
+            if (this == null) yield break;
+            t += Time.deltaTime * speed / Vector3.Distance(dropPos, targetPos);
+            transform.position = Vector3.Lerp(dropPos, targetPos, t);
+            yield return null;
+        }
+
+        transform.position = targetPos;
+        dropCoroutine = null;
     }
 }

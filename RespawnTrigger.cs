@@ -47,6 +47,7 @@ public class RespawnTrigger : MonoBehaviour
         if (slotController != null) {
             sceneManager.AddValueToMatrix(spawnedObject, GetColumnForMatrix((float)xPosition));
             slotController.SetConstructorValues(false, speed);
+            sceneManager.SetBusy(false);
         }
     }
 

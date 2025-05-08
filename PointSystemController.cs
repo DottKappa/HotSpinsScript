@@ -23,6 +23,7 @@ public class PointSystemController : MonoBehaviour
     private bool isHorizontalDownActive = false;
     private bool isVerticalLeftActive = false;
     private bool isVerticalRightActive = false;
+    private int limitPoints = 9999999;
 
     void Start()
     {
@@ -103,6 +104,8 @@ public class PointSystemController : MonoBehaviour
     public void MultipliePoints(float multiplier)
     {
         points = Mathf.FloorToInt(points * multiplier);
+        if (points >= limitPoints) points = limitPoints;
+
         UpdatePointsText();
         UpdateWaifuImage();
     }
@@ -110,6 +113,8 @@ public class PointSystemController : MonoBehaviour
     public void DividePoints(float multiplier)
     {
         points = Mathf.FloorToInt(points / multiplier);
+        if (points <= 0) points = 0;
+
         UpdatePointsText();
         UpdateWaifuImage();
     }
@@ -186,7 +191,6 @@ public class PointSystemController : MonoBehaviour
         }
         points = ManipulateWinWithPowerUp(calculatePoints);
 
-        int limitPoints = 9999999;
         if (points >= limitPoints) {
             points = limitPoints;
         }

@@ -27,7 +27,7 @@ public class CanvasController : MonoBehaviour
     }
 
     void Update() {
-        numberOfSlotsText.text = "Spins: " + addDot(sceneManager.GetNumberOfSpins());
+        SetTextOfSpins();
         if (Input.GetKeyDown(KeyCode.C)) {
             string waifuName = fileManager.GetActiveWaifuName().ToString();
             if (waifuHidden == false) {
@@ -37,6 +37,19 @@ public class CanvasController : MonoBehaviour
                 waifuHidden = false;
                 SetWaifuImage(waifuName, waifuName+"_"+pointSystemController.GetActualImageStep().ToString());
             }            
+        }
+    }
+
+    private void SetTextOfSpins()
+    {
+        int numberOfSpin = sceneManager.GetNumberOfSpins();
+        numberOfSlotsText.text = addDot(numberOfSpin);
+        if (numberOfSpin % 5 == 0) {
+            numberOfSlotsText.color = new Color32(0x23, 0xCC, 0x15, 0xFF);
+        } else if (numberOfSpin % 11 == 0) {
+            numberOfSlotsText.color = new Color32(0xCC, 0x1E, 0x15, 0xFF);
+        } else {
+            numberOfSlotsText.color = Color.white;
         }
     }
 
