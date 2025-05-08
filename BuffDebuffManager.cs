@@ -25,8 +25,10 @@ public class BuffDebuffManager : MonoBehaviour
         { BuffType.AddMoreSparks, new PowerUpTupla("More probability to spawn diamond (2.45%)(Reset others spawn)") },
         { BuffType.AddMoreBasicCells, new PowerUpTupla("More probability to spawn basic cells (16.67%)(Reset others spawn)") },
         { BuffType.AddMoreSpecialCells, new PowerUpTupla("More probability to spawn special (11.43%)(Reset others spawn)") },
-        { BuffType.CreateHorizontalUp, new PowerUpTupla("Create the possibility to score points on first horizontal line") },
-        { BuffType.CreateHorizontalDown, new PowerUpTupla("Create the possibility to score points on last horizontal line") },
+        { BuffType.CreateHorizontalUp, new PowerUpTupla("Create the possibility to score points on first horizontal line (same multiplier as horizontal)") },
+        { BuffType.CreateHorizontalDown, new PowerUpTupla("Create the possibility to score points on last horizontal line (same multiplier as horizontal)") },
+        { BuffType.CreateVerticalLeft, new PowerUpTupla("Create the possibility to score points on firt vertical line (multiplier = 1)") },
+        { BuffType.CreateVerticalRight, new PowerUpTupla("Create the possibility to score points on last vertical line (multiplier = 1)") },
         { BuffType.Nothing, new PowerUpTupla("Literally nothing") }
     };
 
@@ -60,7 +62,9 @@ public class BuffDebuffManager : MonoBehaviour
                 // Mi serve per tenere attivi i buff permanenti
                 if ((buff == BuffType.Every5DoubleScore && buffDescriptions[buff].IsUsed == true) || 
                     (buff == BuffType.CreateHorizontalUp && buffDescriptions[buff].IsUsed == true) ||
-                    (buff == BuffType.CreateHorizontalDown && buffDescriptions[buff].IsUsed == true)) {
+                    (buff == BuffType.CreateHorizontalDown && buffDescriptions[buff].IsUsed == true) ||
+                    (buff == BuffType.CreateVerticalLeft && buffDescriptions[buff].IsUsed == true) ||
+                    (buff == BuffType.CreateVerticalRight && buffDescriptions[buff].IsUsed == true)) {
                     powerUpManager.ManagePowerUp(buff.ToString());
                 }
             }

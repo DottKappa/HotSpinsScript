@@ -21,6 +21,8 @@ public class PointSystemController : MonoBehaviour
     private int[][] waifuStepsArray;
     private bool isHorizontalUpActive = false;
     private bool isHorizontalDownActive = false;
+    private bool isVerticalLeftActive = false;
+    private bool isVerticalRightActive = false;
 
     void Start()
     {
@@ -52,6 +54,12 @@ public class PointSystemController : MonoBehaviour
             }
             checkDiagonalUpDown();
             checkDiagonalDownUp();
+            if (isVerticalLeftActive) {
+                checkVertical(0, "VL");
+            }
+            if (isVerticalRightActive) {
+                checkVertical(2, "VR");
+            }
             UpdatePointsText();
             UpdateWaifuImage();
             updated = true;
@@ -80,6 +88,16 @@ public class PointSystemController : MonoBehaviour
     public void SetHorizontalDown(bool value)
     {
         isHorizontalDownActive = value;
+    }
+
+    public void SetVerticalLeft(bool value)
+    {
+        isVerticalLeftActive = value;
+    }
+
+    public void SetVerticalRight(bool value)
+    {
+        isVerticalRightActive = value;
     }
 
     public void MultipliePoints(float multiplier)
@@ -141,6 +159,19 @@ public class PointSystemController : MonoBehaviour
                 multiplier = pointSystemIdleController.GetDownUpMultiplier();
             }
             updatePoints(slotCells[2][0].tag.Split('_')[0], multiplier);
+        }
+    }
+
+    private void checkVertical(int column, string animationPosition = "")
+    {
+        if (slotCells[0][column].tag == slotCells[1][column].tag && slotCells[1][column].tag == slotCells[2][column].tag) {
+            int multiplier = 1;
+            callAnimationThunder(animationPosition);
+            callWinSound();
+            callAnimationCell(slotCells[0][column]);
+            callAnimationCell(slotCells[1][column]);
+            callAnimationCell(slotCells[2][column]);
+            updatePoints(slotCells[0][column].tag.Split('_')[0], multiplier);
         }
     }
 

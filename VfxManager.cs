@@ -20,6 +20,10 @@ public class VfxManager : MonoBehaviour
             SetUpDown(thunderInstance);
         } else if (rotation == "D") {
             SetDownUp(thunderInstance);
+        } else if (rotation == "VL") {
+            SetVerticalLeft(thunderInstance);
+        } else if (rotation == "VR") {
+            SetVerticalRight(thunderInstance);
         }
 
         Destroy(thunderInstance, 1f); // Distrugge il prefab dopo 1 secondo
@@ -50,5 +54,19 @@ public class VfxManager : MonoBehaviour
     private void SetDownUp(GameObject gameObject)
     {
         gameObject.transform.rotation = Quaternion.Euler(0, 0, 115);
+    }
+
+    private void SetVerticalLeft(GameObject gameObject)
+    {
+        gameObject.transform.position = new Vector3(0f, 1.5f, 0f);
+        gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+        gameObject.transform.localScale = new Vector3(0.22f, 0.36f, 0.733f);
+    }
+    
+    private void SetVerticalRight(GameObject gameObject)
+    {
+        gameObject.transform.position = new Vector3(6f, 1.5f, 0f);
+        gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+        gameObject.transform.localScale = new Vector3(0.22f, 0.36f, 0.733f);
     }
 }

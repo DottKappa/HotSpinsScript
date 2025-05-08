@@ -7,8 +7,8 @@ public class DespawnTrigger : MonoBehaviour
     void OnTriggerEnter2D(Collider2D slotCell)
     {
         float xPosition = slotCell.transform.position.x;
-        Destroy(slotCell.gameObject);
         if (respawnTrigger != null && slotCell.tag.Contains("_SlotCell")) {
+            Destroy(slotCell.gameObject);
             respawnTrigger.RespawnAtX(xPosition);
         }
     }

@@ -32,6 +32,8 @@ public enum BuffType
     AddMoreSpecialCells,
     CreateHorizontalUp,
     CreateHorizontalDown,
+    CreateVerticalLeft,
+    CreateVerticalRight,
     Nothing,
 }
 

@@ -11,6 +11,12 @@ public class PowerUpManager : MonoBehaviour
     private BuffDebuffManager buffDebuffManager;
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
+    [Header("SpecialArrow")]
+    public GameObject horizontalUp;
+    public GameObject horizontalDown;
+    public GameObject verticalLeft;
+    public GameObject verticalRight;
+
 
     private void Awake()
     {
@@ -112,10 +118,22 @@ public class PowerUpManager : MonoBehaviour
                     break;
                 case BuffType.CreateHorizontalUp:
                     pointSystemController.SetHorizontalUp(true);
+                    horizontalUp.SetActive(true);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.CreateHorizontalDown:
                     pointSystemController.SetHorizontalDown(true);
+                    horizontalDown.SetActive(true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
+                    break;
+                case BuffType.CreateVerticalLeft:
+                    pointSystemController.SetVerticalLeft(true); //
+                    verticalLeft.SetActive(true);
+                    buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
+                    break;
+                case BuffType.CreateVerticalRight:
+                    pointSystemController.SetVerticalRight(true); //
+                    verticalRight.SetActive(true);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 default:
