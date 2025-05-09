@@ -22,17 +22,17 @@ public class CanvasButtons : MonoBehaviour
 
     public void StopLeftColumn()
     {
-        sceneManager.StopSlotByColumn(SlotColumns.First);
+        if (!sceneManager.IsBusy()) sceneManager.StopSlotByColumn(SlotColumns.First);
     }
 
     public void StopCenterColumn()
     {
-        sceneManager.StopSlotByColumn(SlotColumns.Second);
+        if (!sceneManager.IsBusy()) sceneManager.StopSlotByColumn(SlotColumns.Second);
     }
     
     public void StopRightColumn()
     {
-        sceneManager.StopSlotByColumn(SlotColumns.Third);
+        if (!sceneManager.IsBusy()) sceneManager.StopSlotByColumn(SlotColumns.Third);
     }
 
     public void PickUpSpark()

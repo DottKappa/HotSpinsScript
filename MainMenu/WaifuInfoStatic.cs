@@ -28,7 +28,7 @@ public static class WaifuInfoStatic
         return new string[] {
             baseText[0] + "22",
             baseText[1] + "50kg",
-            baseText[2] + "90/60/80",
+            baseText[2] + "80/60/75",
             baseText[3] + "165cm",
             baseText[4] + "you",
         };
