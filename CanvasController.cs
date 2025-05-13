@@ -13,6 +13,10 @@ public class CanvasController : MonoBehaviour
     private List<Transform> slotObjects = new List<Transform>();
     private List<Vector3> originalSlotObjectsPositions = new List<Vector3>();
     private bool waifuHidden = false;
+    private bool hasMultiplierBuff = false;
+    public void SetHasMultiplierBuff(bool value) => hasMultiplierBuff = value;
+    private bool hasDivideDebuff = false;
+    public void SetHasDivideDebuff(bool value) => hasDivideDebuff = value;
 
     void Awake()
     {
@@ -40,13 +44,13 @@ public class CanvasController : MonoBehaviour
         }
     }
 
-    private void SetTextOfSpins()
+    private void SetTextOfSpins() 
     {
         int numberOfSpin = sceneManager.GetNumberOfSpins();
         numberOfSlotsText.text = addDot(numberOfSpin);
-        if (numberOfSpin % 5 == 0) {
+        if (numberOfSpin % 5 == 0 && hasMultiplierBuff) {
             numberOfSlotsText.color = new Color32(0x23, 0xCC, 0x15, 0xFF);
-        } else if (numberOfSpin % 11 == 0) {
+        } else if (numberOfSpin % 11 == 0 && hasDivideDebuff) {
             numberOfSlotsText.color = new Color32(0xCC, 0x1E, 0x15, 0xFF);
         } else {
             numberOfSlotsText.color = Color.white;
@@ -174,8 +178,17 @@ public class CanvasController : MonoBehaviour
 
     public void CheckIfWaifuIsHidden()
     {
+        int points = pointSystemController.GetPoints();
         if (!waifuHidden) {
-            pointSystemController.DividePoints(1.5f);
+            if (points <= 10000) {
+                pointSystemController.DividePoints(1.01f);
+            } else if (points <= 30000) {
+                pointSystemController.DividePoints(1.1f);
+            } else if (points <= 50000) {
+                pointSystemController.DividePoints(1.2f);
+            } else {
+                pointSystemController.DividePoints(1.5f);
+            }
         } else {
             pointSystemController.MultipliePoints(1.01f);
         }

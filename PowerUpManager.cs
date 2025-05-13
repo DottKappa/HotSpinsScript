@@ -84,6 +84,7 @@ public class PowerUpManager : MonoBehaviour
                     break;
                 case BuffType.Every5DoubleScore:
                     pointSystemController.SetNumberOfSpinToBuff(5);
+                    canvasController.SetHasMultiplierBuff(true);
                     buffDebuffManager.SetPowerUpUsed(powerUpBuff.ToString(), true);
                     break;
                 case BuffType.AddMoreSparks:
@@ -155,6 +156,7 @@ public class PowerUpManager : MonoBehaviour
                     break;
                 case DebuffType.Every11HalfScore:
                     pointSystemController.SetNumberOfSpinToDebuff(11);
+                    canvasController.SetHasDivideDebuff(true);
                     buffDebuffManager.SetPowerUpUsed(powerUpDebuff.ToString(), false);
                     break;
                 case DebuffType.RemoveSparks:

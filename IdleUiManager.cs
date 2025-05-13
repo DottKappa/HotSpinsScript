@@ -23,6 +23,9 @@ public class IdleUiManager : MonoBehaviour
     public GameObject idleGameObj;
     public TextMeshProUGUI buttonText;
 
+    [Header("Door")]
+    public GameObject door;
+
     private string[] timers;
     private string[] rooms;
     private bool isIdleVisible = false;
@@ -36,6 +39,9 @@ public class IdleUiManager : MonoBehaviour
     public void idleButton()
     {
         if (sceneManager.GetIsRolling()) return;
+
+        if (isIdleVisible) door.SetActive(true);
+        if (!isIdleVisible) door.SetActive(false);
 
         bool isTogglingToIdle = !isIdleVisible;
 

@@ -19,8 +19,8 @@ public class DoorManager : MonoBehaviour
     IEnumerator CheckForPulse()
     {
         float elapsedTime = 0f;
-        float maxTime = 300f; // 5 minuti
-        float minTime = 60f;  // 1 minuto
+        float maxTime = 600f; // 10 minuti
+        float minTime = 300f;  // 5 minuto
 
         while (true) {
             if (gameObject.activeInHierarchy) {

@@ -26,7 +26,7 @@ public class WaifuDetail : MonoBehaviour
     }
 
     // Metodo di inizializzazione personalizzato
-    public void Initialize(string buttonImagePath, string fullScreenImagePath, bool isButtonEnabled)
+    public void Initialize(string buttonImagePath, string fullScreenImagePath, bool isButtonEnabled, bool needBlur = false)
     {
         this.buttonImagePath = buttonImagePath;
         this.isButtonEnabled = isButtonEnabled;
@@ -38,6 +38,9 @@ public class WaifuDetail : MonoBehaviour
             if (texture != null) {
                 Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                 openImageButton.GetComponent<Image>().sprite = sprite;
+            }
+            if (!needBlur) {
+                RemoveComponentByName(openImageButton.gameObject, "UIEffect");
             }
         }
 
@@ -128,6 +131,16 @@ public class WaifuDetail : MonoBehaviour
             fullScreenImage.sprite = sprite;
         } else {
             Debug.LogError("[WaifuDetail] Immagine fullScreen non trovata in Resources: " + imagePath);
+        }
+    }
+
+    private void RemoveComponentByName(GameObject target, string componentName)
+    {
+        Component[] allComponents = target.GetComponents<Component>();
+        foreach (Component comp in allComponents) {
+            if (comp.GetType().Name == componentName) {
+                Destroy(comp);
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ public class WaifuPage : MonoBehaviour
     private CollectionWaifu collectionWaifu;
     [SerializeField] private TextMeshProUGUI[] waifuInfoFields;
     private FileManager fileManager;
+    private bool isFirstLocked = true;
 
     public void InitializeWaifu(string waifuName, string points, string spins)
     {
@@ -44,16 +45,19 @@ public class WaifuPage : MonoBehaviour
                 string buttonImagePath = "Texture/Waifu/"+waifuName+"/"+waifuName+"_"+index;
                 string fullScreenImagePath = "Texture/Waifu/"+waifuName+"/"+waifuName+"_"+index; // TODO-> deprecato? -> "Texture/Waifu/"+waifuName+"/FullScreen/"+waifuName+"_"+index;
                 bool isButtonEnabled = false;
+                bool needBlur = false;
 
                 if (i <= waifuStep) {
                     isButtonEnabled = true;
+                } else if (isFirstLocked) {
+                    needBlur = true;
+                    isFirstLocked = false;
                 } else {
-                    // TODO -> decidere se così o non far veder niente
                     buttonImagePath = "Texture/Waifu/Lock";
                 }
 
                 i++;
-                imageToggleScript.Initialize(buttonImagePath, fullScreenImagePath, isButtonEnabled);
+                imageToggleScript.Initialize(buttonImagePath, fullScreenImagePath, isButtonEnabled, needBlur);
             } else {
                 nextStepExist = false;
                 break;

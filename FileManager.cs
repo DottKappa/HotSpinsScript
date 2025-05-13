@@ -6,6 +6,7 @@ public class FileManager : MonoBehaviour
 {
     private string folder = "dataFiles";
     private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave("Hina"), new WaifuSave("Shiori"));
+    private SelectorSkin selectorSkin;
 
     void Awake() 
     {
@@ -16,6 +17,11 @@ public class FileManager : MonoBehaviour
         }
 
         LoadWaifuFile();
+    }
+
+    void Start()
+    {
+        selectorSkin = FindFirstObjectByType<SelectorSkin>();
     }
 
     public Waifu GetActiveWaifuName()
@@ -131,7 +137,9 @@ public class FileManager : MonoBehaviour
             Debug.Log("[" + nameFile + "] Salvato correttamente");
         } catch (System.Exception e) {
             Debug.LogError("[FileManager] Failed to save waifu file: " + e.Message);
-        }        
+        }
+
+        selectorSkin.SetUpImageButtons();
     }
 
     public void LoadWaifuFile()

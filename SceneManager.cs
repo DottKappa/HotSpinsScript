@@ -344,18 +344,18 @@ public class SceneManager : MonoBehaviour
             respawnTrigger.ManipulateWeights(4, 4f);
             break;
             case int n when n % 5 == 0:
-            respawnTrigger.ManipulateWeights(5, -10f);
-            respawnTrigger.ManipulateWeights(4, -2f);
+            respawnTrigger.ManipulateWeights(5, -4f);
+            respawnTrigger.ManipulateWeights(4, -3f);
             break;
             case int n when n % 7 == 0:
-            respawnTrigger.ManipulateWeights(6, 10f);
+            respawnTrigger.ManipulateWeights(6, 5f);
             break;
             case int n when n % 11 == 0:
             respawnTrigger.ManipulateWeights(7, 3f);
             respawnTrigger.ManipulateWeights(6, -3f);
             break;
             case int n when n % 13 == 0:
-            respawnTrigger.ManipulateWeights(5, 20f);
+            respawnTrigger.ManipulateWeights(5, 10f);
             break;
         }
     }

@@ -256,8 +256,8 @@ public class PointSystemController : MonoBehaviour
         string waifuName = fileManager.GetActiveWaifuName().ToString();
         for (int i = 0; i < waifuStepsArray.Length; i++) {
             if (points >= waifuStepsArray[i][0] && waifuStepsArray[i][1] == 0) {
-                canvasController.SetWaifuImage(waifuName, waifuName + "_" + (i + 1));
                 waifuStepsArray[i][1] = 1;
+                canvasController.SetWaifuImage(waifuName, waifuName + "_" + (i + 1));
             } else if (i + 1 < waifuStepsArray.Length && points < waifuStepsArray[i + 1][0]) {
                 break;
             }
