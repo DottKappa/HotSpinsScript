@@ -39,8 +39,11 @@ public class CollectionPage : MonoBehaviour
 
     public void SetAllChildInactive()
     {
+        string activeWaifu = PlayerPrefs.GetString("waifuName");
         foreach (CollectionWaifu script in childScripts) {
-            script.SetWaifuInactive();
+            if (script.name != activeWaifu) {
+                script.SetWaifuInactive();
+            }
         }
     }
 

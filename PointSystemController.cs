@@ -123,7 +123,7 @@ public class PointSystemController : MonoBehaviour
     {
         if (slotCells[row][0].tag == slotCells[row][1].tag && slotCells[row][1].tag == slotCells[row][2].tag) {
             int multiplier = 1;
-            callAnimationThunder(animationPosition);
+            callAnimation(animationPosition);
             callWinSound();
             callAnimationCell(slotCells[row][0]);
             callAnimationCell(slotCells[row][1]);
@@ -139,7 +139,7 @@ public class PointSystemController : MonoBehaviour
     {
         if (slotCells[0][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[2][2].tag) {
             int multiplier = 2;
-            callAnimationThunder("U");
+            callAnimation("U");
             callWinSound();
             callAnimationCell(slotCells[0][0]);
             callAnimationCell(slotCells[1][1]);
@@ -155,7 +155,7 @@ public class PointSystemController : MonoBehaviour
     {
         if (slotCells[2][0].tag == slotCells[1][1].tag && slotCells[1][1].tag == slotCells[0][2].tag) {
             int multiplier = 2;
-            callAnimationThunder("D");
+            callAnimation("D");
             callWinSound();
             callAnimationCell(slotCells[2][0]);
             callAnimationCell(slotCells[1][1]);
@@ -171,7 +171,7 @@ public class PointSystemController : MonoBehaviour
     {
         if (slotCells[0][column].tag == slotCells[1][column].tag && slotCells[1][column].tag == slotCells[2][column].tag) {
             int multiplier = 1;
-            callAnimationThunder(animationPosition);
+            callAnimation(animationPosition);
             callWinSound();
             callAnimationCell(slotCells[0][column]);
             callAnimationCell(slotCells[1][column]);
@@ -189,7 +189,12 @@ public class PointSystemController : MonoBehaviour
         } else {
             calculatePoints += 1 * multiplier;
         }
-        points = ManipulateWinWithPowerUp(calculatePoints);
+
+        int actualWin = ManipulateWinWithPowerUp(calculatePoints);
+        if ((actualWin - points) > 10000) {
+            callCoinEmitter(actualWin);
+        }
+        points = actualWin;
 
         if (points >= limitPoints) {
             points = limitPoints;
@@ -353,9 +358,21 @@ public class PointSystemController : MonoBehaviour
         }
     }
 
-    private void callAnimationThunder(string rotation)
+    private void callAnimation(string rotation)
     {
-        vfxManager.PlayThunder(rotation);
+        vfxManager.PlayVfx(rotation);
+    }
+
+    private void callCoinEmitter(int winPoints)
+    {
+        int emission = 1;
+        if (winPoints > 20000 && winPoints <= 30000) {
+            emission = 2;
+        } else if (winPoints > 30000) {
+            emission = 3;
+        }
+
+        vfxManager.PlayCoinEmitter(emission);
     }
 
     private void callWinSound()

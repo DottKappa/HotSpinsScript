@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FileManager : MonoBehaviour
 {
@@ -139,7 +140,9 @@ public class FileManager : MonoBehaviour
             Debug.LogError("[FileManager] Failed to save waifu file: " + e.Message);
         }
 
-        selectorSkin.SetUpImageButtons();
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Slot") {
+            selectorSkin.SetUpImageButtons();
+        }
     }
 
     public void LoadWaifuFile()

@@ -111,4 +111,5 @@ public enum PrestigeSteps
 - seeTutorial [0/1]
 - audioVolume [0-100]
 - isFullScreen [0/1]
+- resolutionIndex
 */
