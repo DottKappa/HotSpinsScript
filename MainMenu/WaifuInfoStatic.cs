@@ -18,6 +18,8 @@ public static class WaifuInfoStatic
                 return GetHinaInfo();  // Assicurati che questa sia la funzione giusta
             case "shiori":
                 return GetShioriInfo();
+            case "tsukiko":
+                return GetTsukikoInfo();
             default:
                 return new string[0]; // Restituisce un array vuoto
         }
@@ -53,6 +55,17 @@ public static class WaifuInfoStatic
             baseText[2] + "110/70/90",
             baseText[3] + "173cm",
             baseText[4] + "mommy issue, teach",
+        };
+    }
+    
+    public static string[] GetTsukikoInfo()
+    {
+        return new string[] {
+            baseText[0] + "24",
+            baseText[1] + "47kg",
+            baseText[2] + "145/60/75",
+            baseText[3] + "160cm",
+            baseText[4] + "emo, melancholic",
         };
     }
 }

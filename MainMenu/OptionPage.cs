@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 
 public class OptionPage : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class OptionPage : MonoBehaviour
         audioSlider.onValueChanged.AddListener(OnVolumeChanged);
         fullscreenToggle.onValueChanged.AddListener(OnFullscreenChanged);
 
+        resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
         SetUpResolution();
     }
 
@@ -49,7 +51,6 @@ public class OptionPage : MonoBehaviour
 
     private void SetUpResolution()
     {
-        // Risoluzioni
         availableResolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
         filteredResolutions.Clear();
@@ -57,29 +58,57 @@ public class OptionPage : MonoBehaviour
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
 
-        for (int i = 0; i < availableResolutions.Length; i++) {
-            Resolution res = availableResolutions[i];
-            // Evita risoluzioni duplicate
-            if (!filteredResolutions.Exists(r => r.width == res.width && r.height == res.height)) {
-                filteredResolutions.Add(res);
-                string option = res.width + " x " + res.height;
-                options.Add(option);
+        float targetAspect = 16f / 9f;
+        const float tolerance = 0.01f;
 
-                if (res.width == Screen.currentResolution.width && res.height == Screen.currentResolution.height)
-                {
-                    currentResolutionIndex = filteredResolutions.Count - 1;
+        // Step 1: Filtra solo risoluzioni 16:9 uniche
+        HashSet<string> seenResolutions = new HashSet<string>();
+        List<Resolution> validResolutions = new List<Resolution>();
+
+        foreach (var res in availableResolutions) {
+            float aspect = (float)res.width / res.height;
+
+            if (Mathf.Abs(aspect - targetAspect) < tolerance) {
+                string key = res.width + "x" + res.height;
+
+                if (!seenResolutions.Contains(key)) {
+                    seenResolutions.Add(key);
+                    validResolutions.Add(res);
                 }
             }
         }
 
+        // Step 2: Ordina dalla risoluzione più alta alla più bassa
+        validResolutions.Sort((a, b) =>
+        {
+            int pixelsA = a.width * a.height;
+            int pixelsB = b.width * b.height;
+            return pixelsB.CompareTo(pixelsA); // descending
+        });
+
+        // Step 3: Costruisci dropdown e trova risoluzione attuale
+        for (int i = 0; i < validResolutions.Count; i++) {
+            Resolution res = validResolutions[i];
+            filteredResolutions.Add(res);
+            options.Add($"{res.width} x {res.height}");
+
+            if (res.width == Screen.currentResolution.width && res.height == Screen.currentResolution.height) {
+                currentResolutionIndex = i;
+            }
+        }
+
+        // Step 4: Popola il dropdown
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = PlayerPrefs.GetInt("resolutionIndex", currentResolutionIndex);
         resolutionDropdown.RefreshShownValue();
 
-        // Applica la risoluzione salvata
-        Resolution savedResolution = filteredResolutions[resolutionDropdown.value];
-        Screen.SetResolution(savedResolution.width, savedResolution.height, isFullScreen);
+        // Step 5: Applica risoluzione salvata
+        if (filteredResolutions.Count > 0) {
+            Resolution savedResolution = filteredResolutions[resolutionDropdown.value];
+            Screen.SetResolution(savedResolution.width, savedResolution.height, isFullScreen);
+        }
     }
+
 
     // Funzione per cambiare il volume
     public void OnVolumeChanged(float value)

@@ -10,12 +10,14 @@ public class WaifuFileStructure
     [SerializeField] private WaifuSave chiho;
     [SerializeField] private WaifuSave hina;
     [SerializeField] private WaifuSave shiori;
+    [SerializeField] private WaifuSave tsukiko;
 
-    public WaifuFileStructure(WaifuSave chiho, WaifuSave hina, WaifuSave shiori)
+    public WaifuFileStructure(WaifuSave chiho, WaifuSave hina, WaifuSave shiori, WaifuSave tsukiko)
     {
         this.chiho = chiho;
         this.hina = hina;
         this.shiori = shiori;
+        this.tsukiko = tsukiko;
     }
 
 // Ritorna l'oggetto waifuSave, se non lo trova tornerà quella di base (Chiho)
@@ -28,6 +30,8 @@ public class WaifuFileStructure
                 return hina;
             case Waifu.Shiori:
                 return shiori;
+            case Waifu.Tsukiko:
+                return tsukiko;
             default:
                 Debug.LogWarning("[WaifuFileStructure] Non ho la waifu associata ["+waifuName.ToString()+"]. Controllare che sia settata");
                 return new WaifuSave(waifuName.ToString());

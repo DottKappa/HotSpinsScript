@@ -51,7 +51,8 @@ public enum Waifu
 {
     Chiho,
     Hina,
-    Shiori
+    Shiori,
+    Tsukiko
 }
 
 // RICORDARSI DI NON USARE GLI STESSI VALORI, SE NO NON VENGONO RICONOSCIUTI
@@ -87,6 +88,16 @@ public enum WaifuSteps
     Shiori_8 = 65000,
     Shiori_9 = 85000,
     Shiori_10 = 110000,
+    Tsukiko_1 = 0,
+    Tsukiko_2 = 6500,
+    Tsukiko_3 = 12000,
+    Tsukiko_4 = 17000,
+    Tsukiko_5 = 27000,
+    Tsukiko_6 = 50000,
+    Tsukiko_7 = 65000,
+    Tsukiko_8 = 80000,
+    Tsukiko_9 = 95000,
+    Tsukiko_10 = 120000,
 }
 
 //potrebbe diventare tipo "hina" e mettere quanti punti per la sua scena zozza

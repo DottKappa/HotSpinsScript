@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class FileManager : MonoBehaviour
 {
     private string folder = "dataFiles";
-    private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave("Hina"), new WaifuSave("Shiori"));
+    private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave("Hina"), new WaifuSave("Shiori"), new WaifuSave("Tsukiko"));
     private SelectorSkin selectorSkin;
 
     void Awake() 
@@ -193,10 +193,11 @@ public class FileManager : MonoBehaviour
         // Recupera i waifu attuali
         WaifuSave chiho = (toReplace == Waifu.Chiho) ? newData : waifuFile.GetWaifuDataByName(Waifu.Chiho);
         WaifuSave hina  = (toReplace == Waifu.Hina)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Hina);
-        WaifuSave shiori  = (toReplace == Waifu.Shiori)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Shiori);
+        WaifuSave shiori = (toReplace == Waifu.Shiori)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Shiori);
+        WaifuSave tsukiko = (toReplace == Waifu.Tsukiko)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Tsukiko);
         // Qui aggiungo la nuova waifu in futuro
         // WaifuSave misaki = (toReplace == Waifu.Misaki) ? newData : waifuFile.GetWaifuDataByName(Waifu.Misaki);
 
-        return new WaifuFileStructure(chiho, hina, shiori); // Qui dovrò aggiungere misaki +
+        return new WaifuFileStructure(chiho, hina, shiori, tsukiko); // Qui dovrò aggiungere misaki +
     }
 }
