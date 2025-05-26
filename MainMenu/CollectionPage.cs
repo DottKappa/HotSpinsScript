@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class CollectionPage : MonoBehaviour
 {
@@ -10,6 +11,13 @@ public class CollectionPage : MonoBehaviour
     public Canvas mainPageCanvas;
     public Canvas collectionPageCanvas;
     private FileManager fileManager;
+    private InputSystem_Actions controls;
+
+    void Awake()
+    {
+        controls = new InputSystem_Actions();
+        controls.UI.Cancel.performed += ctx => ReturnButton();
+    }
 
     void Start()
     {
@@ -21,6 +29,16 @@ public class CollectionPage : MonoBehaviour
         } else {
             Debug.LogError("[CollectionPage.cs] Non ho trovato l'elemento FileManager");
         }
+    }
+
+    void OnEnable()
+    {
+        controls.Enable();
+    }
+
+    void OnDisable()
+    {
+        controls.Disable();
     }
 
     void Update()

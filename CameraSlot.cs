@@ -86,7 +86,7 @@ public class CameraSlot : MonoBehaviour
 
     public void StartVfxThunder()
     {
-        PlayOneShotAndDestroy(vfxThunderAudioClip, 0.6f);
+        PlayOneShotAndDestroy(vfxThunderAudioClip, 0.4f);
     }
     
     public void StartVfxLaserBeam()

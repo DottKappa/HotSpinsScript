@@ -2,134 +2,151 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 public class WaifuDetail : MonoBehaviour
 {
-    public Button openImageButton; // Riferimento al pulsante per aprire l'immagine
-    private Image fullScreenImage; // Riferimento all'immagine che si aprirà a tutto schermo
-    private CanvasGroup canvasGroup; // Riferimento al CanvasGroup per il fade (componente dell'immagine)
+    public Button openImageButton;
 
-    public float fadeDuration = 1.0f; // Durata del fade in/out
-    private bool isButtonEnabled; // Flag per abilitare o meno il bottone
-    private string buttonImagePath; // Percorso dell'immagine per il bottone
+    private Image fullScreenImage;
+    private Image fullScreenBg;
+
+    private CanvasGroup imageCanvasGroup;
+    private CanvasGroup bgCanvasGroup;
+
+    public float fadeDuration = 1.0f;
+
+    private bool isButtonEnabled;
+    private string buttonImagePath;
     private string fullScreenImagePath;
 
     void Awake()
     {
         GameObject fullScreenImageObject = GameObject.Find("FullScreenImage");
-        if (fullScreenImageObject != null) {
+        if (fullScreenImageObject != null)
+        {
             fullScreenImage = fullScreenImageObject.transform.Find("Image")?.GetComponent<Image>();
-        } else {
+            fullScreenBg = fullScreenImageObject.transform.Find("BackGroundGradient")?.GetComponent<Image>();
+
+            imageCanvasGroup = fullScreenImage.GetComponent<CanvasGroup>();
+            bgCanvasGroup = fullScreenBg.GetComponent<CanvasGroup>();
+
+            if (imageCanvasGroup == null)
+                imageCanvasGroup = fullScreenImage.gameObject.AddComponent<CanvasGroup>();
+            if (bgCanvasGroup == null)
+                bgCanvasGroup = fullScreenBg.gameObject.AddComponent<CanvasGroup>();
+        }
+        else
+        {
             Debug.LogError("[WaifuDetail.cs] Non ho trovato l'elemento FullScreenImage");
         }
-
     }
 
-    // Metodo di inizializzazione personalizzato
     public void Initialize(string buttonImagePath, string fullScreenImagePath, bool isButtonEnabled, bool needBlur = false)
     {
         this.buttonImagePath = buttonImagePath;
         this.isButtonEnabled = isButtonEnabled;
         this.fullScreenImagePath = fullScreenImagePath;
 
-        // Carica l'immagine per il bottone
-        if (openImageButton != null && !string.IsNullOrEmpty(buttonImagePath)) {
+        if (openImageButton != null && !string.IsNullOrEmpty(buttonImagePath))
+        {
             Texture2D texture = LoadImage(buttonImagePath);
-            if (texture != null) {
+            if (texture != null)
+            {
                 Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                 openImageButton.GetComponent<Image>().sprite = sprite;
             }
-            if (!needBlur) {
+            if (!needBlur)
+            {
                 RemoveComponentByName(openImageButton.gameObject, "UIEffect");
             }
         }
 
-        // Disabilita il pulsante se necessario
         openImageButton.interactable = isButtonEnabled;
 
-        // Aggiungi i listener solo se il bottone è abilitato
-        if (isButtonEnabled) {
+        if (isButtonEnabled)
+        {
             openImageButton.onClick.AddListener(OpenImage);
         }
     }
 
     private void Start()
     {
-        // Assicurati che l'immagine sia nascosta all'inizio
-        canvasGroup = fullScreenImage.GetComponent<CanvasGroup>();
-        canvasGroup.alpha = 0f; // L'immagine parte trasparente
+        imageCanvasGroup.alpha = 0f;
+        bgCanvasGroup.alpha = 0f;
+
+        fullScreenImage.gameObject.SetActive(false);
+        fullScreenBg.gameObject.SetActive(false);
     }
 
-    // Funzione per aprire l'immagine a tutto schermo con fade-in
     public void OpenImage()
     {
         UpdateFullScreenImage(fullScreenImagePath);
-        fullScreenImage.gameObject.SetActive(true);  // Mostra l'immagine
-        StartCoroutine(FadeIn());
+        fullScreenImage.gameObject.SetActive(true);
+        fullScreenBg.gameObject.SetActive(true);
+
+        List<CanvasGroup> targets = new List<CanvasGroup> { imageCanvasGroup, bgCanvasGroup };
+        StartCoroutine(FadeCanvasGroups(targets, 0f, 1f, fadeDuration));
     }
 
-    // Funzione per chiudere l'immagine con fade-out
     public void CloseImage()
     {
-        StartCoroutine(FadeOut());
+        List<CanvasGroup> targets = new List<CanvasGroup> { imageCanvasGroup, bgCanvasGroup };
+        StartCoroutine(FadeCanvasGroups(targets, 1f, 0f, fadeDuration, disableAfterFade: true));
     }
 
-    // Coroutine per il fade in
-    private IEnumerator FadeIn()
+    private IEnumerator FadeCanvasGroups(List<CanvasGroup> groups, float from, float to, float duration, bool disableAfterFade = false)
     {
-        float elapsedTime = 0f;
+        float elapsed = 0f;
 
-        while (elapsedTime < fadeDuration)
+        foreach (var group in groups)
+            group.alpha = from;
+
+        while (elapsed < duration)
         {
-            canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
-            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(from, to, elapsed / duration);
+            foreach (var group in groups)
+                group.alpha = alpha;
+
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
-        canvasGroup.alpha = 1f; // Assicurati che l'immagine sia completamente visibile
-    }
+        foreach (var group in groups)
+            group.alpha = to;
 
-    // Coroutine per il fade out
-    private IEnumerator FadeOut()
-    {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < fadeDuration)
+        if (disableAfterFade)
         {
-            canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            fullScreenImage.gameObject.SetActive(false);
+            fullScreenBg.gameObject.SetActive(false);
         }
-
-        canvasGroup.alpha = 0f; // Assicurati che l'immagine sia completamente invisibile
-        fullScreenImage.gameObject.SetActive(false);  // Mostra l'immagine
     }
 
-    // Funzione per caricare l'immagine dal path sul bottone
     private Texture2D LoadImage(string path)
     {
         Texture2D texture = Resources.Load<Texture2D>(path);
-        if (texture != null) {
+        if (texture != null)
+        {
             return texture;
-        } else {
+        }
+        else
+        {
             Debug.LogError("[WaifuDetail] File non trovato in Resources: " + path);
             return null;
         }
     }
 
-    // Funzione per cambiare l'immagine di fullScreenImage
     private void UpdateFullScreenImage(string imagePath)
     {
-        // Carica l'immagine dalla cartella Resources con il percorso relativo
         Texture2D texture = Resources.Load<Texture2D>(imagePath);
 
-        if (texture != null) {
-            // Crea uno sprite dalla texture
+        if (texture != null)
+        {
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-
-            // Assegna lo sprite a fullScreenImage
             fullScreenImage.sprite = sprite;
-        } else {
+        }
+        else
+        {
             Debug.LogError("[WaifuDetail] Immagine fullScreen non trovata in Resources: " + imagePath);
         }
     }
@@ -137,8 +154,10 @@ public class WaifuDetail : MonoBehaviour
     private void RemoveComponentByName(GameObject target, string componentName)
     {
         Component[] allComponents = target.GetComponents<Component>();
-        foreach (Component comp in allComponents) {
-            if (comp.GetType().Name == componentName) {
+        foreach (Component comp in allComponents)
+        {
+            if (comp.GetType().Name == componentName)
+            {
                 Destroy(comp);
             }
         }

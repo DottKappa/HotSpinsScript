@@ -71,9 +71,12 @@ public class SelectorSkin : MonoBehaviour
     public void StepSkinButton(int step)
     {
         string waifuName = fileManager.GetActiveWaifuName().ToString();
-        if (step != 0 && IsSkinUnlocked(step)) {
+        if (step != 0 && IsSkinUnlocked(step))
+        {
             canvasController.SetWaifuImage(waifuName, waifuName + "_" + step);
         }
+
+        SelectSkinButton();
     }
 
     private bool IsSkinUnlocked(int step)

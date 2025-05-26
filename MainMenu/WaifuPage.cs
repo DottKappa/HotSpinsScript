@@ -3,6 +3,7 @@ using TMPro;
 using System;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.InputSystem;
 
 public class WaifuPage : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class WaifuPage : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] waifuInfoFields;
     private FileManager fileManager;
     private bool isFirstLocked = true;
+    private InputSystem_Actions controls;
 
     public void InitializeWaifu(string waifuName, string points, string spins)
     {
@@ -28,6 +30,12 @@ public class WaifuPage : MonoBehaviour
         SetPrestigeTable();
     }
 
+    void Awake()
+    {
+        controls = new InputSystem_Actions();
+        controls.UI.Cancel.performed += ctx => ReturnButton();
+    }
+
     void Start()
     {
         fileManager = FindFirstObjectByType<FileManager>();
@@ -36,29 +44,38 @@ public class WaifuPage : MonoBehaviour
         int i = 1;
         bool nextStepExist = true;
 
-        while (nextStepExist) {
+        while (nextStepExist)
+        {
             string index = i.ToString();
-            if (Enum.TryParse(waifuName+"_"+index, out WaifuSteps result)) {
+            if (Enum.TryParse(waifuName + "_" + index, out WaifuSteps result))
+            {
                 GameObject imageToggleInstance = Instantiate(waifuDetailPrefab, contentTransform);
                 WaifuDetail imageToggleScript = imageToggleInstance.GetComponentInChildren<WaifuDetail>();
-                
-                string buttonImagePath = "Texture/Waifu/"+waifuName+"/"+waifuName+"_"+index;
-                string fullScreenImagePath = "Texture/Waifu/"+waifuName+"/"+waifuName+"_"+index; // TODO-> deprecato? -> "Texture/Waifu/"+waifuName+"/FullScreen/"+waifuName+"_"+index;
+
+                string buttonImagePath = "Texture/Waifu/" + waifuName + "/" + waifuName + "_" + index;
+                string fullScreenImagePath = "Texture/Waifu/" + waifuName + "/" + waifuName + "_" + index; // TODO-> deprecato? -> "Texture/Waifu/"+waifuName+"/FullScreen/"+waifuName+"_"+index;
                 bool isButtonEnabled = false;
                 bool needBlur = false;
 
-                if (i <= waifuStep) {
+                if (i <= waifuStep)
+                {
                     isButtonEnabled = true;
-                } else if (isFirstLocked) {
+                }
+                else if (isFirstLocked)
+                {
                     needBlur = true;
                     isFirstLocked = false;
-                } else {
+                }
+                else
+                {
                     buttonImagePath = "Texture/Waifu/Lock";
                 }
 
                 i++;
                 imageToggleScript.Initialize(buttonImagePath, fullScreenImagePath, isButtonEnabled, needBlur);
-            } else {
+            }
+            else
+            {
                 nextStepExist = false;
                 break;
             }
@@ -66,6 +83,16 @@ public class WaifuPage : MonoBehaviour
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform);
         SetWaifuInfoData();
+    }
+
+    void OnEnable()
+    {
+        controls.Enable();
+    }
+
+    void OnDisable()
+    {
+        controls.Disable();
     }
 
     void Update()

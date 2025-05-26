@@ -19,12 +19,12 @@ public class DoorManager : MonoBehaviour
     IEnumerator CheckForPulse()
     {
         float elapsedTime = 0f;
-        float maxTime = 600f; // 10 minuti
-        float minTime = 300f;  // 5 minuto
+        float maxTime = 480f; // 8 minuti
+        float minTime = 240f; // 4 minuto
 
         while (true) {
             if (gameObject.activeInHierarchy) {
-                elapsedTime += 1f;
+                elapsedTime += Time.deltaTime;
 
                 float normalizedTime = Mathf.InverseLerp(minTime, maxTime, elapsedTime);
                 float chance = normalizedTime;
@@ -52,7 +52,7 @@ public class DoorManager : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return null;
         }
     }
 
@@ -76,7 +76,6 @@ public class DoorManager : MonoBehaviour
             }
 
             canvasGroup.alpha = 0f;
-            yield return null;
         }
     }
 }

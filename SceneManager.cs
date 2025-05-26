@@ -18,11 +18,18 @@ public class SceneManager : MonoBehaviour
     private BuffDebuffManager buffDebuffManager;
     private CameraSlot cameraSlot;
     private IdleFileManager idleFileManager;
+    private InputSystem_Actions controls;
 
     // Gestione Bug colonne
     private bool isBusy = false;
     public bool IsBusy() => isBusy;
     public void SetBusy(bool value) => isBusy = value;
+
+    void Awake()
+    {
+        controls = new InputSystem_Actions();
+        controls.UI.Cancel.performed += ctx => ReturnButton();
+    }
 
     void Start()
     {
@@ -86,11 +93,19 @@ public class SceneManager : MonoBehaviour
 
         // Torno al menù principale
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            PlayerPrefs.SetInt("skipWelcomePage", 1);
-            idleFileManager.SaveIdleFile();
-            saveWaifuData();
-            SceneManagement.LoadScene("Menu");
+            ReturnButton();
         }
+    }
+
+    void OnEnable() { controls.Enable(); }
+    void OnDisable() { controls.Disable(); }
+
+    private void ReturnButton()
+    {
+        PlayerPrefs.SetInt("skipWelcomePage", 1);
+        idleFileManager.SaveIdleFile();
+        saveWaifuData();
+        SceneManagement.LoadScene("Menu");
     }
 
     public GameObject[] GetAllPrefabs()
