@@ -123,4 +123,5 @@ public enum PrestigeSteps
 - audioVolume [0-100]
 - isFullScreen [0/1]
 - resolutionIndex
+- fullScreenPath [string image path]
 */

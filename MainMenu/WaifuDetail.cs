@@ -82,10 +82,15 @@ public class WaifuDetail : MonoBehaviour
     public void OpenImage()
     {
         UpdateFullScreenImage(fullScreenImagePath);
+        SetCurrentFullScreenImagePath(fullScreenImagePath);
         fullScreenImage.gameObject.SetActive(true);
         fullScreenBg.gameObject.SetActive(true);
 
-        List<CanvasGroup> targets = new List<CanvasGroup> { imageCanvasGroup, bgCanvasGroup };
+        List<CanvasGroup> targets = new List<CanvasGroup> { imageCanvasGroup };
+        if (bgCanvasGroup.alpha < 1f)
+        {
+            targets.Add(bgCanvasGroup);
+        }
         StartCoroutine(FadeCanvasGroups(targets, 0f, 1f, fadeDuration));
     }
 
@@ -161,5 +166,18 @@ public class WaifuDetail : MonoBehaviour
                 Destroy(comp);
             }
         }
+    }
+
+    public void SetCurrentFullScreenImagePath(string newPath)
+    {
+        PlayerPrefs.SetString("fullScreenPath", newPath);
+        fullScreenImagePath = newPath;
+    }
+
+    public void OpenImageAtPath(string newPath)
+    {
+        fullScreenImagePath = newPath;
+        PlayerPrefs.SetString("fullScreenPath", newPath);
+        OpenImage();
     }
 }
