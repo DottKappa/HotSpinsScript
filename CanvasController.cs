@@ -17,11 +17,18 @@ public class CanvasController : MonoBehaviour
     public void SetHasMultiplierBuff(bool value) => hasMultiplierBuff = value;
     private bool hasDivideDebuff = false;
     public void SetHasDivideDebuff(bool value) => hasDivideDebuff = value;
+    private InputSystem_Actions controls;
+    private Sprite previousWaifuSprite;
 
     void Awake()
     {
         pointSystemController = FindFirstObjectByType<PointSystemController>();
+        controls = new InputSystem_Actions();
+        controls.UI.Hide.performed += ctx => HideWaifu();
     }
+
+    void OnEnable() { controls.Enable(); }
+    void OnDisable() { controls.Disable(); }
 
     void Start() {
         sceneManager = FindFirstObjectByType<SceneManager>();
@@ -33,26 +40,36 @@ public class CanvasController : MonoBehaviour
     void Update() {
         SetTextOfSpins();
         if (Input.GetKeyDown(KeyCode.C)) {
-            string waifuName = fileManager.GetActiveWaifuName().ToString();
-            if (waifuHidden == false) {
-                SetWaifuImage(waifuName, "HideWaifu");
-                waifuHidden = true;
-            } else {
-                waifuHidden = false;
-                SetWaifuImage(waifuName, waifuName+"_"+pointSystemController.GetActualImageStep().ToString());
-            }            
+            HideWaifu();
         }
     }
 
-    private void SetTextOfSpins() 
+    private void HideWaifu()
+    {
+        string waifuName = fileManager.GetActiveWaifuName().ToString();
+        if (waifuHidden == false) {
+            SetWaifuImage(waifuName, "HideWaifu");
+            waifuHidden = true;
+        } else {
+            waifuHidden = false;
+            RestorePreviousWaifuImage();
+        }
+    }
+
+    private void SetTextOfSpins()
     {
         int numberOfSpin = sceneManager.GetNumberOfSpins();
         numberOfSlotsText.text = addDot(numberOfSpin);
-        if (numberOfSpin % 5 == 0 && hasMultiplierBuff) {
+        if (numberOfSpin % 5 == 0 && hasMultiplierBuff)
+        {
             numberOfSlotsText.color = new Color32(0x23, 0xCC, 0x15, 0xFF);
-        } else if (numberOfSpin % 11 == 0 && hasDivideDebuff) {
+        }
+        else if (numberOfSpin % 11 == 0 && hasDivideDebuff)
+        {
             numberOfSlotsText.color = new Color32(0xCC, 0x1E, 0x15, 0xFF);
-        } else {
+        }
+        else
+        {
             numberOfSlotsText.color = Color.white;
         }
     }
@@ -104,6 +121,7 @@ public class CanvasController : MonoBehaviour
                 GameObject waifuImageObject = waifuTransform.gameObject;
                 UnityEngine.UI.Image imageComponent = waifuImageObject.GetComponent<UnityEngine.UI.Image>();
                 if (imageComponent != null) {
+                    previousWaifuSprite = imageComponent.sprite;
                     Sprite newSprite = Resources.Load<Sprite>("Texture/Waifu/" + imageFolder + "/" + imageName);
                     if (newSprite != null) {
                         imageComponent.sprite = newSprite;
@@ -119,16 +137,31 @@ public class CanvasController : MonoBehaviour
             }
         }
     }
+    
+    private void RestorePreviousWaifuImage()
+    {
+        Transform waifuTransform = transform.Find("CanvasBackgroundContainer/Waifu");
+        if (waifuTransform != null && previousWaifuSprite != null)
+        {
+            UnityEngine.UI.Image imageComponent = waifuTransform.GetComponent<UnityEngine.UI.Image>();
+            if (imageComponent != null)
+            {
+                imageComponent.sprite = previousWaifuSprite;
+            }
+        }
+    }
 
     private void FindSlotObj()
     {
         GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
 
-        foreach (GameObject obj in allObjects) {
+        foreach (GameObject obj in allObjects)
+        {
             if (!obj.activeInHierarchy) continue;
 
             string tag = obj.tag;
-            if (tag == "Slot" || tag.Contains("_SlotCell")) {
+            if (tag == "Slot" || tag.Contains("_SlotCell"))
+            {
                 slotObjects.Add(obj.transform);
                 originalSlotObjectsPositions.Add(obj.transform.position);
             }
