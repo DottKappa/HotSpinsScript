@@ -6,6 +6,12 @@ public class FullScreenImage : MonoBehaviour
     private bool isChanging = false;
     private CanvasGroup bgCanvasGroup;
 
+    private bool isCounting = false;
+    private float timeCounter = 0f;
+    private int secondsPassed = 0;
+    // Timer prende il tempo dal file. Quando chiude va a salvare, ma quando arriva a 10m o 20m fa un save
+    private FileManager fileManager;
+
     private void Start()
     {
         Transform bgTransform = transform.Find("BackGroundGradient");
@@ -21,34 +27,72 @@ public class FullScreenImage : MonoBehaviour
         {
             Debug.LogError("[FullScreenImage.cs] BackGroundGradient non trovato come figlio.");
         }
+
+        fileManager = FindFirstObjectByType<FileManager>();
+        secondsPassed = fileManager.GetSecondsInFullScreenByWaifu(GetWaifuNameByOpenedImage());
     }
 
     public void CloseImageButton()
     {
+        if (isCounting)
+        {
+            isCounting = false;
+            secondsPassed += Mathf.FloorToInt(timeCounter);
+            Debug.Log($"Tempo in fullscreen: {secondsPassed} secondi");
+            timeCounter = 0f;
+            fileManager.SetSecondsInFullScreenByWaifu(secondsPassed, GetWaifuNameByOpenedImage());
+        }
+
         WaifuDetail waifuDetail = UnityEngine.Object.FindFirstObjectByType<WaifuDetail>();
         if (waifuDetail != null)
         {
             // Chiama la funzione CloseImage dal componente WaifuDetail
             waifuDetail.CloseImage();
         }
-        else
-        {
-            Debug.LogError("[FullScreenImage.cs] WaifuDetail non trovato nella scena!");
-        }
     }
 
     void Update()
     {
-        if (bgCanvasGroup == null || !Mathf.Approximately(bgCanvasGroup.alpha, 1f))
-        return;
+        if (bgCanvasGroup == null)
+            return;
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Mathf.Approximately(bgCanvasGroup.alpha, 1f))
         {
-            TryOpenPreviousImage();
+            if (!isCounting)
+            {
+                isCounting = true;
+                timeCounter = 0f;
+            }
+
+            timeCounter += Time.deltaTime;
+
+            int totalSeconds = secondsPassed + Mathf.FloorToInt(timeCounter);
+
+            if ((totalSeconds >= 600 && secondsPassed < 600) ||
+                (totalSeconds >= 1200 && secondsPassed < 1200))
+            {
+                secondsPassed = totalSeconds;
+                timeCounter = 0f;
+                fileManager.SetSecondsInFullScreenByWaifu(secondsPassed, GetWaifuNameByOpenedImage());
+                fileManager.SaveWaifuFile();
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+
+        if (!Mathf.Approximately(bgCanvasGroup.alpha, 1f))
         {
-            TryOpenNextImage();
+            isCounting = false;
+        }
+
+        if (Mathf.Approximately(bgCanvasGroup.alpha, 1f))
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                TryOpenPreviousImage();
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                TryOpenNextImage();
+            }
         }
     }
 
@@ -133,5 +177,16 @@ public class FullScreenImage : MonoBehaviour
         {
             isChanging = false;
         }
+    }
+
+    private Waifu GetWaifuNameByOpenedImage()
+    {
+        string currentPath = PlayerPrefs.GetString("fullScreenPath");
+        string[] pathParts = currentPath.Split('/');
+        string waifuName = pathParts[2];
+        string fileName = pathParts[3]; // es: Chiho_2
+        string[] nameParts = fileName.Split('_');
+
+        return (Waifu)System.Enum.Parse(typeof(Waifu), nameParts[0]);
     }
 }

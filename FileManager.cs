@@ -2,12 +2,14 @@ using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class FileManager : MonoBehaviour
 {
     private string folder = "dataFiles";
     private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave("Hina"), new WaifuSave("Shiori"), new WaifuSave("Tsukiko"));
     private SelectorSkin selectorSkin;
+    private HashSet<WaifuSave> modifiedWaifus = new HashSet<WaifuSave>();
 
     void Awake() 
     {
@@ -77,70 +79,100 @@ public class FileManager : MonoBehaviour
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         return waifuSave.GetWeights();
     }
+    
+    public int GetSecondsInFullScreenByWaifu(Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        return waifuSave.GetSecondsInFullScreen();
+    }
 
     public void SetIsUnlockedByWaifu(bool isUnlocked, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetIsUnlocked(isUnlocked);
+        modifiedWaifus.Add(waifuSave);
     }  
 
     public void SetPointsByWaifu(int points, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetPoints(points);
+        modifiedWaifus.Add(waifuSave);
     }
 
     public void SetSpinsByWaifu(int spins, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetSpins(spins);
+        modifiedWaifus.Add(waifuSave);
     }
 
     public void SetImageStepByWaifu(int imageStep, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetImageStep(imageStep);
+        modifiedWaifus.Add(waifuSave);
     }
 
     public void SetBuffUsedByWaifu(string[] names, bool[] isUsed, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetBuffUsed(names, isUsed);
+        modifiedWaifus.Add(waifuSave);
     }
 
     public void SetDebuffUsedByWaifu(string[] names, bool[] isUsed, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetDebuffUsed(names, isUsed);
+        modifiedWaifus.Add(waifuSave);
     }
 
     public void SetMultiplierByWaifu(MultiplierData horizontal, MultiplierData upDown, MultiplierData downUp, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetMultiplier(horizontal, upDown, downUp);
+        modifiedWaifus.Add(waifuSave);
     }
 
     public void SetWeightsByWaifu(float[] weights, Waifu waifuName)
     {
         WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
         waifuSave.SetWeights(weights);
+        modifiedWaifus.Add(waifuSave);
+    }
+    
+    public void SetSecondsInFullScreenByWaifu(int seconds, Waifu waifuName)
+    {
+        WaifuSave waifuSave = waifuFile.GetWaifuDataByName(waifuName);
+        waifuSave.SetSecondsInFullScreen(seconds);
+        modifiedWaifus.Add(waifuSave);
     }
 
     public void SaveWaifuFile()
     {
         string nameFile = "waifuData.json";
         string filePath = Path.Combine(Path.Combine(Application.persistentDataPath, folder), nameFile);
-        
-        try {
+
+        try
+        {
             string json = JsonUtility.ToJson(waifuFile);
             //Debug.Log("JSON da salvare: " + json);
             File.WriteAllText(filePath, json);
             Debug.Log("[" + nameFile + "] Salvato correttamente");
-        } catch (System.Exception e) {
+            
+            WaifuSave[] modifiedArray = new WaifuSave[modifiedWaifus.Count];
+            modifiedWaifus.CopyTo(modifiedArray);
+            SteamAchievement.Instance.CheckAchievementByWaifuFile(modifiedArray);
+            modifiedWaifus.Clear();
+        }
+        catch (System.Exception e)
+        {
             Debug.LogError("[FileManager] Failed to save waifu file: " + e.Message);
         }
 
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Slot") {
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Slot")
+        {
             selectorSkin.SetUpImageButtons();
         }
     }

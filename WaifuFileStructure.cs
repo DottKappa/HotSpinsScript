@@ -40,7 +40,7 @@ public class WaifuFileStructure
 }
 
 [System.Serializable]
-public class WaifuSave 
+public class WaifuSave
 {
     [SerializeField] private string waifuName;
     [SerializeField] private bool isUnlocked;
@@ -51,8 +51,9 @@ public class WaifuSave
     [SerializeField] private PowerUpUsed<DebuffType> debuffUsed;
     [SerializeField] private Multiplier multiplier;
     [SerializeField] private float[] weights;
+    [SerializeField] private int secondsFullScreen;
 
-    public WaifuSave(string waifuName = "Chiho", bool isUnlocked = false, int points = 0, int spins = 0, int imageStep = 1, PowerUpUsed<BuffType> buffUsed = null, PowerUpUsed<DebuffType> debuffUsed = null, Multiplier multiplier = null, float[] weights = null)
+    public WaifuSave(string waifuName = "Chiho", bool isUnlocked = false, int points = 0, int spins = 0, int imageStep = 1, PowerUpUsed<BuffType> buffUsed = null, PowerUpUsed<DebuffType> debuffUsed = null, Multiplier multiplier = null, float[] weights = null, int secondsFullScreen = 0)
     {
         this.waifuName = waifuName;
         this.isUnlocked = isUnlocked;
@@ -62,7 +63,8 @@ public class WaifuSave
         this.buffUsed = buffUsed ?? new PowerUpUsed<BuffType>();
         this.debuffUsed = debuffUsed ?? new PowerUpUsed<DebuffType>();
         this.multiplier = multiplier ?? new Multiplier(new MultiplierData(1, 0), new MultiplierData(2, 0), new MultiplierData(2, 0));
-        this.weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.9f, 3.9f, 0.5f};
+        this.weights = new float[13] { 10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.9f, 3.9f, 0.5f };
+        this.secondsFullScreen = secondsFullScreen;
     }
 
     public string GetWaifuName()
@@ -94,7 +96,7 @@ public class WaifuSave
     {
         return buffUsed;
     }
-    
+
     public PowerUpUsed<DebuffType> GetDebuffUsed()
     {
         return debuffUsed;
@@ -108,6 +110,11 @@ public class WaifuSave
     public float[] GetWeights()
     {
         return weights;
+    }
+
+    public int GetSecondsInFullScreen()
+    {
+        return secondsFullScreen;
     }
 
     public void SetIsUnlocked(bool isUnlocked)
@@ -135,7 +142,7 @@ public class WaifuSave
         this.buffUsed.SetEnumNames(names);
         this.buffUsed.SetIsUsed(isUsed);
     }
-    
+
     public void SetDebuffUsed(string[] names, bool[] isUsed)
     {
         this.debuffUsed.SetEnumNames(names);
@@ -144,7 +151,8 @@ public class WaifuSave
 
     public void SetMultiplier(MultiplierData horizontal, MultiplierData upDown, MultiplierData downUp)
     {
-        if (this.multiplier == null) {
+        if (this.multiplier == null)
+        {
             this.multiplier = new Multiplier(new MultiplierData(1, 0), new MultiplierData(2, 0), new MultiplierData(2, 0));
         }
         this.multiplier.SetHorizontal(horizontal);
@@ -155,6 +163,11 @@ public class WaifuSave
     public void SetWeights(float[] weights)
     {
         this.weights = weights;
+    }
+    
+    public void SetSecondsInFullScreen(int seconds)
+    {
+        secondsFullScreen = seconds;
     }
 }
 
