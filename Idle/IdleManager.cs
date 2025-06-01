@@ -99,6 +99,12 @@ public class IdleManager : MonoBehaviour
         idleFileManager.SetRoomLvByName(roomName, lvRequested);
         UpdateNumberOfUnlockableText(numberOfUnlockable);
         UnlockRoomLvByGameObjAndLv(room, lvRequested);
+
+        if (lvRequested == 3 && PlayerPrefs.GetInt("isFirstRoomMaxed", 1) == 1) {
+            SteamAchievementManager.Instance.AwardAchievement("IDLE_MAX_ROOM_LV");
+            PlayerPrefs.SetInt("isFirstRoomMaxed", 0);
+            PlayerPrefs.Save();
+        }
     }
 
     public void UpdateTimerButton(string roomNameAndLv)
@@ -119,6 +125,12 @@ public class IdleManager : MonoBehaviour
             if (progressScript != null) {
                 progressScript.UpdateTimerMultiplierForLvUp();
             }
+        }
+        
+        if (lvRequested == 3 && PlayerPrefs.GetInt("isFirstTimerMaxed", 1) == 1) {
+            SteamAchievementManager.Instance.AwardAchievement("IDLE_MAX_TIME_LV");
+            PlayerPrefs.SetInt("isFirstTimerMaxed", 0);
+            PlayerPrefs.Save();
         }
     }
 
@@ -211,6 +223,7 @@ public class IdleManager : MonoBehaviour
         UpdateNumberOfUnlockableText(numberOfUnlockable);
         roomGameObj.SetActive(true);
         DestroyUnlockableNeedOnButtonByRoomName(roomGameObj.name);
+        SteamAchievement.Instance.CheckIdleAchievement(roomGameObj.name);
     }
 
     private bool CheckUnlockedRoomByRoomNameLocked(string roomName)

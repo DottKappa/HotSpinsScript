@@ -125,4 +125,6 @@ public enum PrestigeSteps
 - resolutionIndex
 - fullScreenPath [string image path]
 - isFirstSpin [0/1]
+- isFirstRoomMaxed [0/1]
+- isFirstTimerMaxed [0/1]
 */

@@ -133,4 +133,33 @@ public class SteamAchievement : MonoBehaviour
             }
         }
     }
+
+    public void CheckIdleAchievement(string roomName)
+    {
+        var idleAchievements = new Dictionary<string, string>
+        {
+            { "IDLE_UNLOCK_1", "slot" },
+            { "IDLE_UNLOCK_2", "poker" },
+            { "IDLE_UNLOCK_3", "bar" },
+            { "IDLE_UNLOCK_4", "reception" },
+            { "IDLE_UNLOCK_5", "kitchen" },
+        };
+
+        string[] achievements = SteamBackEndStatic.GetAchievementIdle();
+        foreach (var achievementName in achievements)
+        {
+            foreach (var pair in idleAchievements)
+            {
+                if (achievementName.Contains(pair.Key) && roomName == pair.Value)
+                {
+                    SteamAchievementManager.Instance.AwardAchievement(achievementName);
+                }
+            }
+        }
+
+        if (SteamAchievementManager.Instance.GetNumberOfMissingAchievement1() == 1)
+        {
+            SteamAchievementManager.Instance.AwardAchievement("FINAL_ACHIEVEMENT_1");
+        }
+    }
 }

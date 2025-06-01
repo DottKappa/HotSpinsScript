@@ -108,4 +108,9 @@ public static class SteamBackEndStatic
     {
         return generalAchievement_1;
     }
+
+    public static string[] GetAchievementIdle()
+    {
+        return idleAchievement_1;
+    }
 }
