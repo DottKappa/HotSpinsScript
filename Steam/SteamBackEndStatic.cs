@@ -15,7 +15,7 @@ public static class SteamBackEndStatic
         "POINTS_3",
         "FINAL_ACHIEVEMENT_1",
     };
-    
+
     private static readonly string[] idleAchievement_1 = new string[]
     {
         "IDLE_UNLOCK_1",
@@ -102,5 +102,10 @@ public static class SteamBackEndStatic
         }
 
         return Array.Empty<string>();
+    }
+
+    public static string[] GetAchievementGeneral()
+    {
+        return generalAchievement_1;
     }
 }

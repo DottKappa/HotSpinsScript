@@ -77,6 +77,11 @@ public class SteamAchievementManager : MonoBehaviour
         return missingCount;
     }
 
+    public int GetNumberOfMissingAchievement1()
+    {
+        return missingAchievements_1;
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoCreateManager()
     {

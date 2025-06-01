@@ -20,7 +20,7 @@ public class SteamAchievement : MonoBehaviour
         }
     }
 
-// Da cancellare Start()
+    // Da cancellare Start()
     void Start()
     {
         SteamUserStats.ResetAllStats(true);
@@ -97,6 +97,39 @@ public class SteamAchievement : MonoBehaviour
                         SteamAchievementManager.Instance.AwardAchievement(achievementName);
                     }
                 }
+            }
+        }
+    }
+
+    public void CheckGenericAchievement(WaifuFileStructure waifuFile)
+    {
+        var spinAchievements = new Dictionary<string, int>
+        {
+            { "POINTS_1", 250000 },
+            { "POINTS_2", 500000 },
+            { "POINTS_3", 999999 }
+        };
+
+        string[] achievements = SteamBackEndStatic.GetAchievementGeneral();
+        int total = 0;
+        foreach (Waifu waifu in System.Enum.GetValues(typeof(Waifu)))
+        {
+            total += waifuFile.GetWaifuDataByName(waifu).GetPoints();
+        }
+
+        foreach (var achievementName in achievements)
+        {
+            foreach (var pair in spinAchievements)
+            {
+                if (achievementName.Contains(pair.Key) && total >= pair.Value)
+                {
+                    SteamAchievementManager.Instance.AwardAchievement(achievementName);
+                }
+            }
+
+            if (achievementName == "FINAL_ACHIEVEMENT_1" && SteamAchievementManager.Instance.GetNumberOfMissingAchievement1() == 1)
+            {
+                SteamAchievementManager.Instance.AwardAchievement(achievementName);
             }
         }
     }

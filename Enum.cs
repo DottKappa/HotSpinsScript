@@ -124,4 +124,5 @@ public enum PrestigeSteps
 - isFullScreen [0/1]
 - resolutionIndex
 - fullScreenPath [string image path]
+- isFirstSpin [0/1]
 */

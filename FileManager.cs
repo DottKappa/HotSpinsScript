@@ -160,11 +160,12 @@ public class FileManager : MonoBehaviour
             //Debug.Log("JSON da salvare: " + json);
             File.WriteAllText(filePath, json);
             Debug.Log("[" + nameFile + "] Salvato correttamente");
-            
+
             WaifuSave[] modifiedArray = new WaifuSave[modifiedWaifus.Count];
             modifiedWaifus.CopyTo(modifiedArray);
             SteamAchievement.Instance.CheckAchievementByWaifuFile(modifiedArray);
             modifiedWaifus.Clear();
+            SteamAchievement.Instance.CheckGenericAchievement(waifuFile);
         }
         catch (System.Exception e)
         {

@@ -61,7 +61,12 @@ public class SceneManager : MonoBehaviour
         if (!MatrixHasEmptySlot() || !isRolling) {
             if (Input.GetKeyDown(KeyCode.Space) && !IsBusy()) {
                 if (!isRolling) {
-                    StartSlot();                    
+                    StartSlot();
+                    if (PlayerPrefs.GetInt("isFirstSpin", 1) == 1) {
+                        SteamAchievementManager.Instance.AwardAchievement("FIRST_SPIN");
+                        PlayerPrefs.SetInt("isFirstSpin", 0);
+                        PlayerPrefs.Save();
+                    }
                 } else {
                     StopSlot();
                 }

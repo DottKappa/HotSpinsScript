@@ -11,6 +11,17 @@ public class FullScreenImage : MonoBehaviour
     private int secondsPassed = 0;
     // Timer prende il tempo dal file. Quando chiude va a salvare, ma quando arriva a 10m o 20m fa un save
     private FileManager fileManager;
+    private InputSystem_Actions controls;
+
+    void Awake()
+    {
+        controls = new InputSystem_Actions();
+        controls.UI.Cancel.performed += ctx => CloseImageButton();
+    }
+
+    void OnEnable() { controls.Enable(); }
+    void OnDisable() { controls.Disable(); }
+
 
     private void Start()
     {
@@ -55,6 +66,11 @@ public class FullScreenImage : MonoBehaviour
     {
         if (bgCanvasGroup == null)
             return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseImageButton();
+        }
 
         if (Mathf.Approximately(bgCanvasGroup.alpha, 1f))
         {
