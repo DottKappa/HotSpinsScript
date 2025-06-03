@@ -11,11 +11,18 @@ public class CanvasButtons : MonoBehaviour
 
     public void StartStopSpins()
     {
-        if (!sceneManager.MatrixHasEmptySlot() || !sceneManager.GetIsRolling()) {
-            if (sceneManager.GetIsRolling()) {
-                sceneManager.StopSlot();
-            } else {
-                sceneManager.StartSlot();
+        if (!sceneManager.GetAutospinEnabled())
+        {
+            if (!sceneManager.MatrixHasEmptySlot() || !sceneManager.GetIsRolling())
+            {
+                if (sceneManager.GetIsRolling())
+                {
+                    sceneManager.StopSlot();
+                }
+                else
+                {
+                    sceneManager.StartSlot();
+                }
             }
         }
     }

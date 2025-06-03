@@ -1,4 +1,8 @@
 using UnityEngine;
+using Random = UnityEngine.Random;
+using System.Collections;
+using System;
+using System.Collections.Generic;
 
 public class RespawnTrigger : MonoBehaviour
 {
@@ -154,5 +158,79 @@ public class RespawnTrigger : MonoBehaviour
     {
         this.speed = speed;
         numberOfSpecialSpins = sceneManager.GetNumberOfSpins() + numberOfSpins;
+    }
+
+    public void SmartBoost(int numberOfSpins)
+    {
+        float[] defaults = GetDefaultWeights();
+
+        // Check: più di 6 pesi con lo stesso valore e diversi da default -> reset
+        Dictionary<float, int> valueCounts = new Dictionary<float, int>();
+        foreach (float w in weights)
+        {
+            float rounded = (float)Math.Round(w, 2);
+            if (!valueCounts.ContainsKey(rounded))
+                valueCounts[rounded] = 1;
+            else
+                valueCounts[rounded]++;
+        }
+
+        foreach (var kvp in valueCounts)
+        {
+            float value = kvp.Key;
+            int count = kvp.Value;
+
+            int defaultCount = 0;
+            foreach (float d in defaults)
+            {
+                if (Mathf.Approximately(d, value))
+                    defaultCount++;
+            }
+
+            if (count > 6 && count > defaultCount)
+            {
+                ResetWeights();
+                return;
+            }
+        }
+
+        // Sblocca index dinamicamente ogni 75 spin
+        List<int> candidates = new List<int> { 0, 1, 2, 3 };
+        int additional = Mathf.FloorToInt(numberOfSpins / 75f);
+        for (int i = 0; i < additional; i++)
+        {
+            int index = 4 + i;
+            if (index < 12) candidates.Add(index);
+        }
+
+        // Scegli un candidato random per boost
+        int minIndex = candidates[Random.Range(0, candidates.Count)];
+
+        // Boost 20 se index 10 o 11, altrimenti 35
+        float boostAmount = (minIndex == 10 || minIndex == 11) ? 20f : 35f;
+        weights[minIndex] += boostAmount;
+
+        // Limita il peso massimo a 50
+        if (weights[minIndex] > 50f)
+            weights[minIndex] = 50f;
+
+        // Trova candidato con peso più alto (escluso minIndex)
+        int maxIndex = -1;
+        float maxWeight = float.MinValue;
+        foreach (int i in candidates)
+        {
+            if (i != minIndex && weights[i] > maxWeight)
+            {
+                maxWeight = weights[i];
+                maxIndex = i;
+            }
+        }
+
+        // Abbassa il più alto se sopra default
+        if (maxIndex != -1)
+        {
+            float decreaseAmount = (maxIndex == 10 || maxIndex == 11) ? 18f : 30f;
+            weights[maxIndex] = Mathf.Max(weights[maxIndex] - decreaseAmount, defaults[maxIndex]);
+        }
     }
 }

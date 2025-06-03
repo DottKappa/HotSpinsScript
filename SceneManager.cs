@@ -25,6 +25,11 @@ public class SceneManager : MonoBehaviour
     public bool IsBusy() => isBusy;
     public void SetBusy(bool value) => isBusy = value;
 
+    // Gestione autospin
+    private bool isAutospinEnabled = false;
+    public bool GetAutospinEnabled() => isAutospinEnabled;
+    public void SetAutospinEnabled(bool value) => isAutospinEnabled = value;
+
     void Awake()
     {
         controls = new InputSystem_Actions();
@@ -59,7 +64,7 @@ public class SceneManager : MonoBehaviour
     void Update()
     {
         if (!MatrixHasEmptySlot() || !isRolling) {
-            if (Input.GetKeyDown(KeyCode.Space) && !IsBusy()) {
+            if (Input.GetKeyDown(KeyCode.Space) && !IsBusy() && !isAutospinEnabled) {
                 if (!isRolling) {
                     StartSlot();
                     if (PlayerPrefs.GetInt("isFirstSpin", 1) == 1) {
@@ -253,7 +258,7 @@ public class SceneManager : MonoBehaviour
             cameraSlot.StopSpinSound();
         }
 
-        if (column != null) {
+        if (column != null && !isAutospinEnabled) {
             int colIndex = (int)column;
             for (int row = 0; row < slotCells.Length; row++) {
                 if (slotCells[row][colIndex] != null) {
@@ -359,34 +364,20 @@ public class SceneManager : MonoBehaviour
 
     private void ManipulateSlot()
     {
-        switch (numberOfSpins) {
-            case int n when n % 3 == 0:
-            respawnTrigger.ManipulateWeights(4, 4f);
-            break;
-            case int n when n % 5 == 0:
-            respawnTrigger.ManipulateWeights(5, -4f);
-            respawnTrigger.ManipulateWeights(4, -3f);
-            break;
-            case int n when n % 7 == 0:
-            respawnTrigger.ManipulateWeights(6, 5f);
-            break;
-            case int n when n % 11 == 0:
-            respawnTrigger.ManipulateWeights(7, 3f);
-            respawnTrigger.ManipulateWeights(6, -3f);
-            break;
-            case int n when n % 13 == 0:
-            respawnTrigger.ManipulateWeights(5, 10f);
-            break;
-        }
+        respawnTrigger.SmartBoost(numberOfSpins);
     }
 
     public void PickUpSpark()
     {
-        int numberOfSparksInSlot = GetNumberOfSparksInSlot();
-        if (numberOfSparksInSlot > 0) {
-            EmptySlotMatrix();
-            idleFileManager.UpdateNumberOfUnlockableRoom(numberOfSparksInSlot);
-            powerUpManager.addSpark(numberOfSparksInSlot);
+        if (!GetAutospinEnabled())
+        {
+            int numberOfSparksInSlot = GetNumberOfSparksInSlot();
+            if (numberOfSparksInSlot > 0)
+            {
+                EmptySlotMatrix();
+                idleFileManager.UpdateNumberOfUnlockableRoom(numberOfSparksInSlot);
+                powerUpManager.addSpark(numberOfSparksInSlot);
+            }
         }
     }
 

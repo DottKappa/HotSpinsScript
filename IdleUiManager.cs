@@ -39,6 +39,7 @@ public class IdleUiManager : MonoBehaviour
     public void idleButton()
     {
         if (sceneManager.GetIsRolling()) return;
+        if (sceneManager.GetAutospinEnabled()) return;
         sceneManager.SetBusy(!isIdleVisible);
 
         if (isIdleVisible) door.SetActive(true);

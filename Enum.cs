@@ -127,4 +127,5 @@ public enum PrestigeSteps
 - isFirstSpin [0/1]
 - isFirstRoomMaxed [0/1]
 - isFirstTimerMaxed [0/1]
+- autospinUnlocked [0/1]
 */
