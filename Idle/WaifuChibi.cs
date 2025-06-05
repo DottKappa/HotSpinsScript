@@ -15,7 +15,7 @@ public class WaifuChibi : MonoBehaviour
     public float flipDelay = 0.4f;
 
     [Header("Idle Breath")]
-    public float breathScaleAmount = 0.02f;
+    public float breathScaleAmount = 0.000005f;
     public float breathSpeed = 2f;
 
     private RectTransform rectTransform;

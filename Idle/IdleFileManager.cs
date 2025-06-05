@@ -150,7 +150,7 @@ public class IdleFileManager : MonoBehaviour
 
         try {
             string json = JsonUtility.ToJson(idleFileStructure);
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(filePath, Encryptor.Encrypt(json));
             Debug.Log("[" + nameFile + "] Salvato correttamente");
         } catch (System.Exception e) {
             Debug.LogError("[IdleFileManager] Failed to save waifu file: " + e.Message);
@@ -163,7 +163,7 @@ public class IdleFileManager : MonoBehaviour
         string filePath = Path.Combine(Path.Combine(Application.persistentDataPath, folder), nameFile);
 
         if (File.Exists(filePath)) {
-            string json = File.ReadAllText(filePath);
+            string json = Encryptor.Decrypt(File.ReadAllText(filePath));
             if (json == "{}" || string.IsNullOrEmpty(json)) {
                 Debug.LogWarning("[IdleFileManager] Il file json è vuoto");
                 return;

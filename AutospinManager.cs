@@ -110,7 +110,7 @@ public class AutospinManager : MonoBehaviour, IPointerEnterHandler, IPointerExit
             else
             {
                 sceneManager.SetAutospinEnabled(false);
-                autospinButtonImage.color = new Color32(0xFF, 0xFF, 0xFF, 0xFF);
+                autospinButtonImage.color = new Color32(0x00, 0x00, 0x00, 0xFF);
                 // Il loop si interromperà alla fine del ciclo corrente
             }
         }

@@ -70,7 +70,7 @@ public class CanvasController : MonoBehaviour
         }
         else
         {
-            numberOfSlotsText.color = Color.white;
+            numberOfSlotsText.color = Color.black;
         }
     }
 
