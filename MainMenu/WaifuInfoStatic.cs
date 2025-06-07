@@ -11,7 +11,8 @@ public static class WaifuInfoStatic
 
     public static string[] GetInfoByWaifu(string waifuName)
     {
-        switch (waifuName) {
+        switch (waifuName)
+        {
             case "chiho":
                 return GetChihoInfo();
             case "hina":
@@ -20,6 +21,8 @@ public static class WaifuInfoStatic
                 return GetShioriInfo();
             case "tsukiko":
                 return GetTsukikoInfo();
+            case "soojin":
+                return GetSoojinInfo();
             default:
                 return new string[0]; // Restituisce un array vuoto
         }
@@ -46,7 +49,7 @@ public static class WaifuInfoStatic
             baseText[4] + "kitty, pink, fish, tail",
         };
     }
-    
+
     public static string[] GetShioriInfo()
     {
         return new string[] {
@@ -57,15 +60,26 @@ public static class WaifuInfoStatic
             baseText[4] + "mommy issue, teach",
         };
     }
-    
+
     public static string[] GetTsukikoInfo()
     {
         return new string[] {
             baseText[0] + "24",
             baseText[1] + "47kg",
-            baseText[2] + "145/60/75",
+            baseText[2] + "70/60/75",
             baseText[3] + "160cm",
             baseText[4] + "emo, melancholic",
+        };
+    }
+
+    public static string[] GetSoojinInfo()
+    {
+        return new string[] {
+            baseText[0] + "26",
+            baseText[1] + "55kg",
+            baseText[2] + "100/75/75",
+            baseText[3] + "170cm",
+            baseText[4] + "normie",
         };
     }
 }

@@ -276,6 +276,10 @@ public class IdleManager : MonoBehaviour
             return;
         }
 
+        FileManager fileManager = FindFirstObjectByType<FileManager>();
+        bool isActive = fileManager.GetIsUnlockedByWaifu((Waifu)System.Enum.Parse(typeof(Waifu), waifuName));
+        if (!isActive) return;
+
         Sprite sprite = GetSpriteByWaifuName(waifuName);
         GameObject roomActive = GetActiveRoom();
         Image imageComponent = GetImageComponentByGameObj(roomActive);

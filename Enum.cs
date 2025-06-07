@@ -1,17 +1,17 @@
 public enum SlotSymbols
 {
-    Cherry = 11,
-    Melon = 15,
-    Strawberry = 25,
-    Banana = 69,
-    Hearts = 100,
-    Diamonds = 150,
-    Clubs = 175,
-    Spades = 222,
-    Sun = 120, // Somma di tutte le basic
-    Moon = 647, // Somma di tutte le scatter
+    Cherry = 110,
+    Melon = 150,
+    Strawberry = 250,
+    Banana = 690,
+    Hearts = 1000,
+    Diamonds = 1250,
+    Clubs = 1500,
+    Spades = 1750,
+    Sun = 1200, // Somma di tutte le basic
+    Moon = 5500, // Somma di tutte le scatter
     Seven = 777,
-    Special = 1544, // Somma di multiplier e special
+    Special = 6700, // Somma di multiplier e special
 }
 
 public enum SlotColumns
@@ -52,7 +52,8 @@ public enum Waifu
     Chiho,
     Hina,
     Shiori,
-    Tsukiko
+    Tsukiko,
+    Soojin,
 }
 
 // RICORDARSI DI NON USARE GLI STESSI VALORI, SE NO NON VENGONO RICONOSCIUTI
@@ -98,6 +99,17 @@ public enum WaifuSteps
     Tsukiko_8 = 80000,
     Tsukiko_9 = 95000,
     Tsukiko_10 = 120000,
+    
+    Soojin_1 = 0,
+    Soojin_2 = 8500,
+    Soojin_3 = 14000,
+    Soojin_4 = 20000,
+    Soojin_5 = 30000,
+    Soojin_6 = 52500,
+    Soojin_7 = 70000,
+    Soojin_8 = 85000,
+    Soojin_9 = 105000,
+    Soojin_10 = 130000,
 }
 
 //potrebbe diventare tipo "hina" e mettere quanti punti per la sua scena zozza
@@ -128,4 +140,7 @@ public enum PrestigeSteps
 - isFirstRoomMaxed [0/1]
 - isFirstTimerMaxed [0/1]
 - autospinUnlocked [0/1]
+- slotSkin [string color] [green/red/pink/purple/blue]
+- borderSkin [string color] [green/red/pink/purple/blue]
+- buttonSkin [string color] [green/red/pink/purple/blue]
 */

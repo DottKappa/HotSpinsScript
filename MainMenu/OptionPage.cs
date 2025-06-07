@@ -14,6 +14,10 @@ public class OptionPage : MonoBehaviour
     public TextMeshProUGUI percentage;
     public Canvas mainPageCanvas;
     public Canvas optionPageCanvas;
+    [Header("Skin objs")]
+    public Transform slotSkins;
+    public Transform borderSkins;
+    public Transform buttonSkins;
 
     private Resolution[] availableResolutions;
     private List<Resolution> filteredResolutions = new List<Resolution>();
@@ -48,6 +52,13 @@ public class OptionPage : MonoBehaviour
 
         controls = new InputSystem_Actions();
         controls.UI.Cancel.performed += ctx => ReturnButton();
+    }
+
+    void Start()
+    {
+        ActivateSelectedSlot("slotSkin", slotSkins);
+        ActivateSelectedSlot("borderSkin", borderSkins);
+        ActivateSelectedSlot("buttonSkin", buttonSkins);
     }
 
     void OnEnable()
@@ -177,6 +188,41 @@ public class OptionPage : MonoBehaviour
         Screen.SetResolution(selectedResolution.width, selectedResolution.height, Screen.fullScreen);
         PlayerPrefs.SetInt("resolutionIndex", index);
         PlayerPrefs.Save();
+    }
+
+    public void SlotColorButton(string color)
+    {
+        Debug.Log("COLORE SLOT -> " + color);
+        PlayerPrefs.SetString("slotSkin", color.ToLower());
+        ActivateSelectedSlot("slotSkin", slotSkins);
+    }
+
+    public void BorderColorButton(string color)
+    {
+        Debug.Log("COLORE BORDO -> " + color);
+        PlayerPrefs.SetString("borderSkin", color.ToLower());
+        ActivateSelectedSlot("borderSkin", borderSkins);
+    }
+
+    public void ButtonColorButton(string color)
+    {
+        Debug.Log("COLORE BOTTONI -> " + color);
+        PlayerPrefs.SetString("buttonSkin", color.ToLower());
+        ActivateSelectedSlot("buttonSkin", buttonSkins);
+    }
+
+    private void ActivateSelectedSlot(string playerPrefKey, Transform parentSlot)
+    {
+        string selectedValue = PlayerPrefs.GetString(playerPrefKey, "pink");
+
+        foreach (Transform bgButton in parentSlot)
+        {
+            string bgName = bgButton.name; // es: BGButton_pink
+            string color = bgName.Replace("BGButton_", ""); // es: "pink"
+
+            Transform ckButton = bgButton.Find("CKButton_" + color);
+            ckButton?.gameObject.SetActive(color == selectedValue);
+        }
     }
 
     public void ReturnButton()

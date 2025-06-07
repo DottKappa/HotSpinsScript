@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PointSystemIdleController : MonoBehaviour
@@ -11,6 +12,10 @@ public class PointSystemIdleController : MonoBehaviour
     public TextMeshProUGUI upDownUsage;
     public TextMeshProUGUI horizontalUsage;
     public TextMeshProUGUI downUpUsage;
+    [Header("Background multiplier")]
+    public Image upDownBg;
+    public Image horizontalBg;
+    public Image downUpBg;
 
     private int numberOfHorizontal = 0;
     private int numberOfUpDown = 0;
@@ -59,6 +64,9 @@ public class PointSystemIdleController : MonoBehaviour
         UpdateFontSize(upDownText, upDownMultiplier);
         UpdateFontSize(horizontalText, horizontalMultiplier);
         UpdateFontSize(downUpText, downUpMultiplier);
+        UpdateImageWidth(upDownBg, upDownMultiplier);
+        UpdateImageWidth(horizontalBg, horizontalMultiplier);
+        UpdateImageWidth(downUpBg, downUpMultiplier);
         SetRemainingUsage();
         LimitMultipliers();
     }
@@ -74,6 +82,22 @@ public class PointSystemIdleController : MonoBehaviour
         text.fontSize = fontSize;
     }
 
+    private float originalWidth = 66f;
+    private void UpdateImageWidth(Image image, int multiplier)
+    {
+        RectTransform rectTransform = image.rectTransform;
+        Vector2 size = rectTransform.sizeDelta;
+
+        // Clamp del multiplier per evitare di superare i limiti
+        int clampedMultiplier = Mathf.Clamp(multiplier, 0, 5);
+
+        // Calcolo incremento
+        float widthIncrease = 14f * clampedMultiplier;
+
+        size.x = originalWidth + widthIncrease;
+        rectTransform.sizeDelta = size;
+    }
+
     public void UpdateIdleMultipliers()
     {
         HalveIfZero(ref numberOfUpDown, ref upDownMultiplier);
@@ -81,7 +105,7 @@ public class PointSystemIdleController : MonoBehaviour
         HalveIfZero(ref numberOfDownUp, ref downUpMultiplier);
 
         SetUpMinimumMultiplier();
-        fileManager.SetMultiplierByWaifu(new MultiplierData(horizontalMultiplier, numberOfHorizontal), 
+        fileManager.SetMultiplierByWaifu(new MultiplierData(horizontalMultiplier, numberOfHorizontal),
             new MultiplierData(upDownMultiplier, numberOfUpDown), new MultiplierData(downUpMultiplier, numberOfDownUp), fileManager.GetActiveWaifuName());
         SetRemainingUsage();
     }
@@ -131,4 +155,7 @@ public class PointSystemIdleController : MonoBehaviour
             downUpMultiplier = maxLimit;
         }
     }
+    
+    
+    //60-150
 }

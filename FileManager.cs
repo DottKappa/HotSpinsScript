@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class FileManager : MonoBehaviour
 {
     private string folder = "dataFiles";
-    private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave("Hina"), new WaifuSave("Shiori"), new WaifuSave("Tsukiko"));
+    private WaifuFileStructure waifuFile = new WaifuFileStructure(new WaifuSave("Chiho"), new WaifuSave("Hina"), new WaifuSave("Shiori"), new WaifuSave("Tsukiko"), new WaifuSave("Soojin"));
     private SelectorSkin selectorSkin;
     private HashSet<WaifuSave> modifiedWaifus = new HashSet<WaifuSave>();
 
@@ -228,9 +228,10 @@ public class FileManager : MonoBehaviour
         WaifuSave hina  = (toReplace == Waifu.Hina)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Hina);
         WaifuSave shiori = (toReplace == Waifu.Shiori)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Shiori);
         WaifuSave tsukiko = (toReplace == Waifu.Tsukiko)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Tsukiko);
+        WaifuSave soojin = (toReplace == Waifu.Soojin)  ? newData : waifuFile.GetWaifuDataByName(Waifu.Soojin);
         // Qui aggiungo la nuova waifu in futuro
         // WaifuSave misaki = (toReplace == Waifu.Misaki) ? newData : waifuFile.GetWaifuDataByName(Waifu.Misaki);
 
-        return new WaifuFileStructure(chiho, hina, shiori, tsukiko); // Qui dovrò aggiungere misaki +
+        return new WaifuFileStructure(chiho, hina, shiori, tsukiko, soojin); // Qui dovrò aggiungere misaki +
     }
 }
