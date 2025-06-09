@@ -115,6 +115,7 @@ public class PointSystemController : MonoBehaviour
 
         UpdatePointsText();
         UpdateWaifuImage();
+        selectorSkin.SetUpImageButtons();
     }
 
     public void DividePoints(float multiplier)

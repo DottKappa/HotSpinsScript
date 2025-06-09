@@ -22,13 +22,11 @@ public class SkinSetUp : MonoBehaviour
         SetUpSlotSKin();
         SetUpBorderSKin();
         SetUpButtons();
-
-
     }
 
     private void SetUpSlotSKin()
     {
-        string skin = PlayerPrefs.GetString("slotSkin");
+        string skin = PlayerPrefs.GetString("slotSkin", "pink");
         string imagePath = "Texture/SlotSKin/Slot/" + skin;
         Sprite newSprite = Resources.Load<Sprite>(imagePath);
         slotSkin.sprite = newSprite;
@@ -36,7 +34,7 @@ public class SkinSetUp : MonoBehaviour
 
     private void SetUpBorderSKin()
     {
-        string skin = PlayerPrefs.GetString("borderSkin");
+        string skin = PlayerPrefs.GetString("borderSkin", "pink");
         string imagePath = "Texture/SlotSKin/Border/" + skin;
         Sprite newSprite = Resources.Load<Sprite>(imagePath);
         borderSkin.sprite = newSprite;
@@ -46,7 +44,7 @@ public class SkinSetUp : MonoBehaviour
     {
         Sprite newSprite;
         string imagePath;
-        string skin = PlayerPrefs.GetString("buttonSkin");
+        string skin = PlayerPrefs.GetString("buttonSkin", "pink");
         foreach (var item in buttonsSlotSkin)
         {
             imagePath = "Texture/SlotSKin/Buttons/" + skin + "/slotButton";

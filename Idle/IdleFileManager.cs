@@ -183,9 +183,10 @@ public class IdleFileManager : MonoBehaviour
     {
         Room newBasicRoom = new Room();
         newBasicRoom.CreateRoomByName(IdleStatic.GetBasicRoom());
+        newBasicRoom.SelectedWaifu = "Chiho";
         idleFileStructure.AddRoom(newBasicRoom);
         string json = JsonUtility.ToJson(idleFileStructure);
-        File.WriteAllText(filePath, json);
+        File.WriteAllText(filePath, Encryptor.Encrypt(json));
         Debug.Log("[" + nameFile + "] Salvato correttamente");
     }
 

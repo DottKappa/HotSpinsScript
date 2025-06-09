@@ -192,21 +192,18 @@ public class OptionPage : MonoBehaviour
 
     public void SlotColorButton(string color)
     {
-        Debug.Log("COLORE SLOT -> " + color);
         PlayerPrefs.SetString("slotSkin", color.ToLower());
         ActivateSelectedSlot("slotSkin", slotSkins);
     }
 
     public void BorderColorButton(string color)
     {
-        Debug.Log("COLORE BORDO -> " + color);
         PlayerPrefs.SetString("borderSkin", color.ToLower());
         ActivateSelectedSlot("borderSkin", borderSkins);
     }
 
     public void ButtonColorButton(string color)
     {
-        Debug.Log("COLORE BOTTONI -> " + color);
         PlayerPrefs.SetString("buttonSkin", color.ToLower());
         ActivateSelectedSlot("buttonSkin", buttonSkins);
     }
