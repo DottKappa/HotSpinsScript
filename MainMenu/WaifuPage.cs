@@ -17,6 +17,7 @@ public class WaifuPage : MonoBehaviour
     public RectTransform contentTransform; // Riferimento al content della ScrollView
     private CollectionWaifu collectionWaifu;
     [SerializeField] private TextMeshProUGUI[] waifuInfoFields;
+    [SerializeField] private TextMeshProUGUI[] hentaiPointsNeeded;
     private FileManager fileManager;
     private bool isFirstLocked = true;
     private InputSystem_Actions controls;
@@ -82,7 +83,32 @@ public class WaifuPage : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform);
+        SetWaifuPrestigeImage();
         SetWaifuInfoData();
+        SetHentaiPointsNeeded();
+    }
+
+    private void SetWaifuPrestigeImage()
+    {
+        int currentPoints = int.Parse(points);
+        for (int i = 1; i <= 3; i++)
+        {
+            string enumName = waifuName + "_0_" + i;
+
+            if (System.Enum.TryParse(enumName, out PrestigeSteps step) && currentPoints >= (int)step)
+            {
+                GameObject obj = Instantiate(waifuDetailPrefab);
+                obj.name = "Hentai_" + i;
+                obj.transform.SetParent(this.transform);
+
+                Destroy(obj.transform.Find("WaifuDetailImage/Border")?.gameObject);
+                Destroy(obj.GetComponent<Image>());
+
+                var script = obj.GetComponentInChildren<WaifuDetail>();
+                string path = $"Texture/Waifu/{waifuName}/{waifuName}_0_{i}";
+                script.Initialize(path, path, true);
+            }
+        }
     }
 
     void OnEnable()
@@ -97,7 +123,8 @@ public class WaifuPage : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             ReturnButton();
         }
     }
@@ -116,26 +143,36 @@ public class WaifuPage : MonoBehaviour
         int.TryParse(points, out pointsInt);
         int[] waifuSteps = GetEnumValuesStartingWith(waifuName);
 
-        for (int i = 0; i < prestigeArray.Length; i++) {
-            if (pointsInt >= waifuSteps[i]) {
+        for (int i = 0; i < prestigeArray.Length; i++)
+        {
+            if (pointsInt >= waifuSteps[i])
+            {
                 prestigeArray[i] = 1;
-            } else {
+            }
+            else
+            {
                 prestigeArray[i] = 0;
             }
         }
 
         GameObject table = GameObject.Find("Table");
 
-        if (table != null) {
+        if (table != null)
+        {
             PrestigeTable prestigeTableScript = table.GetComponent<PrestigeTable>();
 
-            if (prestigeTableScript != null) {
+            if (prestigeTableScript != null)
+            {
                 prestigeTableScript.prefabIndices = prestigeArray;
                 prestigeTableScript.SetUpPrestigeTable(waifuName);
-            } else {
+            }
+            else
+            {
                 Debug.LogError("PrestigeTable script non trovato sul GameObject Table.");
             }
-        } else {
+        }
+        else
+        {
             Debug.LogError("GameObject Table non trovato nella scena.");
         }
     }
@@ -144,19 +181,24 @@ public class WaifuPage : MonoBehaviour
     {
         // TODO -> Attenzione se cambierò i nomi
         GameObject collectionPage = GameObject.Find("CollectionPage");
-        if (collectionPage == null) {
+        if (collectionPage == null)
+        {
             Debug.LogError("ERRORE!");
         }
         // Trova Chiho anche se disattivato
         Transform chihoTransform = FindChildRecursive(collectionPage.transform, "Chiho");
-        if (chihoTransform != null) {
+        if (chihoTransform != null)
+        {
             GameObject chiho = chihoTransform.gameObject;
             collectionWaifu = chiho.GetComponent<CollectionWaifu>();
 
-            if (collectionWaifu == null) {
+            if (collectionWaifu == null)
+            {
                 Debug.LogError("[WaifuPage.cs] Componente CollectionWaifu non trovato su Chiho!");
             }
-        } else {
+        }
+        else
+        {
             Debug.LogError("[WaifuPage.cs] GameObject 'Chiho' non trovato nella scena!");
         }
     }
@@ -164,7 +206,8 @@ public class WaifuPage : MonoBehaviour
     private int GetWaifuStep()
     {
         Waifu waifuEnum;
-        if (Enum.TryParse(waifuName, out waifuEnum)) {
+        if (Enum.TryParse(waifuName, out waifuEnum))
+        {
             return fileManager.GetImageStepByWaifu(waifuEnum);
         }
 
@@ -175,6 +218,21 @@ public class WaifuPage : MonoBehaviour
     {
         collectionWaifu.InteractWithGameObj(true);
         Destroy(gameObject);
+    }
+
+    public void HentaiButton(string hentaiNumber)
+    {
+        string targetName = "Hentai_" + hentaiNumber;
+        GameObject hentaiObject = GameObject.Find(targetName);
+
+        if (hentaiObject != null)
+        {
+            WaifuDetail detail = hentaiObject.GetComponentInChildren<WaifuDetail>();
+            if (detail != null)
+            {
+                detail.OpenImageAtPath($"Texture/Waifu/{waifuName}/{waifuName}_0_" + hentaiNumber);
+            }
+        }
     }
 
     private string addDot(string points)
@@ -204,14 +262,17 @@ public class WaifuPage : MonoBehaviour
     private Transform FindChildRecursive(Transform parent, string childName)
     {
         // Controlla se il nome del figlio corrisponde
-        if (parent.name == childName) {
+        if (parent.name == childName)
+        {
             return parent;
         }
 
         // Ricerca tra tutti i figli
-        foreach (Transform child in parent) {
+        foreach (Transform child in parent)
+        {
             Transform result = FindChildRecursive(child, childName);
-            if (result != null) {
+            if (result != null)
+            {
                 return result;
             }
         }
@@ -230,19 +291,46 @@ public class WaifuPage : MonoBehaviour
     private void SetWaifuInfoData()
     {
         string[] info = WaifuInfoStatic.GetInfoByWaifu(waifuName.ToLower());
-        
-        if (info.Length > 0) {
+
+        if (info.Length > 0)
+        {
             int waifuStep = GetWaifuStep();
             int index = 2;
 
-            for (int i = 0; i < waifuInfoFields.Length && i < info.Length; i++) {
-                if (waifuInfoFields[i] != null && waifuStep >= index) {
+            for (int i = 0; i < waifuInfoFields.Length && i < info.Length; i++)
+            {
+                if (waifuInfoFields[i] != null && waifuStep >= index)
+                {
                     waifuInfoFields[i].text = info[i];
                     index += 2;
                 }
             }
-        } else {
+        }
+        else
+        {
             Debug.LogError("[WaifuPage.cs] Non esistono le info per la waifu " + waifuName + " nella classe [WaifuInfoStatic.cs]");
+        }
+    }
+
+    private void SetHentaiPointsNeeded()
+    {
+        if (GetWaifuStep() < 10) { return; }
+        
+        int currentPoints = int.Parse(points);
+        int uiIndex = 0;
+        bool shownMissing = false;
+
+        for (int i = 1; i <= 3 && uiIndex < hentaiPointsNeeded.Length; i++)
+        {
+            if (!System.Enum.TryParse($"{waifuName}_0_{i}", out PrestigeSteps step)) continue;
+
+            int requiredPoints = (int)step;
+
+            if (currentPoints >= requiredPoints || !shownMissing)
+            {
+                hentaiPointsNeeded[uiIndex++].text = addDot(requiredPoints.ToString());
+                if (currentPoints < requiredPoints) shownMissing = true;
+            }
         }
     }
 }

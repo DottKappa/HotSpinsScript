@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Text.RegularExpressions;
 
 public class FullScreenImage : MonoBehaviour
 {
@@ -101,11 +102,11 @@ public class FullScreenImage : MonoBehaviour
 
         if (Mathf.Approximately(bgCanvasGroup.alpha, 1f))
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 TryOpenPreviousImage();
             }
-            else if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             {
                 TryOpenNextImage();
             }
@@ -116,6 +117,7 @@ public class FullScreenImage : MonoBehaviour
     {
         if (isChanging) return;
         isChanging = true;
+        if (TryOpenNextHentaiImage()) { return; }
 
         try
         {
@@ -141,6 +143,7 @@ public class FullScreenImage : MonoBehaviour
 
             Waifu activeWaifu = (Waifu)Enum.Parse(typeof(Waifu), waifuName);
             int maxUnlocked = fileManager.GetImageStepByWaifu(activeWaifu);
+            if (nextIndex > maxUnlocked && nextIndex == 11) TryOpenNextHentaiImage(true);
             if (nextIndex > maxUnlocked) return;
 
             string nextImagePath = $"Texture/Waifu/{waifuName}/{waifuName}_{nextIndex}";
@@ -159,6 +162,7 @@ public class FullScreenImage : MonoBehaviour
     {
         if (isChanging) return;
         isChanging = true;
+        if(TryOpenPreviusHentaiImage()) { return; }
 
         try
         {
@@ -204,5 +208,63 @@ public class FullScreenImage : MonoBehaviour
         string[] nameParts = fileName.Split('_');
 
         return (Waifu)System.Enum.Parse(typeof(Waifu), nameParts[0]);
+    }
+
+    private bool TryOpenNextHentaiImage(bool isFirst = false)
+    {
+        string path = PlayerPrefs.GetString("fullScreenPath");
+        bool isMatch = Regex.IsMatch(path, @"_0_\d+$");
+        if (isMatch || isFirst)
+        {
+            string lastChar = "0";
+            if (!isFirst) lastChar = path[path.Length - 1].ToString();
+
+            int num = int.Parse(lastChar);
+            if (num < 3)
+            {
+                num += 1;
+            }
+            else
+            {
+                isChanging = false;
+                return true;
+            }
+
+            WaifuPage waifuPage = FindFirstObjectByType<WaifuPage>();
+            waifuPage.HentaiButton(num.ToString());
+            isChanging = false;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryOpenPreviusHentaiImage()
+    {
+        string path = PlayerPrefs.GetString("fullScreenPath");
+        bool isMatch = Regex.IsMatch(path, @"_0_\d+$");
+        if (isMatch)
+        {
+            string lastChar = path[path.Length - 1].ToString();
+            int num = int.Parse(lastChar);
+            if (num > 1)
+            {
+                num -= 1;
+                WaifuPage waifuPage = FindFirstObjectByType<WaifuPage>();
+                waifuPage.HentaiButton(num.ToString());
+            }
+            else
+            {
+                WaifuDetail waifuDetail = UnityEngine.Object.FindFirstObjectByType<WaifuDetail>();
+                int firstUnderscore = path.IndexOf('_');
+                string newPath = path.Substring(0, firstUnderscore) + "_10";
+                waifuDetail.OpenImageAtPath(newPath);
+            }
+            
+            isChanging = false;
+            return true;
+        }
+
+        return false;
     }
 }

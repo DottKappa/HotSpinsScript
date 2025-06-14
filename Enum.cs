@@ -69,6 +69,7 @@ public enum WaifuSteps
     Chiho_8 = 35000,
     Chiho_9 = 50000,
     Chiho_10 = 79999,
+
     Hina_1 = 0,
     Hina_2 = 3500,
     Hina_3 = 9000,
@@ -79,6 +80,7 @@ public enum WaifuSteps
     Hina_8 = 60000,
     Hina_9 = 80000,
     Hina_10 = 99999,
+
     Shiori_1 = 0,
     Shiori_2 = 4500,
     Shiori_3 = 10000,
@@ -89,6 +91,7 @@ public enum WaifuSteps
     Shiori_8 = 65000,
     Shiori_9 = 85000,
     Shiori_10 = 110000,
+
     Tsukiko_1 = 0,
     Tsukiko_2 = 6500,
     Tsukiko_3 = 12000,
@@ -112,19 +115,27 @@ public enum WaifuSteps
     Soojin_10 = 130000,
 }
 
-//potrebbe diventare tipo "hina" e mettere quanti punti per la sua scena zozza
 public enum PrestigeSteps
 {
-    Step_1 = 10000,
-    Step_2 = 20000,
-    Step_3 = 30000,
-    Step_4 = 40000,
-    Step_5 = 50000,
-    Step_6 = 60000,
-    Step_7 = 70000,
-    Step_8 = 80000,
-    Step_9 = 90000,
-    Step_10 = 99999,
+    Chiho_0_1 = 150000,
+    Chiho_0_2 = 350000,
+    Chiho_0_3 = 550000,
+
+    Hina_0_1 = 200000,
+    Hina_0_2 = 400000,
+    Hina_0_3 = 600000,
+
+    Shiori_0_1 = 250000,
+    Shiori_0_2 = 450000,
+    Shiori_0_3 = 650000,
+
+    Tsukiko_0_1 = 300000,
+    Tsukiko_0_2 = 500000,
+    Tsukiko_0_3 = 700000,
+
+    Soojin_0_1 = 350000,
+    Soojin_0_2 = 550000,
+    Soojin_0_3 = 750000,
 }
 
 /*
