@@ -10,9 +10,11 @@ public class DoorManager : MonoBehaviour
     public CanvasController canvasController;
 
     private Coroutine pulseCoroutine = null;
+    private SceneManager sceneManager;
 
     void Start()
     {
+        sceneManager = FindFirstObjectByType<SceneManager>();
         StartCoroutine(CheckForPulse());
     }
 
@@ -23,7 +25,7 @@ public class DoorManager : MonoBehaviour
         float minTime = 240f; // 4 minuto
 
         while (true) {
-            if (gameObject.activeInHierarchy) {
+            if (gameObject.activeInHierarchy && !sceneManager.GetAutospinEnabled()) {
                 elapsedTime += Time.deltaTime;
 
                 float normalizedTime = Mathf.InverseLerp(minTime, maxTime, elapsedTime);

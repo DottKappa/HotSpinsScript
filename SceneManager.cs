@@ -156,6 +156,10 @@ public class SceneManager : MonoBehaviour
             for (int i = 0; i < slotCells.Length; i++) {
                 for (int j = 0; j < slotCells[i].Length; j++) {
                     if (slotCells[i][j] != null && slotCells[i][j].tag.Contains("Powerup_")) {
+                        GameObject prefab = Resources.Load<GameObject>("Prefab/SparkVFX");
+                        Vector3 spawnPos = slotCells[i][j].transform.position;
+                        spawnPos.z = 0f;
+                        Instantiate(prefab, spawnPos, Quaternion.identity);
                         numberOfSparks++;
                     }
                 }
@@ -194,10 +198,11 @@ public class SceneManager : MonoBehaviour
         isRolling = false;
         isRollingByColumn = new bool[3] {false, false, false};
 
-        if (GetNumberOfSparksInSlot() > 0) {
+        RoundPositionByMatrix();
+        if (GetNumberOfSparksInSlot() > 0)
+        {
             cameraSlot.StartSparkInSlotSound();
         }
-        RoundPositionByMatrix();
         StartCoroutine(StopSlotWithDelay());
     }
 

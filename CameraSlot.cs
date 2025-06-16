@@ -16,6 +16,8 @@ public class CameraSlot : MonoBehaviour
     private AudioClip vfxLaserBeamAudioClip;
     private AudioClip vfxExplosionAudioClip;
     private AudioClip vfxCoinAudioClip;
+    private AudioClip vfxArrowAudioClip;
+    private AudioClip vfxMoaningAudioClip;
 
     void Awake()
     {
@@ -39,6 +41,8 @@ public class CameraSlot : MonoBehaviour
         vfxLaserBeamAudioClip = Resources.Load<AudioClip>("audio/VfxLaserBeam");
         vfxExplosionAudioClip = Resources.Load<AudioClip>("audio/VfxExplosion");
         vfxCoinAudioClip = Resources.Load<AudioClip>("audio/VfxCoin");
+        vfxArrowAudioClip = Resources.Load<AudioClip>("audio/VfxArrow");
+        vfxMoaningAudioClip = Resources.Load<AudioClip>("audio/VfxMoaning");
     }
 
     public void StartSlotSpinSound()
@@ -97,6 +101,16 @@ public class CameraSlot : MonoBehaviour
     public void StartVfxExplosion()
     {
         PlayOneShotAndDestroy(vfxExplosionAudioClip, 0.6f);
+    }
+
+    public void StartVfxArrow()
+    {
+        PlayOneShotAndDestroy(vfxArrowAudioClip, 0.6f);
+    }
+
+    public void StartVfxMoaning()
+    {
+        PlayOneShotAndDestroy(vfxMoaningAudioClip, 0.6f);
     }
 
     public void StartVfxCoin()

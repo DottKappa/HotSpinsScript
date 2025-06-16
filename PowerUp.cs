@@ -7,7 +7,7 @@ public class PowerUp : MonoBehaviour
     public Vector3 startPositionFirstCard = new Vector3(12, 0, 75);
     public Vector3 endPositionFirstCard = new Vector3(0, 0, 80);
     public Vector3 startPositionSecondCard = new Vector3(18, 0, 75);
-    public Vector3 endPositionSecondCard = new Vector3(6.5f, 0, 80);
+    public Vector3 endPositionSecondCard = new Vector3(6.2f, 0, 80);
     public Quaternion endRotation = Quaternion.Euler(90, 0, -180);
     public float duration = 1f; // Durata della transizione in secondi
     public bool isFirstCard = true;
