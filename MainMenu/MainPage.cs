@@ -1,5 +1,6 @@
 using UnityEngine;
 using SceneManagement = UnityEngine.SceneManagement.SceneManager;
+using System.Collections;
 
 public class MainPage : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MainPage : MonoBehaviour
     public Canvas rulesIdlePageCanvas;
     public GameObject fullScreenImage;
     private IdleFileManager idleFileManager;
+    public CanvasGroup bgSlot;
     
     void Start()
     {
@@ -25,6 +27,7 @@ public class MainPage : MonoBehaviour
             cg.alpha = 1f;
             cg.interactable = true;
             cg.blocksRaycasts = true;
+            StartCoroutine(FadeOut(bgSlot));
         }
     }
 
@@ -91,5 +94,22 @@ public class MainPage : MonoBehaviour
     {
         mainPageCanvas.gameObject.SetActive(false);
         rulesIdlePageCanvas.gameObject.SetActive(true);
+    }
+    
+    private IEnumerator FadeOut(CanvasGroup canvasGroup)
+    {
+        float startAlpha = canvasGroup.alpha;
+        float elapsedTime = 0f;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+
+        while (elapsedTime < 3f)
+        {
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / 3f);
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        canvasGroup.alpha = 0f;
     }
 }

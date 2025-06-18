@@ -1,17 +1,17 @@
 public enum SlotSymbols
 {
-    Cherry = 110,
-    Melon = 150,
-    Strawberry = 250,
-    Banana = 690,
-    Hearts = 1000,
-    Diamonds = 1250,
-    Clubs = 1500,
-    Spades = 1750,
-    Sun = 1200, // Somma di tutte le basic
-    Moon = 5500, // Somma di tutte le scatter
+    Cherry = 201,
+    Melon = 220,
+    Strawberry = 240,
+    Banana = 269,
+    Hearts = 350,
+    Diamonds = 400,
+    Clubs = 450,
+    Spades = 500,
+    Sun = 930, // Somma di tutte le basic
+    Moon = 1700, // Somma di tutte le scatter
     Seven = 777,
-    Special = 6700, // Somma di multiplier e special
+    Special = 2630, // Somma di multiplier e special
 }
 
 public enum SlotColumns

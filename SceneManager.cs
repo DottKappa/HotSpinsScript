@@ -10,6 +10,7 @@ public class SceneManager : MonoBehaviour
     private bool isRolling = false;
     private int numberOfSpins = 0;
     private bool[] isRollingByColumn = new bool[3] {true, true, true};
+    public bool[] GetRollingColumn() => isRollingByColumn;
     private bool needSave = true;
     private PointSystemController pointSystemController;
     private RespawnTrigger respawnTrigger;
@@ -91,6 +92,8 @@ public class SceneManager : MonoBehaviour
                 if (needSave) {
                     saveWaifuData();
                     needSave = false;
+                    respawnTrigger.SetNullRowPrefab();
+                    respawnTrigger.SetZeroRowPrefabCounter();
                 }
             }
         }
@@ -174,6 +177,7 @@ public class SceneManager : MonoBehaviour
         cameraSlot.StartSlotSpinSound();
         EmptySlotMatrix();
         needSave = true;
+        pointSystemController.IncrementLastWin();
 
         // Istanzia 9 prefab nelle posizioni specificate
         for (int i = 0; i < startingPositions.Length; i++) {

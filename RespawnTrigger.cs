@@ -8,15 +8,21 @@ public class RespawnTrigger : MonoBehaviour
 {
     private SceneManager sceneManager;
     private FileManager fileManager;
-    private float[] weights = new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.8f, 3.7f, 0.5f};
+    private PointSystemController pointSystemController;
+    private float[] weights = new float[13] { 12f, 12f, 12f, 12f, 8f, 8f, 8f, 8f, 6f, 6f, 3.8f, 3.7f, 0.5f };
     private GameObject[] prefabs;
     private float speed = 23.0f;
     private int numberOfSpecialSpins = 0;
+    private GameObject rowPrefab;
+    private int rowPrefabCounter = 0;
+    public void SetNullRowPrefab() => rowPrefab = null;
+    public void SetZeroRowPrefabCounter(int counter = 0) => rowPrefabCounter = 0;
 
     void Start()
     {
         sceneManager = FindFirstObjectByType<SceneManager>();
         fileManager = FindFirstObjectByType<FileManager>();
+        pointSystemController = FindFirstObjectByType<PointSystemController>();
 
         Waifu waifuName = (Waifu)System.Enum.Parse(typeof(Waifu), PlayerPrefs.GetString("waifuName"));
         weights = fileManager.GetWeightsByWaifu(waifuName);
@@ -42,11 +48,44 @@ public class RespawnTrigger : MonoBehaviour
         }
 
         Vector3 spawnPosition = new Vector3(xPosition, transform.position.y, transform.position.z);
-        GameObject prefabToSpawn = null;
-        prefabToSpawn = GetRandomGameObjectByWeight();
+        GameObject prefabToSpawn = GetRandomGameObjectByWeight(true);
+
+        if (pointSystemController.GetLastWin() > 2)
+        {
+            Debug.Log("NON VINCO DA -> " + pointSystemController.GetLastWin());
+            if (rowPrefab == null)
+            {
+                rowPrefab = GetRandomGameObjectByWeight(false, true);
+            }
+
+            bool[] rollingColumn = sceneManager.GetRollingColumn();
+            int rollingTrueCount = CountTrue(rollingColumn);
+            switch (rollingTrueCount)
+            {
+                case 3:
+                    if (rowPrefabCounter % 3 == 0 || rowPrefabCounter % 8 == 0)
+                        prefabToSpawn = rowPrefab;
+                    else if (pointSystemController.GetLastWin() >= 10 && rowPrefabCounter % 4 == 0)
+                        prefabToSpawn = rowPrefab;
+                    else if (pointSystemController.GetLastWin() >= 14 && rowPrefabCounter % 2 == 0)
+                        prefabToSpawn = rowPrefab;
+                    else if (pointSystemController.GetLastWin() >= 18 && rowPrefabCounter % 5 == 0)
+                        prefabToSpawn = rowPrefab;
+                    break;
+                case 2:
+                    if (rowPrefabCounter % 4 == 0)
+                        prefabToSpawn = rowPrefab;
+                    break;
+                case 1:
+                    if (rowPrefabCounter % 5 == 0)
+                        prefabToSpawn = rowPrefab;
+                    break;
+            }
+
+            rowPrefabCounter++;
+        }
 
         GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
-
         SlotController slotController = spawnedObject.GetComponent<SlotController>();
         if (slotController != null) {
             sceneManager.AddValueToMatrix(spawnedObject, GetColumnForMatrix((float)xPosition));
@@ -68,26 +107,52 @@ public class RespawnTrigger : MonoBehaviour
         return 0;
     }
 
-    private GameObject GetRandomGameObjectByWeight()
+    private GameObject GetRandomGameObjectByWeight(bool isDefaultWeight = false, bool excludePowerupByName = false)
     {
-        if (prefabs.Length != weights.Length) {
+        float[] localWeights = weights;
+        if (isDefaultWeight)
+        {
+            localWeights = GetDefaultWeights();
+            localWeights[GetIndexOfWeightsByTag("powerup")] = weights[GetIndexOfWeightsByTag("powerup")];
+        }
+
+        if (prefabs.Length != localWeights.Length)
+        {
             Debug.LogError("Il numero di pesi non corrisponde al numero di prefabs. Controllare che i pesi siano aggiornati in RESPAWN_TRIGGER.");
             return null;
         }
 
         // Calcola la somma dei pesi
+        List<GameObject> filteredPrefabs = new List<GameObject>();
+        List<float> filteredWeights = new List<float>();
+
+        for (int i = 0; i < prefabs.Length; i++)
+        {
+            if (excludePowerupByName && prefabs[i].CompareTag("Powerup_SlotCell"))
+            {
+                continue; // Salta i powerup
+            }
+
+            filteredPrefabs.Add(prefabs[i]);
+            filteredWeights.Add(localWeights[i]);
+        }
+
+        // Calcola la somma dei pesi
         float totalWeight = 0f;
-        foreach (float weight in weights) {
+        foreach (float weight in filteredWeights)
+        {
             totalWeight += weight;
         }
 
         float randomValue = Random.Range(0f, totalWeight);
         float cumulativeWeight = 0f;
 
-        for (int i = 0; i < prefabs.Length; i++) {
-            cumulativeWeight += weights[i];
-            if (randomValue <= cumulativeWeight) {
-                return prefabs[i];
+        for (int i = 0; i < filteredPrefabs.Count; i++)
+        {
+            cumulativeWeight += filteredWeights[i];
+            if (randomValue <= cumulativeWeight)
+            {
+                return filteredPrefabs[i];
             }
         }
 
@@ -151,7 +216,7 @@ public class RespawnTrigger : MonoBehaviour
 
     public float[] GetDefaultWeights()
     {
-        return new float[13] {10f, 10f, 10f, 10f, 10f, 10f, 10f, 10f, 6f, 6f, 3.8f, 3.7f, 0.5f};
+        return new float[13] { 12f, 12f, 12f, 12f, 8f, 8f, 8f, 8f, 6f, 6f, 3.8f, 3.7f, 0.5f };
     }
 
     public void ManipulateSpeed(float speed, int numberOfSpins)
@@ -232,5 +297,15 @@ public class RespawnTrigger : MonoBehaviour
             float decreaseAmount = (maxIndex == 10 || maxIndex == 11) ? 18f : 30f;
             weights[maxIndex] = Mathf.Max(weights[maxIndex] - decreaseAmount, defaults[maxIndex]);
         }
+    }
+    
+    private int CountTrue(bool[] array)
+    {
+        int count = 0;
+        foreach (bool val in array)
+        {
+            if (val) count++;
+        }
+        return count;
     }
 }

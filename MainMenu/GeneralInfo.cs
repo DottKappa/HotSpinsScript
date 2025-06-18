@@ -39,13 +39,29 @@ public class GeneralInfo : MonoBehaviour
         int unlocked = 0;
 
         // Somma i valori attuali sbloccati per ciascuna waifu
-        foreach (Waifu waifu in System.Enum.GetValues(typeof(Waifu))) {
+        foreach (Waifu waifu in System.Enum.GetValues(typeof(Waifu)))
+        {
             unlocked += fileManager.GetImageStepByWaifu(waifu);
+            int points = fileManager.GetPointsByWaifu(waifu);
+            foreach (PrestigeSteps step in System.Enum.GetValues(typeof(PrestigeSteps)))
+            {
+                string stepName = step.ToString();
+                if (stepName.Contains(waifu.ToString()))
+                {
+                    if ((int)step <= points)
+                    {
+                        unlocked++;
+                    }
+                }
+            }
         }
 
         // Calcola il numero totale di step disponibili nel gioco
         int total = 0;
         foreach (WaifuSteps step in System.Enum.GetValues(typeof(WaifuSteps))) {
+            total++;
+        }
+        foreach (WaifuSteps step in System.Enum.GetValues(typeof(PrestigeSteps))) {
             total++;
         }
 

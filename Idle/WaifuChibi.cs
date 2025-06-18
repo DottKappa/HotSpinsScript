@@ -24,13 +24,16 @@ public class WaifuChibi : MonoBehaviour
     private float baseY;
     private Vector3 originalScale;
     private bool canMove = true;
+    private Vector3 initialScale;
 
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
         rectTransform.localPosition = new Vector3(rightX, rectTransform.localPosition.y, rectTransform.localPosition.z);
         baseY = rectTransform.localPosition.y;
-        originalScale = rectTransform.localScale;
+
+        initialScale = rectTransform.localScale;
+        originalScale = initialScale;
 
         SetFacingDirection();
     }
@@ -46,6 +49,13 @@ public class WaifuChibi : MonoBehaviour
             {
                 IdleBreath(); // effetto idle mentre fermo
                 return;
+            }
+            else
+            {
+                // Reset scala Y quando si muove
+                Vector3 scale = rectTransform.localScale;
+                scale.y = initialScale.y;
+                rectTransform.localScale = scale;
             }
 
             float targetX = goingLeft ? leftX : rightX;
@@ -78,7 +88,7 @@ public class WaifuChibi : MonoBehaviour
         // NON resettare l'intera scala, altrimenti perdi il flip
         // Reset solo la scala Y
         Vector3 scale = rectTransform.localScale;
-        scale.y = originalScale.y;
+        scale.x = goingLeft ? Mathf.Abs(initialScale.x) : -Mathf.Abs(initialScale.x);
         rectTransform.localScale = scale;
 
         isWaiting = false;
@@ -100,10 +110,11 @@ public class WaifuChibi : MonoBehaviour
     private void IdleBreath()
     {
         // Oscillazione scala Y senza toccare X (flip)
-        float breath = Mathf.Sin(Time.time * breathSpeed) * breathScaleAmount;
+        float breath = Mathf.Sin(100 * breathSpeed) * breathScaleAmount;
 
-        Vector3 newScale = rectTransform.localScale;
-        newScale.y = originalScale.y + breath;
+        Vector3 newScale = initialScale;
+        newScale.y += breath;
+        newScale.x = rectTransform.localScale.x;
         rectTransform.localScale = newScale;
     }
 }

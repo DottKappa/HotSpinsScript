@@ -13,6 +13,7 @@ public static class SteamBackEndStatic
         "POINTS_1",
         "POINTS_2",
         "POINTS_3",
+        "ILLUSTRATION_1",
         "FINAL_ACHIEVEMENT_1",
     };
 

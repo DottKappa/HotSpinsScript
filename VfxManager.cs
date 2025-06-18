@@ -104,7 +104,7 @@ public class VfxManager : MonoBehaviour
         else if (gameObject.name.Contains("Arrow"))
         {
             SetHorizontalUp(gameObject);
-            gameObject.transform.rotation = Quaternion.Euler(22, 0, 0);
+            gameObject.transform.rotation = Quaternion.Euler(22, 90, 0);
         }
         else if (gameObject.name.Contains("Moaning"))
         {
@@ -137,8 +137,8 @@ public class VfxManager : MonoBehaviour
         }
         else if (gameObject.name.Contains("Arrow"))
         {
-            SetHorizontalUp(gameObject);
-            gameObject.transform.rotation = Quaternion.Euler(-20, 0, 0);
+            SetHorizontalDown(gameObject);
+            gameObject.transform.rotation = Quaternion.Euler(-20, 90, 0);
         }
         else if (gameObject.name.Contains("Moaning"))
         {

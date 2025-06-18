@@ -149,6 +149,17 @@ public class WaifuDetail : MonoBehaviour
         {
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             fullScreenImage.sprite = sprite;
+            fullScreenImage.GetComponent<RectTransform>().sizeDelta = new Vector2(31f, fullScreenImage.GetComponent<RectTransform>().sizeDelta.y);
+            string[] parts = imagePath.Split('_');
+            if (parts[^2] == "0")
+            {
+                fullScreenImage.GetComponent<RectTransform>().sizeDelta = new Vector2(38f, fullScreenImage.GetComponent<RectTransform>().sizeDelta.y);
+                if (parts[^1] == "3")
+                {
+                    fullScreenImage.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, fullScreenImage.GetComponent<RectTransform>().sizeDelta.y);
+                }
+            }
+            
         }
         else
         {

@@ -25,6 +25,10 @@ public class PointSystemController : MonoBehaviour
     private bool isVerticalLeftActive = false;
     private bool isVerticalRightActive = false;
     private int limitPoints = 9999999;
+    private int lastWin = 0;
+    public int GetLastWin() => lastWin;
+    public void IncrementLastWin() => lastWin++;
+    public void ResetLastWin() => lastWin = 0;
 
     void Start()
     {
@@ -199,7 +203,7 @@ public class PointSystemController : MonoBehaviour
 
     private void updatePoints(string tag, int multiplier)
     {
-        float calculatePoints = points;
+        float calculatePoints = 0;
         if (System.Enum.TryParse(tag, out SlotSymbols symbol))
         {
             int value = (int)symbol;
@@ -211,17 +215,18 @@ public class PointSystemController : MonoBehaviour
         }
 
         int actualWin = ManipulateWinWithPowerUp(calculatePoints);
-        if ((actualWin - points) > 10000)
+        if ((actualWin) > 10000)
         {
             callCoinEmitter(actualWin);
         }
-        points = actualWin;
+        points = actualWin + points;
 
         if (points >= limitPoints)
         {
             points = limitPoints;
         }
 
+        ResetLastWin();
         //respawnTrigger.ResetWeights(); -> Non mi interessa più resettarli
     }
 

@@ -127,6 +127,14 @@ public class SteamAchievement : MonoBehaviour
                 }
             }
 
+            if (achievementName == "ILLUSTRATION_1")
+            {
+                if (UnlockedAllIllustration())
+                {
+                    SteamAchievementManager.Instance.AwardAchievement(achievementName);
+                }
+            }
+
             if (achievementName == "FINAL_ACHIEVEMENT_1" && SteamAchievementManager.Instance.GetNumberOfMissingAchievement1() == 1)
             {
                 SteamAchievementManager.Instance.AwardAchievement(achievementName);
@@ -161,5 +169,42 @@ public class SteamAchievement : MonoBehaviour
         {
             SteamAchievementManager.Instance.AwardAchievement("FINAL_ACHIEVEMENT_1");
         }
+    }
+
+    private bool UnlockedAllIllustration()
+    {
+        int unlocked = 0;
+        FileManager fileManager = FindFirstObjectByType<FileManager>();
+
+        // Somma i valori attuali sbloccati per ciascuna waifu
+        foreach (Waifu waifu in System.Enum.GetValues(typeof(Waifu)))
+        {
+            unlocked += fileManager.GetImageStepByWaifu(waifu);
+            int points = fileManager.GetPointsByWaifu(waifu);
+            foreach (PrestigeSteps step in System.Enum.GetValues(typeof(PrestigeSteps)))
+            {
+                string stepName = step.ToString();
+                if (stepName.Contains(waifu.ToString()))
+                {
+                    if ((int)step <= points)
+                    {
+                        unlocked++;
+                    }
+                }
+            }
+        }
+
+        // Calcola il numero totale di step disponibili nel gioco
+        int total = 0;
+        foreach (WaifuSteps step in System.Enum.GetValues(typeof(WaifuSteps)))
+        {
+            total++;
+        }
+        foreach (WaifuSteps step in System.Enum.GetValues(typeof(PrestigeSteps)))
+        {
+            total++;
+        }
+
+        return unlocked == total;
     }
 }
