@@ -55,7 +55,7 @@ public class PointSystemIdleController : MonoBehaviour
         UpdateIdleMultipliers();
     }
 
-    void Update()
+    private void UpdateIdleMultipliers_2()
     {
         upDownText.text = upDownMultiplier.ToString() + "x";
         horizontalText.text = horizontalMultiplier.ToString() + "x";
@@ -100,6 +100,7 @@ public class PointSystemIdleController : MonoBehaviour
 
     public void UpdateIdleMultipliers()
     {
+        UpdateIdleMultipliers_2();
         HalveIfZero(ref numberOfUpDown, ref upDownMultiplier);
         HalveIfZero(ref numberOfHorizontal, ref horizontalMultiplier);
         HalveIfZero(ref numberOfDownUp, ref downUpMultiplier);

@@ -154,4 +154,5 @@ public enum PrestigeSteps
 - slotSkin [string color] [green/red/pink/purple/blue]
 - borderSkin [string color] [green/red/pink/purple/blue]
 - buttonSkin [string color] [green/red/pink/purple/blue]
+- vSyncEnabled [0/1]
 */

@@ -78,7 +78,7 @@ public class PointSystemController : MonoBehaviour
             if (pointSystemIdleController.GetNumberOfHorizontal() > 0) pointSystemIdleController.SetNumberOfHorizontal(-1);
             if (pointSystemIdleController.GetNumberOfUpDown() > 0) pointSystemIdleController.SetNumberOfUpDown(-1);
             if (pointSystemIdleController.GetNumberOfDownUp() > 0) pointSystemIdleController.SetNumberOfDownUp(-1);
-            pointSystemIdleController.UpdateIdleMultipliers();
+            UpdateIdleMultiplierByController();
         }
     }
 
@@ -438,7 +438,7 @@ public class PointSystemController : MonoBehaviour
         cameraSlot.StartNormalWinSound();
         canvasController.ShakeSlot();
     }
-    
+
     private void RecalculateWaifuSteps()
     {
         if (waifuStepsArray == null || waifuStepsArray.Length == 0) return;
@@ -476,5 +476,10 @@ public class PointSystemController : MonoBehaviour
             fileManager.SetImageStepByWaifu(0, activeWaifu);
             fileManager.SaveWaifuFile();
         }
+    }
+
+    public void UpdateIdleMultiplierByController()
+    {
+        pointSystemIdleController.UpdateIdleMultipliers();
     }
 }

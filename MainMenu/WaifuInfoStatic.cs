@@ -42,7 +42,7 @@ public static class WaifuInfoStatic
     public static string[] GetHinaInfo()
     {
         return new string[] {
-            baseText[0] + "19",
+            baseText[0] + "21",
             baseText[1] + "45kg",
             baseText[2] + "90/60/80",
             baseText[3] + "155cm",

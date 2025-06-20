@@ -16,15 +16,19 @@ public class IdlePowerUp : MonoBehaviour
     public void IdlePowerUpButton()
     {
         int availability = hoverTooltipSmartPositioning.GetAvailability();
-        if (availability == 1) {
+        if (availability == 1)
+        {
             Destroy(gameObject);
-        } else {
+        }
+        else
+        {
             hoverTooltipSmartPositioning.UpdateAvailability(-1);
         }
 
-        idleFileManager.UpdateOrCreatePowerUp(gameObject.name, availability-1);
+        idleFileManager.UpdateOrCreatePowerUp(gameObject.name, availability - 1);
         UsePowerUp(gameObject.name);
         idleFileManager.SaveIdleFile();
+        pointSystemIdleController.UpdateIdleMultipliers();
     }
 
     private void UsePowerUp(string powerUpName)

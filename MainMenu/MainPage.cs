@@ -12,7 +12,7 @@ public class MainPage : MonoBehaviour
     public Canvas rulesIdlePageCanvas;
     public GameObject fullScreenImage;
     private IdleFileManager idleFileManager;
-    public CanvasGroup bgSlot;
+    public Canvas welcomePageCanvas;
     
     void Start()
     {
@@ -27,7 +27,6 @@ public class MainPage : MonoBehaviour
             cg.alpha = 1f;
             cg.interactable = true;
             cg.blocksRaycasts = true;
-            StartCoroutine(FadeOut(bgSlot));
         }
     }
 
@@ -84,6 +83,14 @@ public class MainPage : MonoBehaviour
         Application.Quit();
     }
 
+    public void ReturnButton()
+    {
+        idleFileManager.SaveIdleFile();
+        mainPageCanvas.gameObject.SetActive(false);
+        idleCanvas.gameObject.SetActive(false);
+        welcomePageCanvas.gameObject.SetActive(true);
+    }
+
     public void RulesButton()
     {
         mainPageCanvas.gameObject.SetActive(false);
@@ -94,22 +101,5 @@ public class MainPage : MonoBehaviour
     {
         mainPageCanvas.gameObject.SetActive(false);
         rulesIdlePageCanvas.gameObject.SetActive(true);
-    }
-    
-    private IEnumerator FadeOut(CanvasGroup canvasGroup)
-    {
-        float startAlpha = canvasGroup.alpha;
-        float elapsedTime = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-
-        while (elapsedTime < 3f)
-        {
-            canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / 3f);
-            elapsedTime += Time.unscaledDeltaTime;
-            yield return null;
-        }
-
-        canvasGroup.alpha = 0f;
     }
 }

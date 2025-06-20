@@ -20,6 +20,10 @@ public class ProgressBarTimer : MonoBehaviour
     private WaifuChibi waifuChibi;
     private Coroutine colorCoroutine;
     private bool isPulsating = false;
+    private GameObject target;
+    private string nomePadre;
+    private CanvasGroup cgPadre;
+    private CanvasGroup cgPadrePadre;
 
     void Awake()
     {
@@ -33,29 +37,44 @@ public class ProgressBarTimer : MonoBehaviour
         uiBumpScaler = giftImageTransform.GetComponent<UIBumpScaler>();
         Transform waifuChibiTransform = transform.parent.Find("Background/WaifuChibi");
         waifuChibi = waifuChibiTransform.GetComponent<WaifuChibi>();
+        nomePadre = transform.parent.name;
+        target = GameObject.Find(nomePadre + "Button");
+        cgPadre = transform.parent?.GetComponent<CanvasGroup>();
+        cgPadrePadre = transform.parent?.parent?.GetComponent<CanvasGroup>();
         UpdateTimerMultiplier();
     }
 
     void Update()
     {
-        // Se il tempo non è ancora terminato
+        // Aggiorno sempre il tempo
         if (elapsedTime < totalDurationInSeconds) {
             elapsedTime += Time.deltaTime;
-            float fillAmount = Mathf.Clamp01(elapsedTime / totalDurationInSeconds);
-            progressBar.value = fillAmount;
-
-            // Calcolo del tempo rimanente
             timeRemaining = totalDurationInSeconds - elapsedTime;
-            int minutes = Mathf.FloorToInt(timeRemaining / 60f);
-            int seconds = Mathf.FloorToInt(timeRemaining % 60f);
-            
-            // Aggiorna il testo
-            timeText.text = $"{minutes:D2}:{seconds:D2}";
         } else {
-            // Tempo terminato, forza il completamento della barra e fissa il testo su 00:00
-            progressBar.value = 1f;
-            timeText.text = "00:00";
- 
+            timeRemaining = 0f;
+        }
+
+        if ((cgPadre != null && cgPadre.alpha == 0f) || (cgPadrePadre != null && cgPadrePadre.alpha == 0f)) {
+            // Non aggiorno UI, ma tempo è aggiornato correttamente
+            return;
+        }
+
+        // Aggiorno barra e testo solo se visibile
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        float fillAmount = Mathf.Clamp01(elapsedTime / totalDurationInSeconds);
+        progressBar.value = fillAmount;
+
+        int minutes = Mathf.FloorToInt(timeRemaining / 60f);
+        int seconds = Mathf.FloorToInt(timeRemaining % 60f);
+
+        timeText.text = $"{minutes:D2}:{seconds:D2}";
+
+        if (elapsedTime >= totalDurationInSeconds) {
+            // Comportamenti finali
             waifuChibi.StartStopWaifu(false);
             uiBumpScaler.PopUpGiftButton();
             if (!isPulsating) {
@@ -72,7 +91,6 @@ public class ProgressBarTimer : MonoBehaviour
 
     public void UpdateTimerMultiplier()
     {
-        string nomePadre = transform.parent.name;
         if (IdleStatic.ExistsRoom(nomePadre)) {
             totalDurationInSeconds = IdleStatic.GetRoomDurationByRoomName(nomePadre);
             Room room = idleFileManager.GetOrCreateRoomByName(nomePadre);
@@ -90,7 +108,6 @@ public class ProgressBarTimer : MonoBehaviour
 
     public void UpdateTimerMultiplierForLvUp()
     {
-        string nomePadre = transform.parent.name;
         if (IdleStatic.ExistsRoom(nomePadre)) {
             totalDurationInSeconds = IdleStatic.GetRoomDurationByRoomName(nomePadre);
             Room room = idleFileManager.GetOrCreateRoomByName(nomePadre);
@@ -123,7 +140,6 @@ public class ProgressBarTimer : MonoBehaviour
 
     private void ResetTimer()
     {
-        string nomePadre = transform.parent.name;
         Room room = idleFileManager.GetRoomByName(nomePadre);
         room.TimeNextReward = (IdleStatic.GetRoomDurationByRoomName(nomePadre) / room.TimeMultiplier);
         timeRemaining = (IdleStatic.GetRoomDurationByRoomName(nomePadre) / room.TimeMultiplier);
@@ -134,8 +150,6 @@ public class ProgressBarTimer : MonoBehaviour
 
     private void StartPulsatingEffect()
     {
-        string nomePadre = transform.parent.name;
-        GameObject target = GameObject.Find(nomePadre + "Button");
         if (target == null) {
             Debug.LogError($"[ProgressBarTimer] GameObject con nome '{nomePadre}Button' non trovato");
             return;
@@ -171,8 +185,6 @@ public class ProgressBarTimer : MonoBehaviour
             colorCoroutine = null;
         }
 
-        string nomePadre = transform.parent.name;
-        GameObject target = GameObject.Find(nomePadre + "Button");
         if (target != null) {
             Image img = target.GetComponent<Image>();
             if (img != null) {

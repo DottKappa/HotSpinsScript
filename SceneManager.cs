@@ -40,14 +40,16 @@ public class SceneManager : MonoBehaviour
     void Start()
     {
         // Assicurati che l'array di posizioni abbia esattamente 9 elementi
-        if (startingPositions.Length != 9) {
+        if (startingPositions.Length != 9)
+        {
             Debug.LogError("Devi specificare esattamente 9 posizioni.");
             return;
         }
 
         // Inizializza la matrice slotCells come 3x3
         slotCells = new GameObject[3][];
-        for (int i = 0; i < slotCells.Length; i++) {
+        for (int i = 0; i < slotCells.Length; i++)
+        {
             slotCells[i] = new GameObject[3];
         }
 
@@ -58,7 +60,7 @@ public class SceneManager : MonoBehaviour
         buffDebuffManager = FindFirstObjectByType<BuffDebuffManager>();
         cameraSlot = FindFirstObjectByType<CameraSlot>();
         idleFileManager = FindFirstObjectByType<IdleFileManager>();
-        
+
         numberOfSpins = fileManager.GetSpinsByWaifu(fileManager.GetActiveWaifuName());
     }
 
@@ -178,6 +180,7 @@ public class SceneManager : MonoBehaviour
         EmptySlotMatrix();
         needSave = true;
         pointSystemController.IncrementLastWin();
+        pointSystemController.UpdateIdleMultiplierByController();
 
         // Istanzia 9 prefab nelle posizioni specificate
         for (int i = 0; i < startingPositions.Length; i++) {

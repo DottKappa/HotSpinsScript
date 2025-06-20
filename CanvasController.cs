@@ -19,6 +19,7 @@ public class CanvasController : MonoBehaviour
     public void SetHasDivideDebuff(bool value) => hasDivideDebuff = value;
     private InputSystem_Actions controls;
     private Sprite previousWaifuSprite;
+    private int lastSpin = -1;
 
     void Awake()
     {
@@ -38,8 +39,14 @@ public class CanvasController : MonoBehaviour
     }
 
     void Update() {
-        SetTextOfSpins();
-        if (Input.GetKeyDown(KeyCode.C)) {
+        int currentSpin = sceneManager.GetNumberOfSpins();
+        if (currentSpin != lastSpin)
+        {
+            lastSpin = currentSpin;
+            SetTextOfSpins(currentSpin);
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
             HideWaifu();
         }
     }
@@ -56,9 +63,8 @@ public class CanvasController : MonoBehaviour
         }
     }
 
-    private void SetTextOfSpins()
+    private void SetTextOfSpins(int numberOfSpin)
     {
-        int numberOfSpin = sceneManager.GetNumberOfSpins();
         numberOfSlotsText.text = addDot(numberOfSpin);
         if (numberOfSpin % 5 == 0 && hasMultiplierBuff)
         {

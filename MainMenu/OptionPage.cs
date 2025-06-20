@@ -18,6 +18,7 @@ public class OptionPage : MonoBehaviour
     public Transform slotSkins;
     public Transform borderSkins;
     public Transform buttonSkins;
+    public Toggle vsyncToggle;
 
     private Resolution[] availableResolutions;
     private List<Resolution> filteredResolutions = new List<Resolution>();
@@ -49,6 +50,9 @@ public class OptionPage : MonoBehaviour
 
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
         SetUpResolution();
+
+        vsyncToggle.isOn = PlayerPrefs.GetInt("vSyncEnabled", 1) == 1;
+        vsyncToggle.onValueChanged.AddListener(SetVSyncEnabled);
 
         controls = new InputSystem_Actions();
         controls.UI.Cancel.performed += ctx => ReturnButton();
@@ -226,5 +230,12 @@ public class OptionPage : MonoBehaviour
     {
         optionPageCanvas.gameObject.SetActive(false);
         mainPageCanvas.gameObject.SetActive(true);
+    }
+
+    public void SetVSyncEnabled(bool enabled)
+    {
+        QualitySettings.vSyncCount = enabled ? 1 : 0;
+        PlayerPrefs.SetInt("vSyncEnabled", enabled ? 1 : 0);
+        PlayerPrefs.Save();
     }
 }
