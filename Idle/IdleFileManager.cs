@@ -101,8 +101,8 @@ public class IdleFileManager : MonoBehaviour
     {
         int numberOfUnlockable = GetNumberOfUnlockableRoom();
         if (numberOfUnlockable < use) {
-            messageFadeController.ShowText("Impossible to use [" + use + "] diamonds. You have only [" + numberOfUnlockable + "]");
-            throw new InvalidOperationException("[IdleFileManager.cs] Impossibile usare un unclockableRoom, nel file ne sono presenti [" + numberOfUnlockable + "]");
+            messageFadeController?.ShowText("Impossible to use [" + use + "] diamonds. You have only [" + numberOfUnlockable + "]");
+            throw new InvalidOperationException("[IdleFileManager.cs] Impossible to use [" + use + "] diamonds. You have only [" + numberOfUnlockable + "]");
         }
 
         idleFileStructure.UnlockableRoom = numberOfUnlockable - use;

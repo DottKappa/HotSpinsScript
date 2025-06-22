@@ -17,11 +17,15 @@ public class SkinSetUp : MonoBehaviour
     public Image buttonsSkinSelectorSkin;
     public Image buttonsIdleSkin;
 
+    [Header("Monitor Skin")]
+    public Image monitorSkin;
+
     void Awake()
     {
         SetUpSlotSKin();
         SetUpBorderSKin();
         SetUpButtons();
+        SetUpMonitor();
     }
 
     private void SetUpSlotSKin()
@@ -75,5 +79,21 @@ public class SkinSetUp : MonoBehaviour
         imagePath = "Texture/SlotSKin/Buttons/" + skin + "/heart_idle";
         newSprite = Resources.Load<Sprite>(imagePath);
         buttonsIdleSkin.sprite = newSprite;
+    }
+
+    private void SetUpMonitor()
+    {
+        Color color;
+        switch (PlayerPrefs.GetString("monitorSkin", "pink"))
+        {
+            case "green": ColorUtility.TryParseHtmlString("#57FD60", out color); break;
+            case "red": ColorUtility.TryParseHtmlString("#FD9D73", out color); break;
+            case "pink": ColorUtility.TryParseHtmlString("#FFFFFF", out color); break;
+            case "purple": ColorUtility.TryParseHtmlString("#A08AFF", out color); break;
+            case "blue": ColorUtility.TryParseHtmlString("#8FFFD9", out color); break;
+            default: ColorUtility.TryParseHtmlString("#57FD60", out color); break;
+        }
+        
+        monitorSkin.color = color;
     }
 }

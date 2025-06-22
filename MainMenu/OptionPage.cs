@@ -14,11 +14,12 @@ public class OptionPage : MonoBehaviour
     public TextMeshProUGUI percentage;
     public Canvas mainPageCanvas;
     public Canvas optionPageCanvas;
+    public Toggle vsyncToggle;
     [Header("Skin objs")]
     public Transform slotSkins;
     public Transform borderSkins;
     public Transform buttonSkins;
-    public Toggle vsyncToggle;
+    public Transform monitorSkins;
 
     private Resolution[] availableResolutions;
     private List<Resolution> filteredResolutions = new List<Resolution>();
@@ -63,6 +64,7 @@ public class OptionPage : MonoBehaviour
         ActivateSelectedSlot("slotSkin", slotSkins);
         ActivateSelectedSlot("borderSkin", borderSkins);
         ActivateSelectedSlot("buttonSkin", buttonSkins);
+        ActivateSelectedSlot("monitorSkin", monitorSkins);
     }
 
     void OnEnable()
@@ -210,6 +212,12 @@ public class OptionPage : MonoBehaviour
     {
         PlayerPrefs.SetString("buttonSkin", color.ToLower());
         ActivateSelectedSlot("buttonSkin", buttonSkins);
+    }
+    
+    public void MonitorColorButton(string color)
+    {
+        PlayerPrefs.SetString("monitorSkin", color.ToLower());
+        ActivateSelectedSlot("monitorSkin", monitorSkins);
     }
 
     private void ActivateSelectedSlot(string playerPrefKey, Transform parentSlot)

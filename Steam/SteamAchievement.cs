@@ -106,8 +106,8 @@ public class SteamAchievement : MonoBehaviour
         var spinAchievements = new Dictionary<string, int>
         {
             { "POINTS_1", 250000 },
-            { "POINTS_2", 500000 },
-            { "POINTS_3", 999999 }
+            { "POINTS_2", 750000 },
+            { "POINTS_3", 1500000 }
         };
 
         string[] achievements = SteamBackEndStatic.GetAchievementGeneral();

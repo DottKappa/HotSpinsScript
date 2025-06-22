@@ -13,6 +13,9 @@ public class WelcomePage : MonoBehaviour
     public Canvas rulesIdlePageCanvas;
     public CanvasGroup bgSlot;
 
+    [Header("Welcome page")]
+    public GameObject warpPage;
+
     private void Awake()
     {
         cam = Camera.main;
@@ -37,7 +40,7 @@ public class WelcomePage : MonoBehaviour
         if (PlayerPrefs.GetInt("skipWelcomePage") == 1)
         {
             PlayerPrefs.SetInt("skipWelcomePage", 0);
-            StartButton();
+            FakeStart();
         }
     }
 
@@ -52,7 +55,13 @@ public class WelcomePage : MonoBehaviour
         mainPageCanvas.gameObject.SetActive(true);
         idleCanvas.gameObject.SetActive(true);
         welcomePageCanvas.gameObject.SetActive(false);
-        //Destroy(welcomePageCanvas.gameObject);
+    }
+
+    private void FakeStart()
+    {
+        mainPageCanvas.gameObject.SetActive(true);
+        idleCanvas.gameObject.SetActive(true);
+        welcomePageCanvas.gameObject.SetActive(false);
     }
 
     public void StartZoomButton()
@@ -62,7 +71,8 @@ public class WelcomePage : MonoBehaviour
 
     public void WarpButton()
     {
-
+        warpPage.SetActive(true);
+        welcomePageCanvas.gameObject.SetActive(false);
     }
 
     public void CreditsButton()

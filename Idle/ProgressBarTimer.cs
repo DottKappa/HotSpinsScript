@@ -51,9 +51,11 @@ public class ProgressBarTimer : MonoBehaviour
             elapsedTime += Time.deltaTime;
             timeRemaining = totalDurationInSeconds - elapsedTime;
         } else {
+            uiBumpScaler.PopUpGiftButton();
+            StartPulsatingEffect();
             timeRemaining = 0f;
         }
-
+        
         if ((cgPadre != null && cgPadre.alpha == 0f) || (cgPadrePadre != null && cgPadrePadre.alpha == 0f)) {
             // Non aggiorno UI, ma tempo è aggiornato correttamente
             return;
@@ -76,7 +78,7 @@ public class ProgressBarTimer : MonoBehaviour
         if (elapsedTime >= totalDurationInSeconds) {
             // Comportamenti finali
             waifuChibi.StartStopWaifu(false);
-            uiBumpScaler.PopUpGiftButton();
+            //uiBumpScaler.PopUpGiftButton();
             if (!isPulsating) {
                 StartPulsatingEffect();
                 isPulsating = true;
@@ -87,6 +89,13 @@ public class ProgressBarTimer : MonoBehaviour
     public float GetTimeForNextReward()
     {
         return Mathf.Floor(timeRemaining);
+    }
+
+    public string GetTimerString()
+    {
+        int minutes = Mathf.FloorToInt(timeRemaining / 60f);
+        int seconds = Mathf.FloorToInt(timeRemaining % 60f);
+        return $"{minutes:D2}:{seconds:D2}";
     }
 
     public void UpdateTimerMultiplier()

@@ -153,7 +153,7 @@ public class SceneManager : MonoBehaviour
         return isRolling;
     }
 
-    public int GetNumberOfSparksInSlot()
+    public int GetNumberOfSparksInSlot(bool needVFX = false)
     {
         int numberOfSparks = 0;
         
@@ -161,10 +161,13 @@ public class SceneManager : MonoBehaviour
             for (int i = 0; i < slotCells.Length; i++) {
                 for (int j = 0; j < slotCells[i].Length; j++) {
                     if (slotCells[i][j] != null && slotCells[i][j].tag.Contains("Powerup_")) {
-                        GameObject prefab = Resources.Load<GameObject>("Prefab/SparkVFX");
-                        Vector3 spawnPos = slotCells[i][j].transform.position;
-                        spawnPos.z = 0f;
-                        Instantiate(prefab, spawnPos, Quaternion.identity);
+                        if (needVFX)
+                        {
+                            GameObject prefab = Resources.Load<GameObject>("Prefab/SparkVFX");
+                            Vector3 spawnPos = slotCells[i][j].transform.position;
+                            spawnPos.z = 0f;
+                            Instantiate(prefab, spawnPos, Quaternion.identity);
+                        }
                         numberOfSparks++;
                     }
                 }
@@ -206,7 +209,7 @@ public class SceneManager : MonoBehaviour
         isRollingByColumn = new bool[3] {false, false, false};
 
         RoundPositionByMatrix();
-        if (GetNumberOfSparksInSlot() > 0)
+        if (GetNumberOfSparksInSlot(true) > 0)
         {
             cameraSlot.StartSparkInSlotSound();
         }

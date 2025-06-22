@@ -119,15 +119,15 @@ public class IdleUiManager : MonoBehaviour
         if (roomObj == null || !roomObj.activeInHierarchy)
             return "00:00";
 
-        Transform timerTransform = roomObj.transform.Find("ProgressObj/Timer");
+        Transform timerTransform = roomObj.transform.Find("ProgressObj");
         if (timerTransform == null)
         {
             Debug.LogError($"[IdleUiManager] Timer not found in {roomObj.name}");
             return "00:00";
         }
 
-        TextMeshProUGUI timerTMP = timerTransform.GetComponent<TextMeshProUGUI>();
-        return timerTMP.text;
+        ProgressBarTimer timerTMP = timerTransform.GetComponent<ProgressBarTimer>();
+        return timerTMP.GetTimerString();
     }
 
     private void SortTimersAndRooms()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using SceneManagement = UnityEngine.SceneManagement.SceneManager;
 using System.Collections;
 
@@ -13,24 +14,34 @@ public class MainPage : MonoBehaviour
     public GameObject fullScreenImage;
     private IdleFileManager idleFileManager;
     public Canvas welcomePageCanvas;
-    
+    [Header("Monitor")]
+    public Image monitorIdle;
+    public Image monitorWaifu;
+    public Image monitorWaifuImage;
+    [Header("Buttons")]
+    public Image[] menuButtons;
+
+
     void Start()
     {
         idleFileManager = FindFirstObjectByType<IdleFileManager>();
     }
 
-    private void OnEnable() 
+    private void OnEnable()
     {
-        if (idleCanvas != null) {
+        if (idleCanvas != null)
+        {
             idleCanvas.gameObject.SetActive(true);
             CanvasGroup cg = idleCanvas.gameObject.GetComponent<CanvasGroup>();
             cg.alpha = 1f;
             cg.interactable = true;
             cg.blocksRaycasts = true;
         }
+        SetUpTv();
+        SetUpButtons();
     }
 
-    private void OnDisable() 
+    private void OnDisable()
     {
         if (idleCanvas != null) {
             CanvasGroup cg = idleCanvas.gameObject.GetComponent<CanvasGroup>();
@@ -101,5 +112,42 @@ public class MainPage : MonoBehaviour
     {
         mainPageCanvas.gameObject.SetActive(false);
         rulesIdlePageCanvas.gameObject.SetActive(true);
+    }
+
+    private void SetUpTv()
+    {
+        string waifuName = PlayerPrefs.GetString("waifuName", "Chiho");
+        Sprite newSprite = Resources.Load<Sprite>("Texture/Waifu/" + waifuName + "/" + waifuName + "_1");
+        if (newSprite != null)
+        {
+            monitorWaifuImage.sprite = newSprite;
+        }
+
+        Color color;
+        switch (PlayerPrefs.GetString("monitorSkin", "pink"))
+        {
+            case "green": ColorUtility.TryParseHtmlString("#57FD60", out color); break;
+            case "red": ColorUtility.TryParseHtmlString("#FD9D73", out color); break;
+            case "pink": ColorUtility.TryParseHtmlString("#FFFFFF", out color); break;
+            case "purple": ColorUtility.TryParseHtmlString("#A08AFF", out color); break;
+            case "blue": ColorUtility.TryParseHtmlString("#8FFFD9", out color); break;
+            default: ColorUtility.TryParseHtmlString("#57FD60", out color); break;
+        }
+        
+        monitorIdle.color = color;
+        monitorWaifu.color = color;
+    }
+
+    private void SetUpButtons()
+    {
+        Sprite newSprite;
+        string imagePath;
+        string skin = PlayerPrefs.GetString("buttonSkin", "pink");
+        foreach (var item in menuButtons)
+        {
+            imagePath = "Texture/SlotSKin/Buttons/" + skin + "/idleTime";
+            newSprite = Resources.Load<Sprite>(imagePath);
+            item.sprite = newSprite;
+        }
     }
 }
