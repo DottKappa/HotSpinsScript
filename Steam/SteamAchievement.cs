@@ -171,6 +171,27 @@ public class SteamAchievement : MonoBehaviour
         }
     }
 
+    public void CheckPullAchievement(int pull)
+    {
+        var warpAchievements = new Dictionary<string, int>
+        {
+            { "WARP_1", 1 },
+            { "WARP_2", 30 }
+        };
+
+        string[] achievements = SteamBackEndStatic.GetAchievementGeneral();
+        foreach (var achievementName in achievements)
+        {
+            foreach (var pair in warpAchievements)
+            {
+                if (achievementName.Contains(pair.Key) && pull >= pair.Value)
+                {
+                    SteamAchievementManager.Instance.AwardAchievement(achievementName);
+                }
+            }
+        }
+    }
+
     private bool UnlockedAllIllustration()
     {
         int unlocked = 0;

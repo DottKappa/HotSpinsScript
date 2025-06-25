@@ -12,6 +12,8 @@ public class WarpPage : MonoBehaviour
     public GameObject welcomePage;
     private FileManager fileManager;
     private IdleFileManager idleFileManager;
+    public CameraMainMenu cameraMainMenu;
+    private SteamAchievement steamAchievement;
 
     [Header("Pull screen")]
     public GameObject pullScreen;
@@ -23,6 +25,7 @@ public class WarpPage : MonoBehaviour
     private List<string> waifuToWriteFile = new();
     public TextMeshProUGUI AvailableWarps;
     public TextMeshProUGUI ErrorText;
+    private int countTotalWarp = 0;
 
     [Header("Warp file")]
     private string folder = "dataFiles";
@@ -43,6 +46,7 @@ public class WarpPage : MonoBehaviour
     private void Start()
     {
         warpTileLoop.SetActive(true);
+        steamAchievement = FindFirstObjectByType<SteamAchievement>();
     }
 
     private void OnEnable()
@@ -71,6 +75,7 @@ public class WarpPage : MonoBehaviour
                 string fileContent = File.ReadAllText(filePath);
                 string[] fileString = fileContent.Split(';');
                 RemoveStepsByKeys(fileString);
+                countTotalWarp = fileString.Length;
             }
             UpdateMissingArtTexts();
         }
@@ -96,6 +101,9 @@ public class WarpPage : MonoBehaviour
         // Pulizia sprite per liberare memoria
         ClearSpritesInGameObject(pullOne);
         ClearSpritesInGameObject(pullTen);
+        countTotalWarp = 0;
+        GameObject parentGO = ErrorText.gameObject.transform.parent?.gameObject;
+        parentGO.SetActive(false);
     }
 
     public void PullBy(int numberOfPulls = 1)
@@ -124,7 +132,7 @@ public class WarpPage : MonoBehaviour
             return;
         }
 
-
+        cameraMainMenu.WarpSound();
         warpTileLoop.SetActive(false);
         warpTilePull.SetActive(true);
         List<string> pulledWaifu = GetRandomSteps(numberOfPulls);
@@ -152,6 +160,8 @@ public class WarpPage : MonoBehaviour
         AvailableWarps.text = idleFileManager.GetNumberOfUnlockableRoom().ToString();
         CanvasGroup canvasGroup = pullScreen.GetComponent<CanvasGroup>();
         StartCoroutine(FadeIn(canvasGroup, 1f));
+        countTotalWarp += pulledWaifu.Count;
+        steamAchievement.CheckPullAchievement(countTotalWarp);
     }
 
     public void ClosePullScreen()

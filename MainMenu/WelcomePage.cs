@@ -1,6 +1,11 @@
 using UnityEngine;
+using TMPro;
 using System;
 using System.Collections;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization;
+using System.Linq;
+using Steamworks;
 
 public class WelcomePage : MonoBehaviour
 {
@@ -12,9 +17,12 @@ public class WelcomePage : MonoBehaviour
     public Canvas idleCanvas;
     public Canvas rulesIdlePageCanvas;
     public CanvasGroup bgSlot;
+    public TMP_Dropdown dropdown;
 
     [Header("Welcome page")]
     public GameObject warpPage;
+    public CameraMainMenu cameraMainMenu;
+    public CanvasGroup credits;
 
     private void Awake()
     {
@@ -47,6 +55,8 @@ public class WelcomePage : MonoBehaviour
     private void Start()
     {
         QualitySettings.vSyncCount = (PlayerPrefs.GetInt("vSyncEnabled", 1) == 1) ? 1 : 0;
+        SetUpLanguage();
+        dropdown.onValueChanged.AddListener(OnDropdownChanged);
     }
 
     public void StartButton()
@@ -66,6 +76,7 @@ public class WelcomePage : MonoBehaviour
 
     public void StartZoomButton()
     {
+        cameraMainMenu.PlayButtonSound();
         StartCoroutine(ZoomAndMoveCoroutine());
     }
 
@@ -77,7 +88,8 @@ public class WelcomePage : MonoBehaviour
 
     public void CreditsButton()
     {
-
+        credits.gameObject.SetActive(true);
+        StartCoroutine(FadeIn(credits));
     }
 
     public void ExitButton()
@@ -102,10 +114,79 @@ public class WelcomePage : MonoBehaviour
         canvasGroup.alpha = 0f;
     }
 
+    private IEnumerator FadeIn(CanvasGroup canvasGroup)
+    {
+        float elapsedTime = 0f;
+        float duration = 0.25f;
+
+        while (elapsedTime < duration)
+        {
+            canvasGroup.alpha = Mathf.Clamp01(elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+    }
+
+    private void SetUpLanguage()
+    {
+        string currentLanguage = PlayerPrefs.GetString("language", "");
+
+        if (currentLanguage == "")
+        {
+            // Prendi la lingua da Steam (es: "italian", "english", "french", ecc.)
+            string steamLang = SteamApps.GetCurrentGameLanguage().ToLower();;
+
+            // Mappa le lingue Steam in codici brevi (puoi espandere la mappa se serve)
+            switch (steamLang)
+            {
+                case "italian":  currentLanguage = "it"; break;
+                case "french":   currentLanguage = "fr"; break;
+                case "spanish":  currentLanguage = "es"; break;
+                case "english":
+                default:         currentLanguage = "en"; break;
+            }
+
+            // Salva la scelta nei PlayerPrefs
+            PlayerPrefs.SetString("language", currentLanguage);
+            PlayerPrefs.Save();
+        }
+
+        StartCoroutine(SetLanguageCoroutine(currentLanguage));
+    }
+
+    private void OnDropdownChanged(int index)
+    {
+        switch (index)
+        {
+            case 0: { StartCoroutine(SetLanguageCoroutine("en")); break; }
+            case 1: { StartCoroutine(SetLanguageCoroutine("it")); break; }
+            case 2: { StartCoroutine(SetLanguageCoroutine("es")); break; }
+            case 3: { StartCoroutine(SetLanguageCoroutine("fr")); break; }
+            default: { StartCoroutine(SetLanguageCoroutine("en")); break; }
+        }
+    }
+
+    private IEnumerator SetLanguageCoroutine(string langCode)
+    {
+        // Attendi che il sistema di localizzazione sia pronto
+        yield return LocalizationSettings.InitializationOperation;
+
+        var targetLocale = LocalizationSettings.AvailableLocales.Locales
+            .FirstOrDefault(locale => locale.Identifier.Code == langCode);
+
+        if (targetLocale != null)
+        {
+            LocalizationSettings.SelectedLocale = targetLocale;
+        }
+    }
 
     private float zoomedSize = 0.65f;             // Quanto zoommare (valore più basso = più zoom)
     private float zoomSpeed = 2f;              // Velocità dello zoom
-    private float zoomedY = 2.3f; 
+    private float zoomedY = 2.3f;
     private Camera cam;
     private float originalSize;
     private Vector3 originalPosition;

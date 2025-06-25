@@ -156,4 +156,5 @@ public enum PrestigeSteps
 - buttonSkin [string color] [green/red/pink/purple/blue]
 - monitorSkin [string color] [green/red/pink/purple/blue]
 - vSyncEnabled [0/1]
+- language [string] [it, en, fr, sp]
 */
