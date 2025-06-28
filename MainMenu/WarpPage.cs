@@ -102,6 +102,10 @@ public class WarpPage : MonoBehaviour
         ClearSpritesInGameObject(pullOne);
         ClearSpritesInGameObject(pullTen);
         countTotalWarp = 0;
+        foreach (Waifu w in Enum.GetValues(typeof(Waifu)))
+        {
+            waifuUnlockCounts[w] = 0;
+        }
         GameObject parentGO = ErrorText.gameObject.transform.parent?.gameObject;
         parentGO.SetActive(false);
     }

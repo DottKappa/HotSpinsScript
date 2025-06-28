@@ -60,6 +60,7 @@ public class SkinSetUp : MonoBehaviour
             imagePath = "Texture/SlotSKin/Buttons/" + skin + "/heart_slot";
             newSprite = Resources.Load<Sprite>(imagePath);
             item.sprite = newSprite;
+            item.color = FixColorForHeartButtons(skin);
         }
         foreach (var item in buttonsTextSkin)
         {
@@ -75,10 +76,12 @@ public class SkinSetUp : MonoBehaviour
         imagePath = "Texture/SlotSKin/Buttons/" + skin + "/heart_skinSelector";
         newSprite = Resources.Load<Sprite>(imagePath);
         buttonsSkinSelectorSkin.sprite = newSprite;
+        buttonsSkinSelectorSkin.color = FixColorForHeartButtons(skin);
 
         imagePath = "Texture/SlotSKin/Buttons/" + skin + "/heart_idle";
         newSprite = Resources.Load<Sprite>(imagePath);
         buttonsIdleSkin.sprite = newSprite;
+        buttonsIdleSkin.color = FixColorForHeartButtons(skin);
     }
 
     private void SetUpMonitor()
@@ -93,7 +96,23 @@ public class SkinSetUp : MonoBehaviour
             case "blue": ColorUtility.TryParseHtmlString("#8FFFD9", out color); break;
             default: ColorUtility.TryParseHtmlString("#57FD60", out color); break;
         }
-        
+
         monitorSkin.color = color;
+    }
+
+    private Color FixColorForHeartButtons(string skin)
+    {
+        Color color = Color.white;;
+        switch (skin)
+        {
+            case "green": ColorUtility.TryParseHtmlString("#57FD60", out color); break;
+            case "red": ColorUtility.TryParseHtmlString("#FD9D73", out color); break;
+            case "purple": ColorUtility.TryParseHtmlString("#A08AFF", out color); break;
+            case "blue": ColorUtility.TryParseHtmlString("#8FFFD9", out color); break;
+            case "pink": break;
+            default: break;
+        }
+
+        return color;
     }
 }

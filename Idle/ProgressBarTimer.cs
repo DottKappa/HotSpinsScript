@@ -52,8 +52,11 @@ public class ProgressBarTimer : MonoBehaviour
             timeRemaining = totalDurationInSeconds - elapsedTime;
         } else {
             uiBumpScaler.PopUpGiftButton();
-            StartPulsatingEffect();
             timeRemaining = 0f;
+            if (!isPulsating) {
+                StartPulsatingEffect();
+                isPulsating = true;
+            }
         }
         
         if ((cgPadre != null && cgPadre.alpha == 0f) || (cgPadrePadre != null && cgPadrePadre.alpha == 0f)) {
