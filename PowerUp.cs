@@ -36,14 +36,14 @@ public class PowerUp : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.transform == transform) {
-                    Debug.Log("Mouse button was pressed on object with tag: " + hit.transform.tag);
-                    Debug.Log("Mouse button was pressed on object: " + whoAmI);
+                    //Debug.Log("Mouse button was pressed on object with tag: " + hit.transform.tag);
+                    //Debug.Log("Mouse button was pressed on object: " + whoAmI);
                     powerUpManager.ManagePowerUp(whoAmI);
                     canvasController.ToggleCanvasElements(true);
                 }
             }
         } else if (Input.GetKeyDown(keyToPickUp)) {
-            Debug.Log("Ho cliccato il tasto -> " + keyToPickUp);
+            //Debug.Log("Ho cliccato il tasto -> " + keyToPickUp);
             powerUpManager.ManagePowerUp(whoAmI);
             canvasController.ToggleCanvasElements(true);
         }

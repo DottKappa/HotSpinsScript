@@ -101,7 +101,7 @@ public class IdleUiManager : MonoBehaviour
 
         Transform roomTransform = idleObj.transform.Find(roomName);
         if (roomTransform == null) {
-            Debug.LogError($"[IdleUiManager] Room '{roomName}' not found under Idle.");
+            //Debug.LogError($"[IdleUiManager] Room '{roomName}' not found under Idle.");
             return false;
         }
 

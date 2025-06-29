@@ -50,7 +50,7 @@ public class FullScreenImage : MonoBehaviour
         {
             isCounting = false;
             secondsPassed += Mathf.FloorToInt(timeCounter);
-            Debug.Log($"Tempo in fullscreen: {secondsPassed} secondi");
+            //Debug.Log($"Tempo in fullscreen: {secondsPassed} secondi");
             timeCounter = 0f;
             fileManager.SetSecondsInFullScreenByWaifu(secondsPassed, GetWaifuNameByOpenedImage());
         }

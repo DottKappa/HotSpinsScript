@@ -41,8 +41,12 @@ public class GeneralInfo : MonoBehaviour
         // Somma i valori attuali sbloccati per ciascuna waifu
         foreach (Waifu waifu in System.Enum.GetValues(typeof(Waifu)))
         {
-            unlocked += fileManager.GetImageStepByWaifu(waifu);
             int points = fileManager.GetPointsByWaifu(waifu);
+            if (points == 0 && waifu.ToString() != "Chiho")
+            {
+                continue;
+            }
+            unlocked += fileManager.GetImageStepByWaifu(waifu);
             foreach (PrestigeSteps step in System.Enum.GetValues(typeof(PrestigeSteps)))
             {
                 string stepName = step.ToString();

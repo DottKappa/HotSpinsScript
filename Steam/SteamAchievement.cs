@@ -20,13 +20,6 @@ public class SteamAchievement : MonoBehaviour
         }
     }
 
-    // Da cancellare Start()
-    void Start()
-    {
-        SteamUserStats.ResetAllStats(true);
-        SteamUserStats.StoreStats();
-    }
-
     public void CheckAchievementByWaifuFile(WaifuSave[] modifiedWaifus)
     {
         foreach (var waifuSave in modifiedWaifus)

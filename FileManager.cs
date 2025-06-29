@@ -159,7 +159,7 @@ public class FileManager : MonoBehaviour
             string json = JsonUtility.ToJson(waifuFile);
             //Debug.Log("JSON da salvare: " + json);
             File.WriteAllText(filePath, Encryptor.Encrypt(json));
-            Debug.Log("[" + nameFile + "] Salvato correttamente");
+            //Debug.Log("[" + nameFile + "] Salvato correttamente");
 
             WaifuSave[] modifiedArray = new WaifuSave[modifiedWaifus.Count];
             modifiedWaifus.CopyTo(modifiedArray);
@@ -186,7 +186,7 @@ public class FileManager : MonoBehaviour
         if (File.Exists(filePath)) {
             string json = Encryptor.Decrypt(File.ReadAllText(filePath));
             if (json == "{}" || string.IsNullOrEmpty(json)) {
-                Debug.LogWarning("[FileManager] Il file json è vuoto");
+                //Debug.LogWarning("[FileManager] Il file json è vuoto");
                 return;
             }
 

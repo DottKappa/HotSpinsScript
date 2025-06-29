@@ -33,7 +33,7 @@ public class IdleFileManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SaveIdleFile();
-        Debug.Log("[IdleFileManager] Salvataggio all'uscita del gioco.");
+        //Debug.Log("[IdleFileManager] Salvataggio all'uscita del gioco.");
     }
 
 // == POWER UP ==
@@ -55,7 +55,7 @@ public class IdleFileManager : MonoBehaviour
             powerUp = new PowerUpData();
             powerUp.CreatePowerUpByType(powerUpTitle, availability);
             idleFileStructure.AddPowerUp(powerUp);
-            Debug.Log("[IdleFileManager] Ho creato il nuovo powerUp [" + powerUpTitle + "] nel idleFileStructure");
+            //Debug.Log("[IdleFileManager] Ho creato il nuovo powerUp [" + powerUpTitle + "] nel idleFileStructure");
         } else {
             powerUp.Quantity = availability;
             if (availability == 0) {
@@ -77,7 +77,7 @@ public class IdleFileManager : MonoBehaviour
             room = new Room();
             room.CreateRoomByName(roomName);
             idleFileStructure.AddRoom(room);
-            Debug.Log("[IdleFileManager] Ho creato la nuova stanza [" + roomName + "] nel idleFileStructure");
+            //Debug.Log("[IdleFileManager] Ho creato la nuova stanza [" + roomName + "] nel idleFileStructure");
         }
 
         return room;
@@ -151,7 +151,7 @@ public class IdleFileManager : MonoBehaviour
         try {
             string json = JsonUtility.ToJson(idleFileStructure);
             File.WriteAllText(filePath, Encryptor.Encrypt(json));
-            Debug.Log("[" + nameFile + "] Salvato correttamente");
+            //Debug.Log("[" + nameFile + "] Salvato correttamente");
         } catch (System.Exception e) {
             Debug.LogError("[IdleFileManager] Failed to save waifu file: " + e.Message);
         }
@@ -187,7 +187,7 @@ public class IdleFileManager : MonoBehaviour
         idleFileStructure.AddRoom(newBasicRoom);
         string json = JsonUtility.ToJson(idleFileStructure);
         File.WriteAllText(filePath, Encryptor.Encrypt(json));
-        Debug.Log("[" + nameFile + "] Salvato correttamente");
+        //Debug.Log("[" + nameFile + "] Salvato correttamente");
     }
 
     private void SaveAllRooms()
@@ -234,12 +234,8 @@ public class IdleFileManager : MonoBehaviour
                     Debug.LogError("[IdleFileManager][SAVE] Impossibile trovare la waifu attiva [" + allRooms[i] + "]");
                     continue;
                 }
-
-//
-
-
             } else {
-                Debug.LogWarning("[IdleFileManager][SAVE] Impossibile trovare la stanza [" + allRooms[i] + "]");
+                //Debug.LogWarning("[IdleFileManager][SAVE] Impossibile trovare la stanza [" + allRooms[i] + "]");
             }
         }
     }

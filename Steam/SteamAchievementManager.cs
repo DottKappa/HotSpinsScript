@@ -43,7 +43,7 @@ public class SteamAchievementManager : MonoBehaviour
 
         if (SteamUserStats.SetAchievement(achievementId))
         {
-            Debug.Log($"Achievement {achievementId} sbloccato!");
+            //Debug.Log($"Achievement {achievementId} sbloccato!");
             SteamUserStats.StoreStats();
             missingAchievements_1 = GetMissingAchievementsCount("Achievement_1");
         }

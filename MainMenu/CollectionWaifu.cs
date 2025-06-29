@@ -43,7 +43,7 @@ public class CollectionWaifu : MonoBehaviour
             PlayerPrefs.SetString("waifuName", waifuName);
             collectionPage.SetAllChildInactive();
             SetIsActiveButton(greenHex, "active");
-            Debug.Log("ho settato correttamente");
+            //Debug.Log("ho settato correttamente");
         }
     }
 

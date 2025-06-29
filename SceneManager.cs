@@ -70,11 +70,6 @@ public class SceneManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && !IsBusy() && !isAutospinEnabled) {
                 if (!isRolling) {
                     StartSlot();
-                    if (PlayerPrefs.GetInt("isFirstSpin", 1) == 1) {
-                        SteamAchievementManager.Instance.AwardAchievement("FIRST_SPIN");
-                        PlayerPrefs.SetInt("isFirstSpin", 0);
-                        PlayerPrefs.Save();
-                    }
                 } else {
                     StopSlot();
                 }
@@ -179,6 +174,11 @@ public class SceneManager : MonoBehaviour
 
     public void StartSlot()
     {
+        if (PlayerPrefs.GetInt("isFirstSpin", 1) == 1) {
+            SteamAchievementManager.Instance.AwardAchievement("FIRST_SPIN");
+            PlayerPrefs.SetInt("isFirstSpin", 0);
+            PlayerPrefs.Save();
+        }
         cameraSlot.StartSlotSpinSound();
         EmptySlotMatrix();
         needSave = true;
@@ -407,7 +407,7 @@ public class SceneManager : MonoBehaviour
         fileManager.SetDebuffUsedByWaifu(System.Enum.GetNames(typeof(DebuffType)), buffDebuffManager.GetIsUsedByDictionary(false), waifuName);
         fileManager.SetWeightsByWaifu(respawnTrigger.GetWeights(), waifuName);
 
-        Debug.Log("[SceneManager] Salvataggio dati waifu");
+        //Debug.Log("[SceneManager] Salvataggio dati waifu");
         fileManager.SaveWaifuFile();
     }
 

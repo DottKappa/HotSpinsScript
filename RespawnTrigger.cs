@@ -52,7 +52,7 @@ public class RespawnTrigger : MonoBehaviour
 
         if (pointSystemController.GetLastWin() > 2)
         {
-            Debug.Log("NON VINCO DA -> " + pointSystemController.GetLastWin());
+            //Debug.Log("NON VINCO DA -> " + pointSystemController.GetLastWin());
             if (rowPrefab == null)
             {
                 rowPrefab = GetRandomGameObjectByWeight(false, true);

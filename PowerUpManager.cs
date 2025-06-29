@@ -29,7 +29,7 @@ public class PowerUpManager : MonoBehaviour
 
     public void addSpark(int numberOfSparksInSlot)
     {
-        Debug.Log("Spark picked up! " + numberOfSparksInSlot);
+        //Debug.Log("Spark picked up! " + numberOfSparksInSlot);
         numberOfSparks += numberOfSparksInSlot;
         
         canvasController.ToggleCanvasElements(false);
@@ -70,7 +70,7 @@ public class PowerUpManager : MonoBehaviour
     public void ManagePowerUp(string enumPowerUp)
     {
         if (System.Enum.TryParse(enumPowerUp, out BuffType powerUpBuff)) {
-            Debug.Log("Parsed BuffType: " + powerUpBuff);
+            //Debug.Log("Parsed BuffType: " + powerUpBuff);
             switch (powerUpBuff) {
                 case BuffType.SlowDown:
                     respawnTrigger.ManipulateSpeed(15.0f, 3);
@@ -142,7 +142,7 @@ public class PowerUpManager : MonoBehaviour
                     break;
             }
         } else if (System.Enum.TryParse(enumPowerUp, out DebuffType powerUpDebuff)) {
-            Debug.Log("Parsed DebuffType: " + powerUpDebuff);
+            //Debug.Log("Parsed DebuffType: " + powerUpDebuff);
             switch (powerUpDebuff) {
                 case DebuffType.SpeedUp:
                     respawnTrigger.ManipulateSpeed(31.0f, 3);

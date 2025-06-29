@@ -17,7 +17,7 @@ public class CompanyLogoScript : MonoBehaviour
     private System.Collections.IEnumerator MoveAndScaleUI()
     {
         // Attesa di 2 secondi prima di iniziare l'animazione
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
 
         Vector2 startAnchoredPos = targetUI.anchoredPosition;
         Vector2 targetAnchoredPos = new Vector2(startAnchoredPos.x, 120f);

@@ -95,7 +95,7 @@ public class AutospinManager : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void EnableAutospin()
     {
-        if (PlayerPrefs.GetInt("autospinUnlocked") == 0)
+        if (PlayerPrefs.GetInt("autospinUnlocked", 1) == 0)
         {
             if (!sceneManager.GetAutospinEnabled())
             {
