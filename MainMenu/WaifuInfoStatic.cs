@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public static class WaifuInfoStatic
 {
     private static readonly string[] baseText = new string[]
@@ -30,56 +32,100 @@ public static class WaifuInfoStatic
 
     public static string[] GetChihoInfo()
     {
+        string[] text = GetBaseTextByLanguage();
+
         return new string[] {
-            baseText[0] + "22",
-            baseText[1] + "50kg",
-            baseText[2] + "80/60/75",
-            baseText[3] + "165cm",
-            baseText[4] + "you",
+            text[0] + "22",
+            text[1] + "50kg",
+            text[2] + "80/60/75",
+            text[3] + "165cm",
+            text[4] + "you",
         };
     }
 
     public static string[] GetHinaInfo()
     {
+        string[] text = GetBaseTextByLanguage();
+
         return new string[] {
-            baseText[0] + "21",
-            baseText[1] + "45kg",
-            baseText[2] + "90/60/80",
-            baseText[3] + "155cm",
-            baseText[4] + "kitty, pink, fish, tail",
+            text[0] + "21",
+            text[1] + "45kg",
+            text[2] + "90/60/80",
+            text[3] + "155cm",
+            text[4] + "kitty, pink, fish, tail",
         };
     }
 
     public static string[] GetShioriInfo()
     {
+        string[] text = GetBaseTextByLanguage();
+     
         return new string[] {
-            baseText[0] + "35",
-            baseText[1] + "65kg",
-            baseText[2] + "110/70/90",
-            baseText[3] + "173cm",
-            baseText[4] + "mommy issue, teach",
+            text[0] + "35",
+            text[1] + "65kg",
+            text[2] + "110/70/90",
+            text[3] + "173cm",
+            text[4] + "mommy issue, teach",
         };
     }
 
     public static string[] GetTsukikoInfo()
     {
+        string[] text = GetBaseTextByLanguage();
+
         return new string[] {
-            baseText[0] + "24",
-            baseText[1] + "47kg",
-            baseText[2] + "70/60/75",
-            baseText[3] + "160cm",
-            baseText[4] + "emo, melancholic",
+            text[0] + "24",
+            text[1] + "47kg",
+            text[2] + "70/60/75",
+            text[3] + "160cm",
+            text[4] + "emo, melancholic",
         };
     }
 
     public static string[] GetSoojinInfo()
     {
+        string[] text = GetBaseTextByLanguage();
+
         return new string[] {
-            baseText[0] + "26",
-            baseText[1] + "55kg",
-            baseText[2] + "100/75/75",
-            baseText[3] + "170cm",
-            baseText[4] + "normie",
+            text[0] + "26",
+            text[1] + "55kg",
+            text[2] + "100/75/75",
+            text[3] + "170cm",
+            text[4] + "normie",
         };
+    }
+
+    private static string[] GetBaseTextByLanguage()
+    {
+        string currentLanguage = PlayerPrefs.GetString("language");
+        switch (currentLanguage)
+        {
+            case "it":
+                return new string[] {
+                    "Eta: ",
+                    "Peso: ",
+                    "b/w/h: ",
+                    "Altezza: ",
+                    "Ama: ",
+                };
+            case "fr":
+                return new string[] {
+                    "Âge: ",
+                    "Poids: ",
+                    "b/t/h: ",
+                    "Taille: ",
+                    "Aime: ",
+                };
+            case "sp":
+                return new string[] {
+                    "Años: ",
+                    "Peso: ",
+                    "b/c/a: ",
+                    "Altura: ",
+                    "Le gusta: ",
+                };
+            case "en":
+            default: return baseText;
+        }
     }
 }

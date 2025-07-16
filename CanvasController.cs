@@ -177,12 +177,28 @@ public class CanvasController : MonoBehaviour
     private void SetNextArtAt()
     {
         int pointsForNextArt = pointSystemController.GetPointsForNextArt();
+        string currentLanguage = null;
+        currentLanguage = PlayerPrefs.GetString("language", currentLanguage);
         
         if (pointsForNextArt != -999) {
-            nextArtAt.text = "Next art at: " + addDot(pointsForNextArt);
+            switch (currentLanguage)
+            {
+                case "it":  nextArtAt.text = "Prossima im a: " + addDot(pointsForNextArt); break;
+                case "fr":  nextArtAt.text = "Próximo arte en: " + addDot(pointsForNextArt); break;
+                case "sp":  nextArtAt.text = "Art suivant à: " + addDot(pointsForNextArt); break;
+                case "en":
+                default:    nextArtAt.text = "Next art at: " + addDot(pointsForNextArt); break;
+            }            
         } else {
             // Vuol dire che ho finito le art
-            nextArtAt.text = "All arts unlocked";
+            switch (currentLanguage)
+            {
+                case "it":  nextArtAt.text = "Tutte le imm sbloc"; break;
+                case "fr":  nextArtAt.text = "Arts débloqués"; break;
+                case "sp":  nextArtAt.text = "Artes desbloqueados"; break;
+                case "en":
+                default:    nextArtAt.text = "All arts unlocked"; break;
+            }
         }
     }
 

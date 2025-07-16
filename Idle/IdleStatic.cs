@@ -3,7 +3,7 @@ using System.Linq;
 
 public static class IdleStatic
 {
-// == ROOMS
+    // == ROOMS
     private static readonly string[] rooms = new string[]
     {
         "Hall",
@@ -69,13 +69,13 @@ public static class IdleStatic
                 if (roomName == rooms[i]) {
                     return roomsUnlockableNeeded[i];
                 }
-            }    
+            }
         }
 
         throw new Exception("[IdleStatic.cs] La stanza passata [" + roomName + "] non esiste o non ha un corrispettivo di sbloccabili");
     }
 
-// == POWERUPS
+    // == POWERUPS
     private static readonly string[] rarities = new string[]
     {
         "common",
@@ -104,7 +104,7 @@ public static class IdleStatic
         16f
     };
 
-// Va aggiunto poi in IdlePowerUp.cs nei vari switch
+    // Va aggiunto poi in IdlePowerUp.cs nei vari switch
     private static readonly string[] idleCommonPowerUps = new string[]
     {
         "3x_on_horizontal",
@@ -163,21 +163,21 @@ public static class IdleStatic
     public static string GetPowerUpDescriptionByTitle(string title)
     {
         // Common
-        for (int i = 0; i < idleCommonPowerUps.Length; i++){
+        for (int i = 0; i < idleCommonPowerUps.Length; i++) {
             if (idleCommonPowerUps[i] == title)
-                return idleCommonPowerUpsDesc[i];
+                return TranslateDescription(idleCommonPowerUpsDesc[i]);
         }
 
         // Rare
         for (int i = 0; i < idleRarePowerUps.Length; i++) {
             if (idleRarePowerUps[i] == title)
-                return idleRarePowerUpsDesc[i];
+                return TranslateDescription(idleRarePowerUpsDesc[i]);
         }
 
         // Mythic
         for (int i = 0; i < idleMythicPowerUps.Length; i++) {
             if (idleMythicPowerUps[i] == title)
-                return idleMythicPowerUpsDesc[i];
+                return TranslateDescription(idleMythicPowerUpsDesc[i]);
         }
 
         return null;
@@ -187,7 +187,7 @@ public static class IdleStatic
     {
         if (string.IsNullOrWhiteSpace(rarity)) {
             var rand = new Random();
-            string [] rarities = IdleStatic.GetRarities();
+            string[] rarities = IdleStatic.GetRarities();
             rarity = rarities[rand.Next(rarities.Length)];
         }
 
@@ -230,5 +230,125 @@ public static class IdleStatic
         }
 
         return powerUps[rand.Next(powerUps.Length)];
+    }
+
+    private static string TranslateDescription(string desc)
+    {
+        string currentLanguage = UnityEngine.PlayerPrefs.GetString("language", "en");
+        switch (desc)
+        {
+            case "Multiply horizontal line by 3, 3 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Riga orizz. x3, 3 volte"; break;
+                    case "fr": desc = "Ligne horiz. x3, 3 fois"; break;
+                    case "sp": desc = "Línea horiz. x3, 3 veces"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply from up to down line by 2, 3 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Alto→basso x2, 3 volte"; break;
+                    case "fr": desc = "Haut→bas x2, 3 fois"; break;
+                    case "sp": desc = "Arriba→abajo x2, 3 veces"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply from down to up line by 2, 3 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Basso→alto x2, 3 volte"; break;
+                    case "fr": desc = "Bas→haut x2, 3 fois"; break;
+                    case "sp": desc = "Abajo→arriba x2, 3 veces"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply horizontal line by 5, 2 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Riga orizz. x5, 2 volte"; break;
+                    case "fr": desc = "Ligne horiz. x5, 2 fois"; break;
+                    case "sp": desc = "Línea horiz. x5, 2 veces"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply from up to down line by 4, 2 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Alto→basso x4, 2 volte"; break;
+                    case "fr": desc = "Haut→bas x4, 2 fois"; break;
+                    case "sp": desc = "Arriba→abajo x4, 2 veces"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply from down to up line by 4, 2 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Basso→alto x4, 2 volte"; break;
+                    case "fr": desc = "Bas→haut x4, 2 fois"; break;
+                    case "sp": desc = "Abajo→arriba x4, 2 veces"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply horizontal line by 10, 1 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Riga orizz. x10, 1 volta"; break;
+                    case "fr": desc = "Ligne horiz. x10, 1 fois"; break;
+                    case "sp": desc = "Línea horiz. x10, 1 vez"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply from up to down line by 7, 1 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Alto→basso x7, 1 volta"; break;
+                    case "fr": desc = "Haut→bas x7, 1 fois"; break;
+                    case "sp": desc = "Arriba→abajo x7, 1 vez"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            case "Multiply from down to up line by 7, 1 times":
+            {
+                switch (currentLanguage)
+                {
+                    case "it": desc = "Basso→alto x7, 1 volta"; break;
+                    case "fr": desc = "Bas→haut x7, 1 fois"; break;
+                    case "sp": desc = "Abajo→arriba x7, 1 vez"; break;
+                    case "en":
+                    default: break;
+                }
+                break;
+            }
+            default:
+            break;
+        }
+
+        return desc;
     }
 }

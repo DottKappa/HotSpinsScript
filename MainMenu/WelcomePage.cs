@@ -133,27 +133,23 @@ public class WelcomePage : MonoBehaviour
 
     private void SetUpLanguage()
     {
-        string currentLanguage = PlayerPrefs.GetString("language", "");
+        string currentLanguage = null;
+        // Prendi la lingua da Steam (es: "italian", "english", "french", ecc.)
+        string steamLang = SteamApps.GetCurrentGameLanguage().ToLower();
 
-        if (currentLanguage == "")
+        // Mappa le lingue Steam in codici brevi (puoi espandere la mappa se serve)
+        switch (steamLang)
         {
-            // Prendi la lingua da Steam (es: "italian", "english", "french", ecc.)
-            string steamLang = SteamApps.GetCurrentGameLanguage().ToLower();;
-
-            // Mappa le lingue Steam in codici brevi (puoi espandere la mappa se serve)
-            switch (steamLang)
-            {
-                case "italian":  currentLanguage = "it"; break;
-                case "french":   currentLanguage = "fr"; break;
-                case "spanish":  currentLanguage = "es"; break;
-                case "english":
-                default:         currentLanguage = "en"; break;
-            }
-
-            // Salva la scelta nei PlayerPrefs
-            PlayerPrefs.SetString("language", currentLanguage);
-            PlayerPrefs.Save();
+            case "italian":  currentLanguage = "it"; break;
+            case "french":   currentLanguage = "fr"; break;
+            case "spanish":  currentLanguage = "es"; break;
+            case "english":
+            default:         currentLanguage = "en"; break;
         }
+
+        // Salva la scelta nei PlayerPrefs
+        PlayerPrefs.SetString("language", currentLanguage);
+        PlayerPrefs.Save();
 
         StartCoroutine(SetLanguageCoroutine(currentLanguage));
     }
@@ -182,6 +178,8 @@ public class WelcomePage : MonoBehaviour
         {
             LocalizationSettings.SelectedLocale = targetLocale;
         }
+
+        PlayerPrefs.SetString("language", langCode);
     }
 
     private float zoomedSize = 0.65f;             // Quanto zoommare (valore più basso = più zoom)
