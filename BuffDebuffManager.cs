@@ -207,7 +207,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Prossimi 3 spin lenti"; break;
                         case "fr": desc = "3 tours lents"; break;
-                        case "sp": desc = "Próximos 3 lentos"; break;
+                        case "es": desc = "Próximos 3 lentos"; break;
                         case "en":
                         default: break;
                     }
@@ -219,7 +219,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Doppio punteggio da 2x a 1.1x (–0.1 ogni 10k)"; break;
                         case "fr": desc = "Score x2→1.1x (–0.1/10k)"; break;
-                        case "sp": desc = "Doble puntaje de 2x a 1.1x (–0.1 c/10k)"; break;
+                        case "es": desc = "Doble puntaje de 2x a 1.1x (–0.1 c/10k)"; break;
                         case "en":
                         default: break;
                     }
@@ -231,7 +231,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Doppio punteggio ogni 5 giri"; break;
                         case "fr": desc = "Double tous les 5 tours"; break;
-                        case "sp": desc = "Doble cada 5 giros"; break;
+                        case "es": desc = "Doble cada 5 giros"; break;
                         case "en":
                         default: break;
                     }
@@ -243,7 +243,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "+Diamanti 2.45% (resetta gli altri)"; break;
                         case "fr": desc = "+Diamant 2,45 % (reset autres)"; break;
-                        case "sp": desc = "+Diamante 2.45% (reset otros)"; break;
+                        case "es": desc = "+Diamante 2.45% (reset otros)"; break;
                         case "en":
                         default: break;
                     }
@@ -255,7 +255,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "+Celle base 16.67% (resetta gli altri)"; break;
                         case "fr": desc = "+Base 16,67 % (reset autres)"; break;
-                        case "sp": desc = "+Básica 16.67% (reset otros)"; break;
+                        case "es": desc = "+Básica 16.67% (reset otros)"; break;
                         case "en":
                         default: break;
                     }
@@ -267,7 +267,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "+Celle speciali 11.43% (resetta gli altri)"; break;
                         case "fr": desc = "+Spécial 11,43 % (reset autres)"; break;
-                        case "sp": desc = "+Especial 11.43% (reset otros)"; break;
+                        case "es": desc = "+Especial 11.43% (reset otros)"; break;
                         case "en":
                         default: break;
                     }
@@ -279,7 +279,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Sblocca il punteggio sulla prima linea orizzontale (stesso molt. di orizzontale)"; break;
                         case "fr": desc = "Points 1ère horiz. (même mult.)"; break;
-                        case "sp": desc = "Puntos 1ª horiz. (igual mult.)"; break;
+                        case "es": desc = "Puntos 1ª horiz. (igual mult.)"; break;
                         case "en":
                         default: break;
                     }
@@ -291,7 +291,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Sblocca il punteggio sull'ultima linea orizzontale (stesso molt. di orizzontale)"; break;
                         case "fr": desc = "Points dernière horiz. (même mult.)"; break;
-                        case "sp": desc = "Puntos última horiz. (igual mult.)"; break;
+                        case "es": desc = "Puntos última horiz. (igual mult.)"; break;
                         case "en":
                         default: break;
                     }
@@ -303,7 +303,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Sblocca il punteggio sulla prima linea verticale (moltiplicatore = 1)"; break;
                         case "fr": desc = "Points 1ère vert. (x1)"; break;
-                        case "sp": desc = "Puntos 1ª vert. (mult. 1x)"; break;
+                        case "es": desc = "Puntos 1ª vert. (mult. 1x)"; break;
                         case "en":
                         default: break;
                     }
@@ -315,7 +315,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Sblocca il punteggio sull'ultima linea verticale (moltiplicatore = 1)"; break;
                         case "fr": desc = "Points dernière vert. (x1)"; break;
-                        case "sp": desc = "Puntos última vert. (mult. 1x)"; break;
+                        case "es": desc = "Puntos última vert. (mult. 1x)"; break;
                         case "en":
                         default: break;
                     }
@@ -327,7 +327,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Letteralmente niente"; break;
                         case "fr": desc = "Littéralement rien"; break;
-                        case "sp": desc = "Literalmente nada"; break;
+                        case "es": desc = "Literalmente nada"; break;
                         case "en":
                         default: break;
                     }
@@ -351,7 +351,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Prossimi 3 spin veloci"; break;
                         case "fr": desc = "3 tours rapides"; break;
-                        case "sp": desc = "Próximos 3 rápidos"; break;
+                        case "es": desc = "Próximos 3 rápidos"; break;
                         case "en":
                         default: break;
                     }
@@ -363,7 +363,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Mezzo punteggio 1.1x→2x (+0.1/10k)"; break;
                         case "fr": desc = "Score ÷2 1.1x→2x (+0.1/10k)"; break;
-                        case "sp": desc = "Mitad puntaje 1.1x→2x (+0.1/10k)"; break;
+                        case "es": desc = "Mitad puntaje 1.1x→2x (+0.1/10k)"; break;
                         case "en":
                         default: break;
                     }
@@ -375,7 +375,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Punteggio dimezzato ogni 11 giri"; break;
                         case "fr": desc = "Moitié tous les 11 tours"; break;
-                        case "sp": desc = "Mitad cada 11 giros"; break;
+                        case "es": desc = "Mitad cada 11 giros"; break;
                         case "en":
                         default: break;
                     }
@@ -387,7 +387,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "-Diamanti 0.2% (resetta gli altri)"; break;
                         case "fr": desc = "-Diamant 0.2% (reset autres)"; break;
-                        case "sp": desc = "-Diamante 0.2% (reset otros)"; break;
+                        case "es": desc = "-Diamante 0.2% (reset otros)"; break;
                         case "en": desc = "Remove probability to spawn diamonds (0.2%)(Reset others spawn)"; break;
                         default: break;
                     }
@@ -399,7 +399,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "–Speciale 0% (resetta gli altri)"; break;
                         case "fr": desc = "–Spécial 0% (reset otros)"; break;
-                        case "sp": desc = "–Especial 0% (reset autres)"; break;
+                        case "es": desc = "–Especial 0% (reset autres)"; break;
                         case "en":
                         default: break;
                     }
@@ -411,7 +411,7 @@ public class BuffDebuffManager : MonoBehaviour
                     {
                         case "it": desc = "Reset malus"; break;
                         case "fr": desc = "Reset malus"; break;
-                        case "sp": desc = "Reset penalización"; break;
+                        case "es": desc = "Reset penalización"; break;
                         case "en":
                         default: break;
                     }

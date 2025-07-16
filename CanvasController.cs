@@ -185,7 +185,7 @@ public class CanvasController : MonoBehaviour
             {
                 case "it":  nextArtAt.text = "Prossima im a: " + addDot(pointsForNextArt); break;
                 case "fr":  nextArtAt.text = "Próximo arte en: " + addDot(pointsForNextArt); break;
-                case "sp":  nextArtAt.text = "Art suivant à: " + addDot(pointsForNextArt); break;
+                case "es":  nextArtAt.text = "Art suivant à: " + addDot(pointsForNextArt); break;
                 case "en":
                 default:    nextArtAt.text = "Next art at: " + addDot(pointsForNextArt); break;
             }            
@@ -195,7 +195,7 @@ public class CanvasController : MonoBehaviour
             {
                 case "it":  nextArtAt.text = "Tutte le imm sbloc"; break;
                 case "fr":  nextArtAt.text = "Arts débloqués"; break;
-                case "sp":  nextArtAt.text = "Artes desbloqueados"; break;
+                case "es":  nextArtAt.text = "Artes desbloqueados"; break;
                 case "en":
                 default:    nextArtAt.text = "All arts unlocked"; break;
             }

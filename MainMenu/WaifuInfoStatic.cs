@@ -116,7 +116,7 @@ public static class WaifuInfoStatic
                     "Taille: ",
                     "Aime: ",
                 };
-            case "sp":
+            case "es":
                 return new string[] {
                     "Años: ",
                     "Peso: ",

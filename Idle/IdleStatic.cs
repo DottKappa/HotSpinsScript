@@ -243,7 +243,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Riga orizz. x3, 3 volte"; break;
                     case "fr": desc = "Ligne horiz. x3, 3 fois"; break;
-                    case "sp": desc = "Línea horiz. x3, 3 veces"; break;
+                    case "es": desc = "Línea horiz. x3, 3 veces"; break;
                     case "en":
                     default: break;
                 }
@@ -255,7 +255,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Alto→basso x2, 3 volte"; break;
                     case "fr": desc = "Haut→bas x2, 3 fois"; break;
-                    case "sp": desc = "Arriba→abajo x2, 3 veces"; break;
+                    case "es": desc = "Arriba→abajo x2, 3 veces"; break;
                     case "en":
                     default: break;
                 }
@@ -267,7 +267,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Basso→alto x2, 3 volte"; break;
                     case "fr": desc = "Bas→haut x2, 3 fois"; break;
-                    case "sp": desc = "Abajo→arriba x2, 3 veces"; break;
+                    case "es": desc = "Abajo→arriba x2, 3 veces"; break;
                     case "en":
                     default: break;
                 }
@@ -279,7 +279,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Riga orizz. x5, 2 volte"; break;
                     case "fr": desc = "Ligne horiz. x5, 2 fois"; break;
-                    case "sp": desc = "Línea horiz. x5, 2 veces"; break;
+                    case "es": desc = "Línea horiz. x5, 2 veces"; break;
                     case "en":
                     default: break;
                 }
@@ -291,7 +291,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Alto→basso x4, 2 volte"; break;
                     case "fr": desc = "Haut→bas x4, 2 fois"; break;
-                    case "sp": desc = "Arriba→abajo x4, 2 veces"; break;
+                    case "es": desc = "Arriba→abajo x4, 2 veces"; break;
                     case "en":
                     default: break;
                 }
@@ -303,7 +303,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Basso→alto x4, 2 volte"; break;
                     case "fr": desc = "Bas→haut x4, 2 fois"; break;
-                    case "sp": desc = "Abajo→arriba x4, 2 veces"; break;
+                    case "es": desc = "Abajo→arriba x4, 2 veces"; break;
                     case "en":
                     default: break;
                 }
@@ -315,7 +315,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Riga orizz. x10, 1 volta"; break;
                     case "fr": desc = "Ligne horiz. x10, 1 fois"; break;
-                    case "sp": desc = "Línea horiz. x10, 1 vez"; break;
+                    case "es": desc = "Línea horiz. x10, 1 vez"; break;
                     case "en":
                     default: break;
                 }
@@ -327,7 +327,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Alto→basso x7, 1 volta"; break;
                     case "fr": desc = "Haut→bas x7, 1 fois"; break;
-                    case "sp": desc = "Arriba→abajo x7, 1 vez"; break;
+                    case "es": desc = "Arriba→abajo x7, 1 vez"; break;
                     case "en":
                     default: break;
                 }
@@ -339,7 +339,7 @@ public static class IdleStatic
                 {
                     case "it": desc = "Basso→alto x7, 1 volta"; break;
                     case "fr": desc = "Bas→haut x7, 1 fois"; break;
-                    case "sp": desc = "Abajo→arriba x7, 1 vez"; break;
+                    case "es": desc = "Abajo→arriba x7, 1 vez"; break;
                     case "en":
                     default: break;
                 }
