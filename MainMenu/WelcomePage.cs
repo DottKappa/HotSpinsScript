@@ -133,20 +133,12 @@ public class WelcomePage : MonoBehaviour
 
     private void SetUpLanguage()
     {
-        string currentLanguage = null;
-        // Prendi la lingua da Steam (es: "italian", "english", "french", ecc.)
-        string steamLang = SteamApps.GetCurrentGameLanguage().ToLower();
+        string currentLanguage = PlayerPrefs.GetString("language", "");
 
         // Mappa le lingue Steam in codici brevi (puoi espandere la mappa se serve)
-        switch (steamLang)
-        {
-            case "italian":  currentLanguage = "it"; break;
-            case "french":   currentLanguage = "fr"; break;
-            case "spanish":  currentLanguage = "es"; break;
-            case "english":
-            default:         currentLanguage = "en"; break;
-        }
-
+        if (currentLanguage == "")
+            currentLanguage = "en";
+            
         // Salva la scelta nei PlayerPrefs
         PlayerPrefs.SetString("language", currentLanguage);
         PlayerPrefs.Save();
